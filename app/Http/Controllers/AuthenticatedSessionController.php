@@ -22,7 +22,12 @@ class AuthenticatedSessionController extends Controller
         $credentials = $request->only('username', 'password');
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return Redirect::route('dashboard');
+            if(Auth::user() && Auth::user()->role != '6'){
+                return Redirect::route('dashboard');
+            } else { 
+                Auth::guard('web')->logout();
+                return redirect()->route('login');
+            }
         } 
         
     }

@@ -32,7 +32,7 @@
                     <!--begin::Content-->
                     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
                         <!--begin::Toolbar-->
-                        @include('components.toolbar')
+                        @include('components.toolbar',["title"=>$title])
                         <!--end::Toolbar-->
                         <!--begin::Post-->
                         <div class="post d-flex flex-column-fluid" id="kt_post">
@@ -40,7 +40,7 @@
                             <div id="kt_content_container" class="container-xxl">
                                 <!--begin::Row-->
                             
-                {{ $slot }}
+                                {{ $slot }}
                                 <!--end::Row-->
                             </div>
                             <!--end::Container-->

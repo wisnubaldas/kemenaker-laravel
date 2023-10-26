@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link active" href="../../demo1/dist/index.html">
+                    <a class="menu-link {{ request()->is('dashboard') ? 'active' : '' }}" href="/dashboard">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -66,8 +66,8 @@
                         <span class="menu-title">Dashboard</span>
                     </a>
                 </div>
-                <div class="menu-item">
-                    <a class="menu-link" href="../../demo1/dist/dashboards/no-toolbar.html">
+                <div class="menu-item ">
+                    <a class="menu-link {{ request()->is('usulan-tender') ? 'active' : '' }}" href="/usulan-tender">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/art/art002.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -86,8 +86,9 @@
                         <span class="menu-title">Usulan Tender</span>
                     </a>
                 </div>
+                @if(auth()->user()->tagroup_id=='1')
                 <div class="menu-item">
-                    <a class="menu-link" href="../../demo1/dist/dashboards/light-aside.html">
+                    <a class="menu-link" href="/usulan-ppk">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/abstract/abs027.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -106,14 +107,16 @@
                         <span class="menu-title">Usulan PPK</span>
                     </a>
                 </div>
+                @endif
               
+                @if(auth()->user()->tagroup_id=='1')
                 <div class="menu-item">
                     <div class="menu-content pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">Referensi</span>
                     </div>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link" href="../../demo1/dist/dashboards/only-header.html">
+                    <a class="menu-link" href="anggota-pokja">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/layouts/lay010.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -133,7 +136,7 @@
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link" href="../../demo1/dist/landing.html">
+                    <a class="menu-link" href="/jenis-tender">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/communication/com001.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -156,7 +159,7 @@
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link" href="../../demo1/dist/landing.html">
+                    <a class="menu-link" href="unit-kerja">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/communication/com001.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -185,9 +188,8 @@
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">Administrasi Sistem</span>
                     </div>
                 </div>
-               
                 <div class="menu-item">
-                    <a class="menu-link" href="../../demo1/dist/landing.html">
+                    <a class="menu-link" href="/group">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/communication/com001.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -210,7 +212,7 @@
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link" href="../../demo1/dist/landing.html">
+                    <a class="menu-link" href="/user">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/communication/com001.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -232,7 +234,7 @@
                         <span class="menu-title">User </span>
                     </a>
                 </div>
-               
+               @endif
             </div>
             <!--end::Menu-->
         </div>
