@@ -1,0 +1,47 @@
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+@import 'bootstrap/scss/bootstrap.scss';
+
+
+
+
+@font-face {
+    font-family: "Poppins";
+    src: local("Poppins"),
+        url("/public/fonts/Poppins-Regular.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Poppins-SemiBold";
+    src: local("Poppins-SemiBold"),
+        url("/public/fonts/Poppins-SemiBold.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Poppins-Medium";
+    src: local("Poppins-Medium"),
+        url("/public/fonts/Poppins-Medium.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Poppins-Bold";
+    src: local("Poppins-Bold"),
+        url("/public/fonts/Poppins-Bold.ttf") format("truetype");
+}
+$font-family-base: "Poppins", Helvetica, Arial !important;
+:root {
+    --bs-body-font-family: $font-family-base;
+    --bs-body-color: var(--bs-gray-900) !important;
+}
+
+.f-med {
+    font-family: "Poppins-Medium", sans-serif !important;
+}
+.f-sbold {
+    font-family: "Poppins-SemiBold", sans-serif !important;
+}
+.f-bold {
+    font-family: "Poppins-Bold", sans-serif !important;
+}
+body{
+    background: #e7ecf9;
+    align-items: center;
+    display: flex;
+    font-family: $font-family-base;
+}

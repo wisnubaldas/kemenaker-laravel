@@ -1,0 +1,124 @@
+
+* {
+    box-sizing: border-box;
+  }
+  #login-ukpbj {
+    height: 100vh;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+  #login-ukpbj section {
+    background: #fff;
+    border-radius: 25px;
+    box-shadow: 1px -1px 21px 5px rgba(0,0,0,0.10);
+    display: flex;
+    max-width: 1050px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+  #login-ukpbj section > div {
+    min-height: 300px;
+    width: calc(100% / 2);
+  }
+  #login-ukpbj section > div:nth-child(1) {
+    padding: 20px;
+  }
+  #login-ukpbj section > div:nth-child(2) {
+    background: #194b81;
+    padding: 20px;
+  }
+  .logo-wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+  .login-form {
+    margin: 60px 22% 0;
+  }
+  .login-form input {
+    background: #f0f0f0;
+    border: 0;
+    border-radius: 40px;
+    height: 40px;
+    margin: 10px 0;
+    outline: none;
+    padding: 0 20px;
+    width: 100%;
+  }
+  .login-form button {
+    background: #194b81;
+    border: 0;
+    border-radius: 40px;
+    color: #fff;
+    height: 40px;
+    margin-top: 30px;
+    text-transform: uppercase;
+    width: 100%;
+  }
+  .login-form span {
+    color: indianred;
+    display: inline-block;
+    font-size: 14px;
+    margin: 5px 0 10px;
+  }
+  .login-hero {
+    color: #fff;
+    text-align: center;
+  }
+  .login-hero img {
+    width: calc(100% - 100px);
+  }
+  .login-hero h1 {
+    font-size: 22px;
+    line-height: 34px;
+    margin: 0 0 30px;
+    text-transform: uppercase;
+  }
+  
+  @media screen and (max-width:991px) {
+    .login-form {
+      margin: 80px 15% 0;
+    }
+  }
+  @media screen and (max-width:767px) {
+    #login-ukpbj {
+      height: auto;
+    }
+    #login-ukpbj section {
+      flex-direction: column;
+      margin: 40px;
+    }
+    #login-ukpbj section > div {
+      width: 100%;
+    }
+    #login-ukpbj section > div:nth-child(1) {
+      min-height: 500px;
+    }
+    .login-form {
+      margin: 80px 20px 0;
+    }
+    .login-hero h1 {
+      font-size: 16px;
+      line-height: 28px;
+      margin: 0 0 20px;
+    }
+    .login-hero img {
+      width: calc(100% - 50px);
+    }
+  }
+  @media screen and (max-width:414px) {
+    #login-ukpbj section {
+      flex-direction: column;
+      margin: 20px;
+    }
+    .logo-wrapper img:nth-child(1) {
+      width: 160px;
+    }
+    .logo-wrapper img:nth-child(2) {
+      width: 60px;
+    }
+    .login-hero img {
+      width: 100%;
+    }
+  }
