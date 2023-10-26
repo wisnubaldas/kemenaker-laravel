@@ -1,5 +1,6 @@
 <div class="toolbar" id="kt_toolbar">
     <!--begin::Container-->
+   
     <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
         <!--begin::Page title-->
         <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
@@ -51,19 +52,20 @@
                         <!--begin::Input group-->
                         <div class="mb-10">
                             <!--begin::Label-->
-                            <label class="form-label fw-bold">Status:</label>
+                            <label class="form-label fw-bold">Unit Kerja:</label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <div>
+                              
+                              
+                                
                                 <select class="form-select form-select-solid"
                                     data-kt-select2="true" data-placeholder="Select option"
                                     data-dropdown-parent="#kt_menu_61484bf44d957"
                                     data-allow-clear="true">
                                     <option></option>
-                                    <option value="1">Approved</option>
-                                    <option value="2">Pending</option>
-                                    <option value="2">In Process</option>
-                                    <option value="2">Rejected</option>
+                                    
+                                        <option value="1">Approved</option>
                                 </select>
                             </div>
                             <!--end::Input-->
@@ -72,44 +74,21 @@
                         <!--begin::Input group-->
                         <div class="mb-10">
                             <!--begin::Label-->
-                            <label class="form-label fw-bold">Member Type:</label>
+                            <label class="form-label fw-bold">Nomor Surat Usulan:</label>
                             <!--end::Label-->
                             <!--begin::Options-->
-                            <div class="d-flex">
-                                <!--begin::Options-->
-                                <label
-                                    class="form-check form-check-sm form-check-custom form-check-solid me-5">
-                                    <input class="form-check-input" type="checkbox"
-                                        value="1" />
-                                    <span class="form-check-label">Author</span>
-                                </label>
-                                <!--end::Options-->
-                                <!--begin::Options-->
-                                <label
-                                    class="form-check form-check-sm form-check-custom form-check-solid">
-                                    <input class="form-check-input" type="checkbox"
-                                        value="2" checked="checked" />
-                                    <span class="form-check-label">Customer</span>
-                                </label>
-                                <!--end::Options-->
-                            </div>
+                           <input class="form-control"/>
                             <!--end::Options-->
                         </div>
                         <!--end::Input group-->
                         <!--begin::Input group-->
                         <div class="mb-10">
                             <!--begin::Label-->
-                            <label class="form-label fw-bold">Notifications:</label>
+                            <label class="form-label fw-bold">Nama Tender:</label>
                             <!--end::Label-->
-                            <!--begin::Switch-->
-                            <div
-                                class="form-check form-switch form-switch-sm form-check-custom form-check-solid">
-                                <input class="form-check-input" type="checkbox"
-                                    value="" name="notifications"
-                                    checked="checked" />
-                                <label class="form-check-label">Enabled</label>
-                            </div>
-                            <!--end::Switch-->
+                            <!--begin::Options-->
+                           <input class="form-control"/>
+                            <!--end::Options-->
                         </div>
                         <!--end::Input group-->
                         <!--begin::Actions-->
