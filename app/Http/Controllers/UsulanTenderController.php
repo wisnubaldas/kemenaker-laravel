@@ -6,13 +6,15 @@ use App\Models\TaGroup;
 use App\Models\TaUsulanTender;
 use App\Models\ThUsulanTender;
 use App\Models\ThUsulanTenderDetail;
+use App\Models\TmUnitkerja;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class UsulanTenderController extends Controller
 {
-    public function index():View{
+    public function index(Request $request):View{
 
+       // dd($request->all());
         $data=[
             "title"=>"Usulan Tender",
             "data"=>ThUsulanTenderDetail::select(
@@ -32,12 +34,18 @@ class UsulanTenderController extends Controller
             ->leftJoin('ta_group','th_usulan_tender_detail.posisi','=','ta_group.id')
             ->whereNotNull('th_usulan_tender.alur')
             ->whereNotNull('th_usulan_tender.posisi')
+            ->when($request->input('tm_unitkerja_id'), function ($query, $tm_unitkerja_id) {
+                return $query->where('th_usulan_tender.tmunitkerja_id', $tm_unitkerja_id);
+            })
+            ->when($request->input('no_surat_usulan'), function ($query, $no_surat_usulan) {
+                return $query->where('th_usulan_tender.no_surat_usulan', 'like', '%' . $no_surat_usulan . '%');
+            })
+            ->when($request->input('nama_tender'), function ($query, $nama_tender) {
+                return $query->where('th_usulan_tender_detail.nama_tender', 'like', '%' . $nama_tender . '%');
+            })
             ->orderBy('th_usulan_tender_detail.updated_date', 'DESC')
             ->paginate(20),
-            "ta_group"=>TaGroup::where('status', '=', 1)
-            ->where('id', '<>', 1)
-            ->orderBy('id')
-            ->get()
+            "tm_unitkerja"=>(new TmUnitkerja())->getSortedUnitKerja()
            
         ];
       

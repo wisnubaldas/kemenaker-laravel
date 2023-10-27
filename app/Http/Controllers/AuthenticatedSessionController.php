@@ -31,10 +31,7 @@ class AuthenticatedSessionController extends Controller
         } 
         
     }
-    public function dashboard(): View
-    {
-        return view('app.dashboard');
-    }
+   
 
     public function destroy(Request $request): RedirectResponse
     {
