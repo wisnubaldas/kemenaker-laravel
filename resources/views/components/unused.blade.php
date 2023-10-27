@@ -77,7 +77,7 @@
                                             <div class="symbol symbol-circle symbol-25px" data-bs-toggle="tooltip"
                                                 data-bs-boundary="window" data-bs-placement="top"
                                                 title="Nina Nilson">
-                                                <img src="assets/media/avatars/150-11.jpg" alt="img" />
+                                                <img src="/assets/media/avatars/150-11.jpg" alt="img" />
                                             </div>
                                             <!--end::User-->
                                         </div>
@@ -104,12 +104,12 @@
                                                 class="symbol-group symbol-hover flex-nowrap flex-grow-1 min-w-100px pe-2">
                                                 <!--begin::User-->
                                                 <div class="symbol symbol-circle symbol-25px">
-                                                    <img src="assets/media/avatars/150-3.jpg" alt="img" />
+                                                    <img src="/assets/media/avatars/150-3.jpg" alt="img" />
                                                 </div>
                                                 <!--end::User-->
                                                 <!--begin::User-->
                                                 <div class="symbol symbol-circle symbol-25px">
-                                                    <img src="assets/media/avatars/150-11.jpg" alt="img" />
+                                                    <img src="/assets/media/avatars/150-11.jpg" alt="img" />
                                                 </div>
                                                 <!--end::User-->
                                                 <!--begin::User-->
@@ -151,7 +151,7 @@
                                                 class="symbol-group symbol-hover flex-nowrap flex-grow-1 min-w-100px">
                                                 <!--begin::User-->
                                                 <div class="symbol symbol-circle symbol-25px">
-                                                    <img src="assets/media/avatars/150-5.jpg" alt="img" />
+                                                    <img src="/assets/media/avatars/150-5.jpg" alt="img" />
                                                 </div>
                                                 <!--end::User-->
                                                 <!--begin::User-->
@@ -221,7 +221,7 @@
                                             <div class="symbol symbol-circle symbol-25px" data-bs-toggle="tooltip"
                                                 data-bs-boundary="window" data-bs-placement="top"
                                                 title="Alan Nilson">
-                                                <img src="assets/media/avatars/150-2.jpg" alt="img" />
+                                                <img src="/assets/media/avatars/150-2.jpg" alt="img" />
                                             </div>
                                             <!--end::User-->
                                         </div>
@@ -274,7 +274,7 @@
                                             <div class="symbol symbol-circle symbol-25px" data-bs-toggle="tooltip"
                                                 data-bs-boundary="window" data-bs-placement="top"
                                                 title="Jan Hummer">
-                                                <img src="assets/media/avatars/150-6.jpg" alt="img" />
+                                                <img src="/assets/media/avatars/150-6.jpg" alt="img" />
                                             </div>
                                             <!--end::User-->
                                         </div>
@@ -289,7 +289,7 @@
                                             <div class="d-flex flex-aligns-center pe-10 pe-lg-20">
                                                 <!--begin::Icon-->
                                                 <img alt="" class="w-30px me-3"
-                                                    src="assets/media/svg/files/pdf.svg" />
+                                                    src="/assets/media/svg/files/pdf.svg" />
                                                 <!--end::Icon-->
                                                 <!--begin::Info-->
                                                 <div class="ms-1 fw-bold">
@@ -309,7 +309,7 @@
                                             <div class="d-flex flex-aligns-center pe-10 pe-lg-20">
                                                 <!--begin::Icon-->
                                                 <img alt="" class="w-30px me-3"
-                                                    src="assets/media/svg/files/doc.svg" />
+                                                    src="/assets/media/svg/files/doc.svg" />
                                                 <!--end::Icon-->
                                                 <!--begin::Info-->
                                                 <div class="ms-1 fw-bold">
@@ -329,7 +329,7 @@
                                             <div class="d-flex flex-aligns-center">
                                                 <!--begin::Icon-->
                                                 <img alt="" class="w-30px me-3"
-                                                    src="assets/media/svg/files/css.svg" />
+                                                    src="/assets/media/svg/files/css.svg" />
                                                 <!--end::Icon-->
                                                 <!--begin::Info-->
                                                 <div class="ms-1 fw-bold">
@@ -396,7 +396,7 @@
                                             <div class="symbol symbol-circle symbol-25px" data-bs-toggle="tooltip"
                                                 data-bs-boundary="window" data-bs-placement="top"
                                                 title="Nina Nilson">
-                                                <img src="assets/media/avatars/150-11.jpg" alt="img" />
+                                                <img src="/assets/media/avatars/150-11.jpg" alt="img" />
                                             </div>
                                             <!--end::User-->
                                         </div>
@@ -447,7 +447,7 @@
                                             <div class="symbol symbol-circle symbol-25px" data-bs-toggle="tooltip"
                                                 data-bs-boundary="window" data-bs-placement="top"
                                                 title="Marcus Dotson">
-                                                <img src="assets/media/avatars/150-3.jpg" alt="img" />
+                                                <img src="/assets/media/avatars/150-3.jpg" alt="img" />
                                             </div>
                                             <!--end::User-->
                                         </div>
@@ -463,7 +463,7 @@
                                                 <!--begin::Image-->
                                                 <div class="overlay-wrapper">
                                                     <img alt="img" class="rounded w-200px"
-                                                        src="assets/media/demos/demo1.png" />
+                                                        src="/assets/media/demos/demo1.png" />
                                                 </div>
                                                 <!--end::Image-->
                                                 <!--begin::Link-->
@@ -479,7 +479,7 @@
                                                 <!--begin::Image-->
                                                 <div class="overlay-wrapper">
                                                     <img alt="img" class="rounded w-200px"
-                                                        src="assets/media/demos/demo2.png" />
+                                                        src="/assets/media/demos/demo2.png" />
                                                 </div>
                                                 <!--end::Image-->
                                                 <!--begin::Link-->
@@ -495,7 +495,7 @@
                                                 <!--begin::Image-->
                                                 <div class="overlay-wrapper">
                                                     <img alt="img" class="rounded w-200px"
-                                                        src="assets/media/demos/demo3.png" />
+                                                        src="/assets/media/demos/demo3.png" />
                                                 </div>
                                                 <!--end::Image-->
                                                 <!--begin::Link-->
@@ -607,7 +607,7 @@
                                             <div class="symbol symbol-circle symbol-25px" data-bs-toggle="tooltip"
                                                 data-bs-boundary="window" data-bs-placement="top"
                                                 title="Robert Rich">
-                                                <img src="assets/media/avatars/150-14.jpg" alt="img" />
+                                                <img src="/assets/media/avatars/150-14.jpg" alt="img" />
                                             </div>
                                             <!--end::User-->
                                         </div>
@@ -868,7 +868,7 @@
                                 <div class="d-flex align-items-center mb-2">
                                     <!--begin::Avatar-->
                                     <div class="symbol symbol-35px symbol-circle">
-                                        <img alt="Pic" src="assets/media/avatars/150-15.jpg" />
+                                        <img alt="Pic" src="/assets/media/avatars/150-15.jpg" />
                                     </div>
                                     <!--end::Avatar-->
                                     <!--begin::Details-->
@@ -904,7 +904,7 @@
                                     <!--end::Details-->
                                     <!--begin::Avatar-->
                                     <div class="symbol symbol-35px symbol-circle">
-                                        <img alt="Pic" src="assets/media/avatars/150-26.jpg" />
+                                        <img alt="Pic" src="/assets/media/avatars/150-26.jpg" />
                                     </div>
                                     <!--end::Avatar-->
                                 </div>
@@ -926,7 +926,7 @@
                                 <div class="d-flex align-items-center mb-2">
                                     <!--begin::Avatar-->
                                     <div class="symbol symbol-35px symbol-circle">
-                                        <img alt="Pic" src="assets/media/avatars/150-15.jpg" />
+                                        <img alt="Pic" src="/assets/media/avatars/150-15.jpg" />
                                     </div>
                                     <!--end::Avatar-->
                                     <!--begin::Details-->
@@ -961,7 +961,7 @@
                                     <!--end::Details-->
                                     <!--begin::Avatar-->
                                     <div class="symbol symbol-35px symbol-circle">
-                                        <img alt="Pic" src="assets/media/avatars/150-26.jpg" />
+                                        <img alt="Pic" src="/assets/media/avatars/150-26.jpg" />
                                     </div>
                                     <!--end::Avatar-->
                                 </div>
@@ -983,7 +983,7 @@
                                 <div class="d-flex align-items-center mb-2">
                                     <!--begin::Avatar-->
                                     <div class="symbol symbol-35px symbol-circle">
-                                        <img alt="Pic" src="assets/media/avatars/150-15.jpg" />
+                                        <img alt="Pic" src="/assets/media/avatars/150-15.jpg" />
                                     </div>
                                     <!--end::Avatar-->
                                     <!--begin::Details-->
@@ -1021,7 +1021,7 @@
                                     <!--end::Details-->
                                     <!--begin::Avatar-->
                                     <div class="symbol symbol-35px symbol-circle">
-                                        <img alt="Pic" src="assets/media/avatars/150-26.jpg" />
+                                        <img alt="Pic" src="/assets/media/avatars/150-26.jpg" />
                                     </div>
                                     <!--end::Avatar-->
                                 </div>
@@ -1043,7 +1043,7 @@
                                 <div class="d-flex align-items-center mb-2">
                                     <!--begin::Avatar-->
                                     <div class="symbol symbol-35px symbol-circle">
-                                        <img alt="Pic" src="assets/media/avatars/150-15.jpg" />
+                                        <img alt="Pic" src="/assets/media/avatars/150-15.jpg" />
                                     </div>
                                     <!--end::Avatar-->
                                     <!--begin::Details-->
@@ -1079,7 +1079,7 @@
                                     <!--end::Details-->
                                     <!--begin::Avatar-->
                                     <div class="symbol symbol-35px symbol-circle">
-                                        <img alt="Pic" src="assets/media/avatars/150-26.jpg" />
+                                        <img alt="Pic" src="/assets/media/avatars/150-26.jpg" />
                                     </div>
                                     <!--end::Avatar-->
                                 </div>
@@ -1100,7 +1100,7 @@
                                 <div class="d-flex align-items-center mb-2">
                                     <!--begin::Avatar-->
                                     <div class="symbol symbol-35px symbol-circle">
-                                        <img alt="Pic" src="assets/media/avatars/150-15.jpg" />
+                                        <img alt="Pic" src="/assets/media/avatars/150-15.jpg" />
                                     </div>
                                     <!--end::Avatar-->
                                     <!--begin::Details-->
@@ -1282,7 +1282,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-success rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo1.png" alt="demo"
+                                                <img src="/assets/media/demos/demo1.png" alt="demo"
                                                     class="w-100" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1299,7 +1299,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo2.png" alt="demo"
+                                                <img src="/assets/media/demos/demo2.png" alt="demo"
                                                     class="w-100" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1316,7 +1316,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo3.png" alt="demo"
+                                                <img src="/assets/media/demos/demo3.png" alt="demo"
                                                     class="w-100" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1333,7 +1333,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo4.png" alt="demo"
+                                                <img src="/assets/media/demos/demo4.png" alt="demo"
                                                     class="w-100" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1350,7 +1350,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo5.png" alt="demo"
+                                                <img src="/assets/media/demos/demo5.png" alt="demo"
                                                     class="w-100" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1367,7 +1367,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo6.png" alt="demo"
+                                                <img src="/assets/media/demos/demo6.png" alt="demo"
                                                     class="w-100" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1384,7 +1384,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo7.png" alt="demo"
+                                                <img src="/assets/media/demos/demo7.png" alt="demo"
                                                     class="w-100" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1401,7 +1401,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo8.png" alt="demo"
+                                                <img src="/assets/media/demos/demo8.png" alt="demo"
                                                     class="w-100" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1418,7 +1418,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo9.png" alt="demo"
+                                                <img src="/assets/media/demos/demo9.png" alt="demo"
                                                     class="w-100" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1435,7 +1435,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo10.png" alt="demo"
+                                                <img src="/assets/media/demos/demo10.png" alt="demo"
                                                     class="w-100 opacity-25" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1452,7 +1452,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo11.png" alt="demo"
+                                                <img src="/assets/media/demos/demo11.png" alt="demo"
                                                     class="w-100" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1469,7 +1469,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo12.png" alt="demo"
+                                                <img src="/assets/media/demos/demo12.png" alt="demo"
                                                     class="w-100 opacity-25" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1486,7 +1486,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo13.png" alt="demo"
+                                                <img src="/assets/media/demos/demo13.png" alt="demo"
                                                     class="w-100" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1503,7 +1503,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo14.png" alt="demo"
+                                                <img src="/assets/media/demos/demo14.png" alt="demo"
                                                     class="w-100 opacity-25" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1520,7 +1520,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo15.png" alt="demo"
+                                                <img src="/assets/media/demos/demo15.png" alt="demo"
                                                     class="w-100 opacity-25" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1537,7 +1537,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo16.png" alt="demo"
+                                                <img src="/assets/media/demos/demo16.png" alt="demo"
                                                     class="w-100 opacity-25" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1554,7 +1554,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo17.png" alt="demo"
+                                                <img src="/assets/media/demos/demo17.png" alt="demo"
                                                     class="w-100 opacity-25" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1571,7 +1571,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo18.png" alt="demo"
+                                                <img src="/assets/media/demos/demo18.png" alt="demo"
                                                     class="w-100 opacity-25" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1588,7 +1588,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo19.png" alt="demo"
+                                                <img src="/assets/media/demos/demo19.png" alt="demo"
                                                     class="w-100 opacity-25" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1605,7 +1605,7 @@
                                         <div
                                             class="overlay overflow-hidden position-relative border border-4 border-gray-200 rounded">
                                             <div class="overlay-wrapper">
-                                                <img src="assets/media/demos/demo20.png" alt="demo"
+                                                <img src="/assets/media/demos/demo20.png" alt="demo"
                                                     class="w-100 opacity-25" />
                                             </div>
                                             <div class="overlay-layer bg-dark bg-opacity-10">
@@ -1673,7 +1673,7 @@
                         <!--end::Heading-->
                         <!--begin::Google Contacts Invite-->
                         <div class="btn btn-light-primary fw-bolder w-100 mb-8">
-                            <img alt="Logo" src="assets/media/svg/brand-logos/google-icon.svg"
+                            <img alt="Logo" src="/assets/media/svg/brand-logos/google-icon.svg"
                                 class="h-20px me-3" />Invite Gmail Contacts
                         </div>
                         <!--end::Google Contacts Invite-->
@@ -1699,7 +1699,7 @@
                                     <div class="d-flex align-items-center">
                                         <!--begin::Avatar-->
                                         <div class="symbol symbol-35px symbol-circle">
-                                            <img alt="Pic" src="assets/media/avatars/150-1.jpg" />
+                                            <img alt="Pic" src="/assets/media/avatars/150-1.jpg" />
                                         </div>
                                         <!--end::Avatar-->
                                         <!--begin::Details-->
@@ -1763,7 +1763,7 @@
                                     <div class="d-flex align-items-center">
                                         <!--begin::Avatar-->
                                         <div class="symbol symbol-35px symbol-circle">
-                                            <img alt="Pic" src="assets/media/avatars/150-26.jpg" />
+                                            <img alt="Pic" src="/assets/media/avatars/150-26.jpg" />
                                         </div>
                                         <!--end::Avatar-->
                                         <!--begin::Details-->
@@ -1795,7 +1795,7 @@
                                     <div class="d-flex align-items-center">
                                         <!--begin::Avatar-->
                                         <div class="symbol symbol-35px symbol-circle">
-                                            <img alt="Pic" src="assets/media/avatars/150-4.jpg" />
+                                            <img alt="Pic" src="/assets/media/avatars/150-4.jpg" />
                                         </div>
                                         <!--end::Avatar-->
                                         <!--begin::Details-->
@@ -1827,7 +1827,7 @@
                                     <div class="d-flex align-items-center">
                                         <!--begin::Avatar-->
                                         <div class="symbol symbol-35px symbol-circle">
-                                            <img alt="Pic" src="assets/media/avatars/150-15.jpg" />
+                                            <img alt="Pic" src="/assets/media/avatars/150-15.jpg" />
                                         </div>
                                         <!--end::Avatar-->
                                         <!--begin::Details-->
@@ -1891,7 +1891,7 @@
                                     <div class="d-flex align-items-center">
                                         <!--begin::Avatar-->
                                         <div class="symbol symbol-35px symbol-circle">
-                                            <img alt="Pic" src="assets/media/avatars/150-8.jpg" />
+                                            <img alt="Pic" src="/assets/media/avatars/150-8.jpg" />
                                         </div>
                                         <!--end::Avatar-->
                                         <!--begin::Details-->
@@ -1987,7 +1987,7 @@
                                     <div class="d-flex align-items-center">
                                         <!--begin::Avatar-->
                                         <div class="symbol symbol-35px symbol-circle">
-                                            <img alt="Pic" src="assets/media/avatars/150-6.jpg" />
+                                            <img alt="Pic" src="/assets/media/avatars/150-6.jpg" />
                                         </div>
                                         <!--end::Avatar-->
                                         <!--begin::Details-->
@@ -2051,7 +2051,7 @@
                                     <div class="d-flex align-items-center">
                                         <!--begin::Avatar-->
                                         <div class="symbol symbol-35px symbol-circle">
-                                            <img alt="Pic" src="assets/media/avatars/150-7.jpg" />
+                                            <img alt="Pic" src="/assets/media/avatars/150-7.jpg" />
                                         </div>
                                         <!--end::Avatar-->
                                         <!--begin::Details-->
@@ -2115,7 +2115,7 @@
                                     <div class="d-flex align-items-center">
                                         <!--begin::Avatar-->
                                         <div class="symbol symbol-35px symbol-circle">
-                                            <img alt="Pic" src="assets/media/avatars/150-17.jpg" />
+                                            <img alt="Pic" src="/assets/media/avatars/150-17.jpg" />
                                         </div>
                                         <!--end::Avatar-->
                                         <!--begin::Details-->
@@ -2179,7 +2179,7 @@
                                     <div class="d-flex align-items-center">
                                         <!--begin::Avatar-->
                                         <div class="symbol symbol-35px symbol-circle">
-                                            <img alt="Pic" src="assets/media/avatars/150-10.jpg" />
+                                            <img alt="Pic" src="/assets/media/avatars/150-10.jpg" />
                                         </div>
                                         <!--end::Avatar-->
                                         <!--begin::Details-->
@@ -2210,7 +2210,7 @@
                                     <div class="d-flex align-items-center">
                                         <!--begin::Avatar-->
                                         <div class="symbol symbol-35px symbol-circle">
-                                            <img alt="Pic" src="assets/media/avatars/150-17.jpg" />
+                                            <img alt="Pic" src="/assets/media/avatars/150-17.jpg" />
                                         </div>
                                         <!--end::Avatar-->
                                         <!--begin::Details-->
@@ -2856,11 +2856,11 @@
                                                     <!--begin::Card logos-->
                                                     <div
                                                         class="position-absolute translate-middle-y top-50 end-0 me-5">
-                                                        <img src="assets/media/svg/card-logos/visa.svg"
+                                                        <img src="/assets/media/svg/card-logos/visa.svg"
                                                             alt="" class="h-25px" />
-                                                        <img src="assets/media/svg/card-logos/mastercard.svg"
+                                                        <img src="/assets/media/svg/card-logos/mastercard.svg"
                                                             alt="" class="h-25px" />
-                                                        <img src="assets/media/svg/card-logos/american-express.svg"
+                                                        <img src="/assets/media/svg/card-logos/american-express.svg"
                                                             alt="" class="h-25px" />
                                                     </div>
                                                     <!--end::Card logos-->
@@ -3001,7 +3001,7 @@
                                             <!--end::Description-->
                                             <!--begin::Illustration-->
                                             <div class="text-center px-4 py-15">
-                                                <img src="assets/media/illustrations/sketchy-1/9.png" alt=""
+                                                <img src="/assets/media/illustrations/sketchy-1/9.png" alt=""
                                                     class="w-100 mh-300px" />
                                             </div>
                                             <!--end::Illustration-->

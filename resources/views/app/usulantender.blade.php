@@ -152,7 +152,7 @@
                                     </td>
                                     <td class="pe-4">
                                         <div class="d-flex justify-content-end flex-shrink-0">
-                                            <a href="#"
+                                            <a href="/usulan-tender-detail/{{$item->id}}"
                                                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen019.svg-->
                                                 <span class="svg-icon svg-icon-3">
