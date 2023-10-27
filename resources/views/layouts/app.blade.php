@@ -11,6 +11,7 @@
         <!-- Scripts -->
         <link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 		<link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
         @vite([
             'resources/css/dashboard.scss'
             ,'resources/js/app.js'
@@ -18,7 +19,7 @@
     </head>
     <body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed" style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
       
-        <div class="d-flex flex-column flex-root">
+        <div id="app" class="d-flex flex-column flex-root">
             <!--begin::Page-->
             <div class="page d-flex flex-row flex-column-fluid">
                 <!--begin::Aside-->
