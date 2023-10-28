@@ -8,6 +8,7 @@ use App\Models\ThUsulanTender;
 use App\Models\ThUsulanTenderDetail;
 use App\Models\TmUnitkerja;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class UsulanTenderController extends Controller
@@ -16,10 +17,27 @@ class UsulanTenderController extends Controller
 
        // dd($request->all());
         $detailusulanlist=(new ThUsulanTenderDetail())->getCompleteData();
+        $user=Auth::user();
+        $role=$user->tagroup_id;
+        switch ($role){
+            case 1:
+                $detailusulanlist
+                ->join('th_usulan_tender_pokja', function ($join) {
+                    $join->on('th_usulan_tender_pokja.thusulantenderdetail_id', '=', 'th_usulan_tender_detail.id')
+                        ->where('th_usulan_tender_pokja.thusulananggotapokja_id', '=', 55);
+                });
+                break;
+            case 2:
+                $detailusulanlist
+                ->where('th_usulan_tender.tmunitkerja_id',$user->tmunitkerja_id)
+                ->where('th_usulan_tender.created_by',$user->id);
+
+        }
         $data=[
             "title"=>"Usulan Tender",
             "data"=>
-            $detailusulanlist->when($request->input('tm_unitkerja_id'), function ($query, $tm_unitkerja_id) {
+            $detailusulanlist
+            ->when($request->input('tm_unitkerja_id'), function ($query, $tm_unitkerja_id) {
                 return $query->where('th_usulan_tender.tmunitkerja_id', $tm_unitkerja_id);
             })
             ->when($request->input('no_surat_usulan'), function ($query, $no_surat_usulan) {
@@ -45,4 +63,47 @@ class UsulanTenderController extends Controller
         ];
         return view('app.usulantenderdetail',$data);
     }
+
+    public function draftlist(Request $request):View{
+
+        // dd($request->all());
+         $detailusulanlist=(new ThUsulanTenderDetail())->getCompleteData();
+         $user=Auth::user();
+         $role=$user->tagroup_id;
+         switch ($role){
+             case 1:
+                 $detailusulanlist
+                 ->join('th_usulan_tender_pokja', function ($join) {
+                     $join->on('th_usulan_tender_pokja.thusulantenderdetail_id', '=', 'th_usulan_tender_detail.id')
+                         ->where('th_usulan_tender_pokja.thusulananggotapokja_id', '=', 55);
+                 });
+                 break;
+             case 2:
+                 $detailusulanlist
+                 ->where('th_usulan_tender.tmunitkerja_id',$user->tmunitkerja_id)
+                 ->where('th_usulan_tender.created_by',$user->id);
+ 
+         }
+         $data=[
+             "title"=>"Usulan Tender",
+             "data"=>
+             $detailusulanlist
+             ->when($request->input('tm_unitkerja_id'), function ($query, $tm_unitkerja_id) {
+                 return $query->where('th_usulan_tender.tmunitkerja_id', $tm_unitkerja_id);
+             })
+             ->when($request->input('no_surat_usulan'), function ($query, $no_surat_usulan) {
+                 return $query->where('th_usulan_tender.no_surat_usulan', 'like', '%' . $no_surat_usulan . '%');
+             })
+             ->when($request->input('nama_tender'), function ($query, $nama_tender) {
+                 return $query->where('th_usulan_tender_detail.nama_tender', 'like', '%' . $nama_tender . '%');
+             })
+             ->orderBy('th_usulan_tender_detail.updated_date', 'DESC')
+             ->paginate(20),
+             "tm_unitkerja"=>(new TmUnitkerja())->getSortedUnitKerja()
+            
+         ];
+       
+         //dd($data['data']);
+         return view('app.draftusulantender',$data);
+     }
 }

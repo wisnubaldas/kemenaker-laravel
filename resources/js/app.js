@@ -15,7 +15,8 @@ createApp({
                     jenis_tender:"",
                     nama_tender:""
                 }
-            ]
+            ],
+            tabusulan_active:1
         }
     },
     methods: {

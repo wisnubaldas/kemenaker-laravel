@@ -3,11 +3,13 @@
     <section>
         <div class="card-header border-0 pt-5">
             <div class="card-header">
-                <div class="d-flex flex-stack">
+                <div class="d-flex justify-content-between">
                     <div class="">
                        @include('components.tabusulan')
                     </div>
                     <div class="d-flex align-items-center py-1">
+                       
+                            <a href="/usulan-tender/draft" class="btn btn-sm {{request()->is('usulan-tender/draft')?' btn-light-info me-3 fw-bolder':'btn-light-secondary'}}" >Tambah Usulan Tender</a>
                         <div class="me-4">
                             <!--begin::Menu-->
                             <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder"
@@ -35,45 +37,11 @@
                                 <!--end::Menu separator-->
                                 <!--begin::Form-->
                                 <div class="px-7 py-5">
-                                    <script>
-                                        // Dapatkan elemen select menggunakan ID
-                                        var selectElement = document.getElementById('tm_unitkerja_select');
-                                        
-                                        // Set nilai awal pada elemen Select2
-                                        selectElement.value = '{{ request('tm_unitkerja_id') }}';
-                                        
-                                        // Trigger event change agar Select2 memperbarui tampilan
-                                        var event = new Event('change');
-                                        selectElement.dispatchEvent(event);
-                                    </script>
+                                   
                                     <form method="GET" action="">
                                         @csrf
                                         <!--begin::Input group-->
-                                        <div class="mb-10">
-                                            <!--begin::Label-->
-                                            <label class="form-label fw-bold">Unit Kerja:</label>
-                                            <div>
-                                                <select 
-                                                id="tm_unitkerja_select"
-                                                name="tm_unitkerja_id" 
-                                                value="{{ request('tm_unitkerja_id') }}"
-                                                    class="form-select form-select-solid" data-kt-select2="true"
-                                                    data-placeholder="Select option"
-                                                    data-dropdown-parent="#kt_menu_61484bf44d957"
-                                                    data-allow-clear="true">
-                                                    <option></option>
-                                                    @foreach ($tm_unitkerja as $item)
-                                                        <option 
-                                                            value="{{ $item->id }}"
-                                                            {{request('tm_unitkerja_id')==$item->id?'selected':''}}
-                                                        >
-                                                            {{ $item->unitkerja }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <!--end::Input-->
-                                        </div>
+                                      
                                         <!--end::Input group-->
                                         <!--begin::Input group-->
                                         <div class="mb-10">
@@ -113,6 +81,7 @@
                             <!--end::Menu 1-->
                             <!--end::Menu-->
                         </div>
+                        <div>
                         <select class="form-select form-select-sm form-select-solid w-70px select2-hidden-accessible"
                             data-control="select2" data-placeholder="Select Hours" data-hide-search="true"
                             data-select2-id="select2-data-10-wdu2" tabindex="-1" aria-hidden="true">
@@ -121,21 +90,19 @@
                             <option value="4">100 </option>
                             <option value="all">All</option>
                         </select>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="card-body py-3">
                 <div class="table-responsive">
                     <table id="example"
-                        class="table table-hover table-row-bordered table-row-gray-100 align-middle gs-0 gy-4"
+                        class="table  table-row-bordered table-row-gray-100 align-middle gs-0 gy-4"
                         style="width:100%">
                         <thead>
                             <tr class="fw-bolder text-muted bg-light">
-                                <th class="ps-4 rounded-start">Unit Kerja</th>
-                                <th>Nomor Surat Usulan</th>
-                                <th>Nama tender</th>
-                                <th>Jenis Tender</th>
-                                <th>Posisi</th>
+                                <th class="ps-4 rounded-start">Nomor Surat Usulan</th>
+                                <th>Keterangan</th>
                                 <th class="text-center">Alur</th>
                                 <th class="w-25px pe-4 text-end rounded-end">Aksi</th>
                             </tr>
@@ -143,11 +110,9 @@
                         <tbody>
                             @foreach ($data as $item)
                                 <tr>
-                                    <td class="ps-4">{{ $item->unitkerja }}</td>
-                                    <td>{{ $item->no_surat_usulan }}</td>
-                                    <td>{{ $item->nama_tender }}</td>
-                                    <td>{{ $item->jenis_tender }}</td>
-                                    <td>{{ $item->nama_group }}</td>
+                                 
+                                    <td class="ps-4">{{ $item->no_surat_usulan }}</td>
+                                    <td>{{ $item->keterangan }}</td>
                                     <td><span
                                             class="w-100 badge {{ config('params.badgecolor.' . $item->alur) }} text-wrap">{{ config('params.alur.' . $item->alur) }}</span>
                                     </td>
@@ -176,7 +141,6 @@
                             @endforeach
                         </tbody>
                     </table>
-                    {{-- @include('components.paginationbar',['data'=>$data]) --}}
                     {!! $data->links('pagination::bootstrap-5') !!}
                 </div>
             </div>

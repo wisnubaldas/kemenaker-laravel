@@ -36,4 +36,9 @@ Route::group(['middleware'=>'role:1'],function () {
     Route::get('/unit-kerja', [AuthenticatedSessionController::class, 'dashboard'])->name('unit-kerja');
     Route::get('/group', [AuthenticatedSessionController::class, 'dashboard'])->name('group');
     Route::get('/user', [AuthenticatedSessionController::class, 'dashboard'])->name('user');
+
+});
+
+Route::group(['middleware'=>'role:2'],function () {
+    Route::get('/usulan-tender/draft', [UsulanTenderController::class, 'draftlist'])->name('draft-usulan-tender');
 });
