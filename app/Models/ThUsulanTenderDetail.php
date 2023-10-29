@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class ThUsulanTenderDetail extends Model
 {
@@ -11,9 +13,33 @@ class ThUsulanTenderDetail extends Model
     protected $table="th_usulan_tender_detail";
     public $timestamps = false;
 
-    public function usulanTender()
+    protected static function boot()
     {
+        parent::boot();
+
+        // Hook creating untuk mengisi kolom-kolom secara otomatis sebelum menyimpan data
+        static::creating(function ($model) {
+            $user = Auth::user();
+            $model->created_by = $user->id;
+            $model->created_date = Carbon::now();
+            $model->updated_date = Carbon::now();
+            //$model->created_unitkerja = $user->tmunitkerja_id;
+            //$model->tmunitkerja_id = $user->tmunitkerja_id;
+        });
+        static::updating(function ($model) {
+            $user = Auth::user();
+            $model->updated_by = $user->id;
+            $model->updated_date = Carbon::now();
+        });
+    }
+
+    public function usulanTender()
+    {   
         return $this->belongsTo(ThUsulanTender::class, 'thusulantender_id', 'id');
+    }
+    public function usulanTenderDetailDoc()
+    {   
+        return $this->belongsTo(ThUsulanTenderDetailDoc::class, 'thusulantenderdetail_id', 'id');
     }
 
     public function tmJenisTender()

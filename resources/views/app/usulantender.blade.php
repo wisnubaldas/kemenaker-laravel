@@ -1,11 +1,12 @@
 <x-app-layout>
     <x-slot name="title">{{ $title ?? '' }}</x-slot>
     <section>
+      
         <div class="card-header border-0 pt-5">
             <div class="card-header">
                 <div class="d-flex flex-stack">
                     <div class="">
-                       @include('components.tabusulan')
+                        @include('components.tabusulan')
                     </div>
                     <div class="d-flex align-items-center py-1">
                         <div class="me-4">
@@ -38,10 +39,10 @@
                                     <script>
                                         // Dapatkan elemen select menggunakan ID
                                         var selectElement = document.getElementById('tm_unitkerja_select');
-                                        
+
                                         // Set nilai awal pada elemen Select2
                                         selectElement.value = '{{ request('tm_unitkerja_id') }}';
-                                        
+
                                         // Trigger event change agar Select2 memperbarui tampilan
                                         var event = new Event('change');
                                         selectElement.dispatchEvent(event);
@@ -53,20 +54,16 @@
                                             <!--begin::Label-->
                                             <label class="form-label fw-bold">Unit Kerja:</label>
                                             <div>
-                                                <select 
-                                                id="tm_unitkerja_select"
-                                                name="tm_unitkerja_id" 
-                                                value="{{ request('tm_unitkerja_id') }}"
+                                                <select id="tm_unitkerja_select" name="tm_unitkerja_id"
+                                                    value="{{ request('tm_unitkerja_id') }}"
                                                     class="form-select form-select-solid" data-kt-select2="true"
                                                     data-placeholder="Select option"
                                                     data-dropdown-parent="#kt_menu_61484bf44d957"
                                                     data-allow-clear="true">
                                                     <option></option>
                                                     @foreach ($tm_unitkerja as $item)
-                                                        <option 
-                                                            value="{{ $item->id }}"
-                                                            {{request('tm_unitkerja_id')==$item->id?'selected':''}}
-                                                        >
+                                                        <option value="{{ $item->id }}"
+                                                            {{ request('tm_unitkerja_id') == $item->id ? 'selected' : '' }}>
                                                             {{ $item->unitkerja }}
                                                         </option>
                                                     @endforeach
@@ -153,7 +150,7 @@
                                     </td>
                                     <td class="pe-4">
                                         <div class="d-flex justify-content-end flex-shrink-0">
-                                            <a href="/usulan-tender-detail/{{$item->id}}"
+                                            <a href="/usulan-tender-detail/{{ $item->id }}"
                                                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen019.svg-->
                                                 <span class="svg-icon svg-icon-3">

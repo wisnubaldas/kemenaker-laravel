@@ -1,5 +1,7 @@
 import './bootstrap';
 const { createApp, ref } = Vue
+var i = 0;
+
 
 createApp({
     setup() {
@@ -13,7 +15,12 @@ createApp({
             tenderlist:[
                 {
                     jenis_tender:"",
-                    nama_tender:""
+                    nama_tender:"",
+                    berkaslist:[
+                        {
+                            nama_berkas:"",
+                        }
+                    ],
                 }
             ],
             tabusulan_active:1,
@@ -24,19 +31,24 @@ createApp({
     methods: {
         onAdd(){
             this.tenderlist.push( {
-                jenis_tender:"",
-                nama_tender:"",
                 
+            });
+            vueIndex = this.tenderlist.length;
+        },
+        onAddBerkas(tender){
+            tender.berkaslist.push( {
+                nama_berkas:"",
             });
         },
         saveDraft(){
+            console.log("FORM",this.$refs.draftForm)
+
             this.$refs.draftForm.submit();
         },
         openFilePicker(namainput) {
             this.$refs[namainput].click();
         },
         updateFileName(event) {
-          
             var fileName = event.target.files[0] ? event.target.files[0].name : '';
             this.file_surat_usulan_name=fileName;
 

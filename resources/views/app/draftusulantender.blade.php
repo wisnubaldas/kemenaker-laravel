@@ -1,6 +1,11 @@
 <x-app-layout>
     <x-slot name="title">{{ $title ?? '' }}</x-slot>
     <section>
+        @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
         <div class="card-header border-0 pt-5">
             <div class="card-header">
                 <div class="d-flex justify-content-between">
