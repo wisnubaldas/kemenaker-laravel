@@ -9,4 +9,6 @@ class TaGroup extends Model
 {
     use HasFactory;
     protected $table="ta_group";
+    public $timestamps = false;
+
 }

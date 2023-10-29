@@ -9,4 +9,6 @@ class ThUsulanTenderPokja extends Model
 {
     use HasFactory;
     protected $table = "th_usulan_tender_pokja";
+    public $timestamps = false;
+
 }

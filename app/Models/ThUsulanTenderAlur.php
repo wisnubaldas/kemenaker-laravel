@@ -9,4 +9,6 @@ class ThUsulanTenderAlur extends Model
 {
     use HasFactory;
     protected $table="th_usulan_tender_alur";
+    public $timestamps = false;
+
 }

@@ -57,7 +57,7 @@ return [
         18 => 'Tender Telah Selesai'
     ],
     'badgecolor' => [
-        '' => 'badge-light-secondary',  // Untuk Draft Usulan Tender
+        '' => 'badge-secondary',  // Untuk Draft Usulan Tender
         0 => 'badge-light-primary', // Untuk Usulan Tender Dikirimkan
         1 => 'badge-light-primary', // Untuk Verifikasi Berkas Usulan Tender dan Input Surat Tugas
         2 => 'badge-light-danger',  // Untuk Sekretariat menolak Usulan Tender
