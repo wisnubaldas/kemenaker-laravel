@@ -198,6 +198,11 @@ class UsulanTenderController extends Controller
                             ]
                         ]
                     ]
+                ],
+                "usulan_tender_usul_pokja"=>[
+                    [
+                        "nip"=>""
+                    ]
                 ]
             ]
         ];

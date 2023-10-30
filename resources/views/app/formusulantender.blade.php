@@ -197,25 +197,33 @@
                         </button>
                     </div>
                     <hr />
-                    <div class="row mb-3" v-for="(member,imember) in members">
+                    <div class="row mb-3" v-for="(member,imember) in tenderData.usulan_tender_usul_pokja">
                         <div class="col-3">
                             <label class="fw-bolder mb-3">NIP</label>
-                            <input :name="`pokja[${imember}][nip]`" class="form-control" />
+                            <input 
+                            :value="isEdit?member.nip:''"
+                            :name="`pokja[${imember}][nip]`" class="form-control" />
                         </div>
                         <div class="col-3">
                             <label class="fw-bolder mb-3">Nama Lengkap</label>
-                            <input  :name="`pokja[${imember}][nama_lengkap]`" class="form-control" />
+                            <input  
+                            :value="isEdit?member.nama_lengkap:''"
+                            :name="`pokja[${imember}][nama_lengkap]`" class="form-control" />
                         </div>
                         <div class="col-3">
                             <label class="fw-bolder mb-3">Jabatan</label>
-                            <input  :name="`pokja[${imember}][jabatan]`" class="form-control" />
+                            <input  
+                            :value="isEdit?member.jabatan:''"
+                            :name="`pokja[${imember}][jabatan]`" class="form-control" />
                         </div>
                         <div class="col-3">
                             <div class="d-flex justify-content-between">
                                 <label class="fw-bolder mb-3">No Sertifikat PBJ</label>
                                 <a href="" class="text-danger fw-bolder">Hapus</a>
                             </div>
-                            <input :name="`pokja[${imember}][keterangan]`"  class="form-control" />
+                            <input 
+                            :value="isEdit?member.keterangan:''"
+                            :name="`pokja[${imember}][keterangan]`"  class="form-control" />
                         </div>
                     </div>
                 </div>

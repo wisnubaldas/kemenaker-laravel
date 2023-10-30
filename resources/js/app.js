@@ -76,7 +76,9 @@ createApp({
             this.file_surat_usulan_name=fileName;
         },
         onAddAnggota(){
-            this.members.push({})
+            this.tenderData.usulan_tender_usul_pokja.push({
+                nip:""
+            })
         }
     },
 }).mount('#app')
