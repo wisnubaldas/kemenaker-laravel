@@ -118,7 +118,6 @@ class UsulanTenderController extends Controller
                             ]);  
                            // dd(request('usulanTenderDetails')[$index]['usulanTenderDetailDoc'][$i]['berkas']);      
                             if (!$validatordoc->fails()) {
-                               
                                 $model_doc=new ThUsulanTenderDetailDoc();
                                 $model_doc->thusulantenderdetail_id = $model_detail->id;
                                 $model_doc->nama_berkas=$doc["nama_berkas"];
@@ -136,11 +135,11 @@ class UsulanTenderController extends Controller
             DB::commit();
             return redirect()->route('draft-usulan-tender')
             ->with('success', 'Usulan berhasil disimpan. '
-            .$errTenderDetCount.' Tender Gagal Tersimpan'
+            .$errTenderDetCount.' Tender Gagal Tersimpan dan '
             .$errDocCount.' Dokumen Gagal Tersimpan'
             );
         } catch (Exception $e) {
-            dd($e);
+           // dd($e);
             DB::rollBack();
             return redirect()->route('new-usulan-tender')->withInput();
         }
