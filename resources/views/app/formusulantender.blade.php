@@ -123,17 +123,17 @@
                     <div class="row" v-for="(i,indexi) in item.berkaslist">
                         <div class="col-2 mb-3">
                             <div>
-                                <input :ref="`berkas_${indexi}`" hidden @change="updateDocName($event,`berkas_${indexi}`)" type="file" :name="`usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][berkas]`" />
+                                <input :ref="`berkas_${index}_${indexi}`" hidden @change="updateDocName($event,`berkas_${index}_${indexi}`)" type="file" :name="`usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][berkas]`" />
                               
-                                <div v-if="checkExist(`berkas_${indexi}`)"
-                                    @click="openDocPicker('berkas_'+indexi)" style="cursor: pointer"
+                                <div v-if="checkExist(`berkas_${index}_${indexi}`)"
+                                    @click="openDocPicker('berkas_'+index+'_'+indexi)" style="cursor: pointer"
                                     class="d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-100px me-7 mb-4">
                                    
                                     <img class="mw-50px mw-lg-75px" src="/assets/media/svg/files/pdf.svg"
                                         alt="image">
                                     
                                 </div>
-                                <div v-else @click="openDocPicker('berkas_'+indexi)" style="cursor: pointer"
+                                <div v-else @click="openDocPicker('berkas_'+index+'_'+indexi)" style="cursor: pointer"
                                     class="card  flex-center bg-light-primary border-primary border border-dashed p-8">
                                    
                                     <img src="/assets/media/svg/files/upload.svg" class="h-20px" alt="">
@@ -152,7 +152,7 @@
                             value="{{@old('usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][nama_berkas]')}}"
                             class="form-control me-4" aria-label="Sizing example input"
                                 aria-describedby="inputGroup-sizing-sm" />
-                                <span class="w-75 mt-3  text-2-row text-wrap" v-html="docname['berkas_'+indexi]"></span>
+                                <span class="w-75 mt-3  text-2-row text-wrap" v-html="docname['berkas_'+index+'_'+indexi]"></span>
 
 
                         </div>
@@ -165,7 +165,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
                         <h2>Usulan Anggota Pokja</h2>
-                        <button @click="onAdd" class="btn btn-sm btn-light-primary">
+                        <button type="button" @click="onAddAnggota" class="btn btn-sm btn-light-primary">
                             <span class="svg-icon svg-icon-3"><svg xmlns="http://www.w3.org/2000/svg" width="24"
                                     height="24" viewBox="0 0 24 24" fill="none">
                                     <path
@@ -183,25 +183,25 @@
                         </button>
                     </div>
                     <hr />
-                    <div class="row">
+                    <div class="row mb-3" v-for="(member,imember) in members">
                         <div class="col-3">
                             <label class="fw-bolder mb-3">NIP</label>
-                            <input class="form-control" />
+                            <input :name="`pokja[${imember}][nip]`" class="form-control" />
                         </div>
                         <div class="col-3">
                             <label class="fw-bolder mb-3">Nama Lengkap</label>
-                            <input class="form-control" />
+                            <input  :name="`pokja[${imember}][nama_lengkap]`" class="form-control" />
                         </div>
                         <div class="col-3">
                             <label class="fw-bolder mb-3">Jabatan</label>
-                            <input class="form-control" />
+                            <input  :name="`pokja[${imember}][jabatan]`" class="form-control" />
                         </div>
                         <div class="col-3">
                             <div class="d-flex justify-content-between">
                                 <label class="fw-bolder mb-3">No Sertifikat PBJ</label>
                                 <a href="" class="text-danger fw-bolder">Hapus</a>
                             </div>
-                            <input class="form-control" />
+                            <input :name="`pokja[${imember}][keterangan]`"  class="form-control" />
                         </div>
                     </div>
                 </div>

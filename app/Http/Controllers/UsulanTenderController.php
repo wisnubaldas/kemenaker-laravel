@@ -8,6 +8,8 @@ use App\Models\TaUsulanTender;
 use App\Models\ThUsulanTender;
 use App\Models\ThUsulanTenderDetail;
 use App\Models\ThUsulanTenderDetailDoc;
+use App\Models\ThUsulanTenderPokja;
+use App\Models\ThUsulanTenderUsulpokja;
 use App\Models\TmJenisTender;
 use App\Models\TmUnitkerja;
 use Carbon\Carbon;
@@ -80,12 +82,13 @@ class UsulanTenderController extends Controller
         try {
             $errTenderDetCount=0;
             $errDocCount=0;
+            $errMemberCount=0;
             $model = new ThUsulanTender();
             $model->no_surat_usulan = $request->input('no_surat_usulan');
             $model->keterangan = $request->input('keterangan');
             if ($request->hasFile('file_surat_usulan')) {
                 $file = $request->file('file_surat_usulan');
-                dd($file);
+             //   dd($file);
                 $uniqueFileName = Str::random(20) . '.pdf';
                 $file->storeAs('surat_usulan', $uniqueFileName);
                 $model->file_surat_usulan = $uniqueFileName;
@@ -112,12 +115,12 @@ class UsulanTenderController extends Controller
                     $docs=request('usulanTenderDetails')[$index]['usulanTenderDetailDoc'];
                     foreach ($docs as $i=>$doc) {
                        
-                            $validatordoc = Validator::make($doc, [
+                            $membervalidator = Validator::make($doc, [
                                 'nama_berkas' => 'nullable',
                                 'berkas' => 'required|file|mimes:pdf|max:25000',
                             ]);  
                            // dd(request('usulanTenderDetails')[$index]['usulanTenderDetailDoc'][$i]['berkas']);      
-                            if (!$validatordoc->fails()) {
+                            if (!$membervalidator->fails()) {
                                 $model_doc=new ThUsulanTenderDetailDoc();
                                 $model_doc->thusulantenderdetail_id = $model_detail->id;
                                 $model_doc->nama_berkas=$doc["nama_berkas"];
@@ -132,14 +135,40 @@ class UsulanTenderController extends Controller
                     }
                 }
             }
+            $members = $request->input('pokja');
+            foreach($members as $member){
+                $membervalidator = Validator::make($member, [
+                    'nip' => 'required:max:20',
+                    'nama_lengkap' => 'nullable|max:100',
+                    'jabatan'=>'nullable|max:50',
+                    'keterangan'=>'nullable|max:250',
+                ]);
+                if ($membervalidator->fails()) {
+                    $errMemberCount++;
+                }else{
+                    $modelPokja=new ThUsulanTenderUsulpokja();
+                    $modelPokja->nip=$member['nip'];
+                    $modelPokja->nama_lengkap=$member['nama_lengkap'];
+                    $modelPokja->jabatan=$member['jabatan'];
+                    $modelPokja->keterangan=$member['keterangan'];
+                    $modelPokja->thusulantender_id=$model->id;
+                    if(!$modelPokja->save()){
+                        $errMemberCount++;
+                    };
+                }
+            }
+            
+            //dd($members);
+
             DB::commit();
             return redirect()->route('draft-usulan-tender')
-            ->with('success', 'Usulan berhasil disimpan. '
-            .$errTenderDetCount.' Tender Gagal Tersimpan dan '
-            .$errDocCount.' Dokumen Gagal Tersimpan'
+                ->with('success', 'Usulan berhasil disimpan. '
+                .$errTenderDetCount.' Tender Gagal Tersimpan dan '
+                .$errDocCount.' Dokumen Gagal Tersimpan dan '
+                .$errMemberCount.' Anggota Gagal Tersimpan'
             );
         } catch (Exception $e) {
-           // dd($e);
+            dd($e);
             DB::rollBack();
             return redirect()->route('new-usulan-tender')->withInput();
         }
