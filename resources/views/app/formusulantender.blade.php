@@ -1,6 +1,10 @@
 <x-app-layout>
     <x-slot name="title">{{ $title ?? '' }}</x-slot>
     <section>
+        <script>
+            var isEditDraft=@json($is_edit);
+            var tenderData = @json($data);
+        </script>
         <form ref="draftForm" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="card mb-5">
@@ -19,7 +23,7 @@
                         <div class="me-2">
                             <label class="fw-bolder mb-3">Berkas</label>
                             <input hidden  ref="file_surat_usulan" @change="updateFileName" type="file" name="file_surat_usulan" />
-                                <div v-if="file_surat_usulan_name "
+                                <div v-if="file_surat_usulan_name||tenderData.file_surat_usulan"
                                     @click="openFilePicker('file_surat_usulan')" style="cursor: pointer"
                                     class="d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-150px me-7 mb-4">
                                    
@@ -49,16 +53,19 @@
                                         @enderror
                                     </label>
                                     <input name="no_surat_usulan"
-
                                         class="form-control {{ $errors->has('no_surat_usulan') ? 'is-invalid' : '' }}"
-                                        required value="{{@old('no_surat_usulan')}}" />
+                                        required 
+                                        value="{{ $is_edit ? $data->no_surat_usulan : @old('no_surat_usulan') }}"
+                                        />
 
                                 </div>
                                 <!--end::Status-->
                                 <!--begin::Description-->
                                 <div class="">
                                     <label class="fw-bolder mb-3">Keterangan</label>
-                                    <textarea name="keterangan" value="{{@old('keterangan')}}" class="form-control"></textarea>
+                                    <textarea name="keterangan" 
+                                    value="{{ $is_edit? $data->keterangan : @old('keterangan') }}"
+                                    class="form-control"></textarea>
                                 </div>
                                 <!--end::Description-->
                             </div>
@@ -87,14 +94,18 @@
                 </button>
             </div>
             <hr />
-            <div class="card mb-5" v-for="(item,index) in tenderlist" :key="index">
+            <div class="card mb-5" v-for="(item,index) in tenderData.usulan_tender_details" :key="index">
                 <div class="card-body">
                     <div class="row mb-5">
                         <div class="col-6">
                             <label class="mb-3 fw-bolder">Jenis Tender</label>
-                            <select :name="`usulanTenderDetails[${index}][tmjenistender_id]`" class="form-control" >
+                            <select 
+                            :value="isEdit?item.tmjenistender_id:''"
+                            :name="`usulanTenderDetails[${index}][tmjenistender_id]`" class="form-control" >
+                                <option value="">Pilih Jenis Tender</option>
                                 @foreach ($jenis_tender as $item)
-                                <option value="{{$item->id}}" >{{$item->jenis_tender}}</option>
+                                <option value="{{$item->id}}"
+                                    >{{$item->jenis_tender}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -103,7 +114,10 @@
                                 <label  class="d-flex mb-3 fw-bolder required">
                                     <div class="me-3">Nama Tender</div>                                  
                                 </label>
-                            <input required :name="`usulanTenderDetails[${index}][nama_tender]`" class="form-control" />
+                            <input required 
+                            :name="`usulanTenderDetails[${index}][nama_tender]`" 
+                            :value="isEdit?item.nama_tender:''"
+                            class="form-control" />
                         </div>
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
@@ -120,12 +134,12 @@
                         </button>
                     </div>
                     <hr />
-                    <div class="row" v-for="(i,indexi) in item.berkaslist">
+                    <div class="row" v-for="(i,indexi) in item.usulan_tender_detail_doc">
                         <div class="col-2 mb-3">
                             <div>
                                 <input :ref="`berkas_${index}_${indexi}`" hidden @change="updateDocName($event,`berkas_${index}_${indexi}`)" type="file" :name="`usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][berkas]`" />
                               
-                                <div v-if="checkExist(`berkas_${index}_${indexi}`)"
+                                <div v-if="checkExist(`berkas_${index}_${indexi}`)||i.berkas"
                                     @click="openDocPicker('berkas_'+index+'_'+indexi)" style="cursor: pointer"
                                     class="d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-100px me-7 mb-4">
                                    
@@ -149,7 +163,7 @@
                                 <a href="" class="text-danger fw-bolder">Hapus</a>
                             </div>
                             <input type="text" :name="`usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][nama_berkas]`" 
-                            value="{{@old('usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][nama_berkas]')}}"
+                            :value="isEdit?i.nama_berkas:''"
                             class="form-control me-4" aria-label="Sizing example input"
                                 aria-describedby="inputGroup-sizing-sm" />
                                 <span class="w-75 mt-3  text-2-row text-wrap" v-html="docname['berkas_'+index+'_'+indexi]"></span>

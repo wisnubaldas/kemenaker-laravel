@@ -39,7 +39,7 @@ class ThUsulanTenderDetail extends Model
     }
     public function usulanTenderDetailDoc()
     {   
-        return $this->belongsTo(ThUsulanTenderDetailDoc::class, 'thusulantenderdetail_id', 'id');
+        return $this->hasMany(ThUsulanTenderDetailDoc::class, 'thusulantenderdetail_id', 'id');
     }
 
     public function tmJenisTender()

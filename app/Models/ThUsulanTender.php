@@ -41,6 +41,10 @@ class ThUsulanTender extends Model
     {
         return $this->hasMany(ThUsulanTenderDetail::class, 'thusulantender_id', 'id');
     }
+    public function usulanTenderUsulPokja()
+    {
+        return $this->hasMany(ThUsulanTenderUsulpokja::class, 'thusulantender_id', 'id');
+    }
 
     public function getdraft($unit_kerja_id,$owner_id){
         return $this

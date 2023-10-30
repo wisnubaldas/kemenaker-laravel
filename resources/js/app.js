@@ -12,6 +12,8 @@ createApp({
     },
     data() {
         return {
+            isEdit:window.isEditDraft,
+            tenderData:window.tenderData,
             tenderlist:[
                 {
                     jenis_tender:"",
@@ -45,15 +47,14 @@ createApp({
             return ret;
         },
         onAdd(){
-            this.tenderlist.push( {
+            this.tenderData.usulan_tender_details.push( {
                 berkaslist:[]
             });
-            vueIndex = this.tenderlist.length;
+            vueIndex = this.tenderData.usulan_tender_details.length;
         },
         onAddBerkas(tender){
-            tender.berkaslist.push( {
+            tender.usulan_tender_detail_doc.push( {
                 nama_berkas:"",
-                
             });
         },
         saveDraft(){

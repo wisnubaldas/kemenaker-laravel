@@ -128,7 +128,7 @@
                             @foreach ($data as $item)
                                 <tr>
                                     <td>
-                                        <button type="button" @click="rowdraftactive={{ $loop->iteration }}" class="btn btn-icon btn-light-primary btn-sm me-1">
+                                        <button type="button" @click="rowdraftactive=={{ $loop->iteration }}?rowdraftactive=null:rowdraftactive={{ $loop->iteration }}" class="btn btn-icon btn-light-primary btn-sm me-1">
                                         <span class="svg-icon  svg-icon-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                             <path opacity="0.3" d="M10 4H21C21.6 4 22 4.4 22 5V7H10V4Z" fill="black"/>
                                             <path d="M10.4 3.60001L12 6H21C21.6 6 22 6.4 22 7V19C22 19.6 21.6 20 21 20H3C2.4 20 2 19.6 2 19V4C2 3.4 2.4 3 3 3H9.2C9.7 3 10.2 3.20001 10.4 3.60001ZM16 12H13V9C13 8.4 12.6 8 12 8C11.4 8 11 8.4 11 9V12H8C7.4 12 7 12.4 7 13C7 13.6 7.4 14 8 14H11V17C11 17.6 11.4 18 12 18C12.6 18 13 17.6 13 17V14H16C16.6 14 17 13.6 17 13C17 12.4 16.6 12 16 12Z" fill="black"/>
@@ -153,7 +153,7 @@
                                                 </span>
                                                 <!--end::Svg Icon-->
                                             </a>
-                                            <a href="#" class="btn btn-icon btn-light-warning btn-sm me-1">
+                                            <a href="/usulan-tender/edit/{{$item->id}}" class="btn btn-icon btn-light-warning btn-sm me-1">
                                                 <!--begin::Svg Icon | path: icons/duotune/art/art005.svg-->
                                                 <span class="svg-icon svg-icon-3">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\NewDraftUsulanRequest;
 use App\Models\TaGroup;
 use App\Models\TaUsulanTender;
+use App\Models\ThAnggotaPokja;
 use App\Models\ThUsulanTender;
 use App\Models\ThUsulanTenderDetail;
 use App\Models\ThUsulanTenderDetailDoc;
@@ -26,8 +27,6 @@ class UsulanTenderController extends Controller
 {
     public function index(Request $request): View
     {
-
-        // dd($request->all());
         $detailusulanlist = (new ThUsulanTenderDetail())->getCompleteData();
         $user = Auth::user();
         $role = $user->tagroup_id;
@@ -83,6 +82,7 @@ class UsulanTenderController extends Controller
             $errTenderDetCount=0;
             $errDocCount=0;
             $errMemberCount=0;
+            $registeredpokja=0;
             $model = new ThUsulanTender();
             $model->no_surat_usulan = $request->input('no_surat_usulan');
             $model->keterangan = $request->input('keterangan');
@@ -146,15 +146,22 @@ class UsulanTenderController extends Controller
                 if ($membervalidator->fails()) {
                     $errMemberCount++;
                 }else{
-                    $modelPokja=new ThUsulanTenderUsulpokja();
-                    $modelPokja->nip=$member['nip'];
-                    $modelPokja->nama_lengkap=$member['nama_lengkap'];
-                    $modelPokja->jabatan=$member['jabatan'];
-                    $modelPokja->keterangan=$member['keterangan'];
-                    $modelPokja->thusulantender_id=$model->id;
-                    if(!$modelPokja->save()){
-                        $errMemberCount++;
-                    };
+                    $nip=$member['nip'];
+                    $ceknip=ThAnggotaPokja::where('nip',$nip)->first();
+                    if($ceknip){
+                        $registeredpokja++;
+                    }else{
+                        $modelPokja=new ThUsulanTenderUsulpokja();
+                        $modelPokja->nip=$nip;
+                        $modelPokja->nama_lengkap=$member['nama_lengkap'];
+                        $modelPokja->jabatan=$member['jabatan'];
+                        $modelPokja->keterangan=$member['keterangan'];
+                        $modelPokja->thusulantender_id=$model->id;
+                        if(!$modelPokja->save()){
+                            $errMemberCount++;
+                        };
+                    }
+                   
                 }
             }
             
@@ -165,7 +172,8 @@ class UsulanTenderController extends Controller
                 ->with('success', 'Usulan berhasil disimpan. '
                 .$errTenderDetCount.' Tender Gagal Tersimpan dan '
                 .$errDocCount.' Dokumen Gagal Tersimpan dan '
-                .$errMemberCount.' Anggota Gagal Tersimpan'
+                .$errMemberCount.' Anggota Gagal Tersimpan dan '
+                .$registeredpokja.' Usulan Anggota Pokja Sudah ada dalam database'
             );
         } catch (Exception $e) {
             dd($e);
@@ -179,9 +187,33 @@ class UsulanTenderController extends Controller
         $detailusulanlist = (new ThUsulanTenderDetail())->getCompleteData();
         $data = [
             "title" => "Usulan Tender",
-            "jenis_tender"=>TmJenisTender::orderby('jenis_tender')->get()
+            "jenis_tender"=>TmJenisTender::orderby('jenis_tender')->get(),
+            "is_edit"=>false,
+            "data"=>[
+                "usulan_tender_details"=>[
+                    [
+                        "usulan_tender_detail_doc"=>[
+                            [
+                                "nama_berkas"=>""
+                            ]
+                        ]
+                    ]
+                ]
+            ]
         ];
         return view('app.formusulantender', $data);
+    }
+    public function editdraft(Request $request,$tender_id):View{
+        $data = ThUsulanTender::with('usulanTenderDetails.usulanTenderDetailDoc','usulanTenderUsulPokja')
+        ->where('id',$tender_id)
+        ->first();
+        $data = [
+            "title" => "Usulan Tender",
+            "jenis_tender"=>TmJenisTender::orderby('jenis_tender')->get(),
+            "is_edit"=>true,
+            "data"=>$data
+        ];
+        return view('app.formusulantender', $data); 
     }
 
     public function draftlist(Request $request): View
