@@ -85,6 +85,7 @@ class UsulanTenderController extends Controller
             $model->keterangan = $request->input('keterangan');
             if ($request->hasFile('file_surat_usulan')) {
                 $file = $request->file('file_surat_usulan');
+                dd($file);
                 $uniqueFileName = Str::random(20) . '.pdf';
                 $file->storeAs('surat_usulan', $uniqueFileName);
                 $model->file_surat_usulan = $uniqueFileName;
@@ -92,7 +93,7 @@ class UsulanTenderController extends Controller
             $model->save();
 
             $usulanTenderDetails = $request->input('usulanTenderDetails');
-            foreach ($usulanTenderDetails as $detail) {
+            foreach ($usulanTenderDetails as $index => $detail) {
                 $validator = Validator::make($detail, [
                     'nama_tender' => 'required',
                     'tmjenistender_id' => 'required'
@@ -108,21 +109,23 @@ class UsulanTenderController extends Controller
                     $model_detail->thusulantender_id = $model->id;
                     $model_detail->tmjenistender_id = $tmjenistender_id;
                     $model_detail->save();
-                    $docs=$detail['usulanTenderDetailDoc'];
-                    foreach ($docs as $doc) {
+                    $docs=request('usulanTenderDetails')[$index]['usulanTenderDetailDoc'];
+                    foreach ($docs as $i=>$doc) {
+                       
                             $validatordoc = Validator::make($doc, [
                                 'nama_berkas' => 'nullable',
                                 'berkas' => 'required|file|mimes:pdf|max:25000',
                             ]);  
-                                              
-                            if ($doc['berkas']->hasFile('berkas')||!$validatordoc->fails()) {
+                           // dd(request('usulanTenderDetails')[$index]['usulanTenderDetailDoc'][$i]['berkas']);      
+                            if (!$validatordoc->fails()) {
+                               
                                 $model_doc=new ThUsulanTenderDetailDoc();
                                 $model_doc->thusulantenderdetail_id = $model_detail->id;
                                 $model_doc->nama_berkas=$doc["nama_berkas"];
                                 $file = $doc['berkas'];
                                 $uniqueFileName = Str::random(20) . '.pdf';
                                 $file->storeAs('berkas', $uniqueFileName);
-                                $model_doc->file_surat_uberkassulan = $uniqueFileName;
+                                $model_doc->berkas = $uniqueFileName;
                                 $model_doc->save();
                             }else{
                                 $errDocCount++;
@@ -137,6 +140,7 @@ class UsulanTenderController extends Controller
             .$errDocCount.' Dokumen Gagal Tersimpan'
             );
         } catch (Exception $e) {
+            dd($e);
             DB::rollBack();
             return redirect()->route('new-usulan-tender')->withInput();
         }

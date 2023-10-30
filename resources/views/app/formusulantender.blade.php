@@ -123,19 +123,25 @@
                     <div class="row" v-for="(i,indexi) in item.berkaslist">
                         <div class="col-2 mb-3">
                             <div>
-                                <div
-                                    class="card h-100 flex-center bg-light-primary border-primary border border-dashed p-8">
-                                    <!--begin::Image-->
-
+                                <input :ref="`berkas_${indexi}`" hidden @change="updateDocName($event,`berkas_${indexi}`)" type="file" :name="`usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][berkas]`" />
+                              
+                                <div v-if="checkExist(`berkas_${indexi}`)"
+                                    @click="openDocPicker('berkas_'+indexi)" style="cursor: pointer"
+                                    class="d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-100px me-7 mb-4">
+                                   
+                                    <img class="mw-50px mw-lg-75px" src="/assets/media/svg/files/pdf.svg"
+                                        alt="image">
+                                    
+                                </div>
+                                <div v-else @click="openDocPicker('berkas_'+indexi)" style="cursor: pointer"
+                                    class="card  flex-center bg-light-primary border-primary border border-dashed p-8">
+                                   
                                     <img src="/assets/media/svg/files/upload.svg" class="h-20px" alt="">
-                                    <!--end::Image-->
-                                    <!--begin::Link-->
-                                    <a href="#" class="text-hover-primary fs-6 fw-bolder mb-2">File Upload</a>
-                                    <!--end::Description-->
+                                    <a href="#" class=" fs-6 fw-bolder mb-2">File Upload</a>
+                                    
                                 </div>
                             </div>
-                            <input hidden  ref="berkas" @change="updateFileName" type="file" :name="`usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][berkas]`" />
-                                
+                              
                         </div>
                         <div class="col">
                             <div class="d-flex justify-content-between">
@@ -146,6 +152,7 @@
                             value="{{@old('usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][nama_berkas]')}}"
                             class="form-control me-4" aria-label="Sizing example input"
                                 aria-describedby="inputGroup-sizing-sm" />
+                                <span class="w-75 mt-3  text-2-row text-wrap" v-html="docname['berkas_'+indexi]"></span>
 
 
                         </div>
