@@ -2,16 +2,18 @@ import './bootstrap';
 const { createApp, ref } = Vue
 var i = 0;
 
-
 createApp({
     setup() {
       const message = ref('Hello vue!')
+    
       return {
         message
       }
     },
+    
     data() {
         return {
+            pathmodalactive:null,
             isEdit:window.isEditDraft,
             tenderData:window.tenderData,
             tenderlist:[

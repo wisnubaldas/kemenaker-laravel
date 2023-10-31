@@ -5,6 +5,7 @@
             var isEditDraft=@json($is_edit);
             var tenderData = @json($data);
         </script>
+        @include('components.modalpdf')       
         <form ref="draftForm" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="card mb-5">
@@ -22,12 +23,24 @@
                         <!--begin::Image-->
                         <div class="me-2">
                             <label class="fw-bolder mb-3">Berkas</label>
-                            <input hidden  ref="file_surat_usulan" @change="updateFileName" type="file" name="file_surat_usulan" />
+                            <input hidden  
+                            {{-- value="{{ $is_edit ? $data->file_surat_usulan : @old('file_surat_usulan') }}" --}}
+                            ref="file_surat_usulan" @change="updateFileName" type="file" name="file_surat_usulan" />
                                 <div v-if="file_surat_usulan_name||tenderData.file_surat_usulan"
-                                    @click="openFilePicker('file_surat_usulan')" style="cursor: pointer"
-                                    class="d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-150px me-7 mb-4">
                                    
-                                    <img class="mw-50px mw-lg-75px" src="/assets/media/svg/files/pdf.svg"
+                                    class="image-input d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-150px me-7 mb-4">
+                                    <label @click="openFilePicker('file_surat_usulan')" class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="" data-bs-original-title="Change avatar">
+                                        <i class="bi bi-pencil-fill fs-7"></i>
+                                        <!--begin::Inputs-->
+                                        <input type="hidden" name="avatar_remove">
+                                        <!--end::Inputs-->
+                                    </label>
+                                    <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="" data-bs-original-title="Remove avatar">
+                                        <i class="bi bi-x fs-2"></i>
+                                    </span>
+                                    <img class="mw-50px mw-lg-75px" 
+                                    data-bs-target="#kt_modal_new_card" @click="pathmodalactive='storage/surat_usulan/'+tenderData.file_surat_usulan"
+                                    data-bs-toggle="modal" data-bs-target="#kt_modal_new_card"   style="cursor: pointer" src="/assets/media/svg/files/pdf.svg"
                                         alt="image">
                                     <span class="w-75 mt-3 text-center text-2-row text-wrap" v-html="file_surat_usulan_name"></span>
                                 </div>

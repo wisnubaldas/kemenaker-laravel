@@ -44,4 +44,5 @@ Route::group(['middleware'=>'role:2'],function () {
     Route::get('/usulan-tender/new', [UsulanTenderController::class, 'newdraft'])->name('new-usulan-tender');
     Route::post('/usulan-tender/new', [UsulanTenderController::class, 'submit_newdraft'])->name('submit-new-usulan-tender');
     Route::get('/usulan-tender/edit/{tender_id}', [UsulanTenderController::class, 'editdraft'])->name('edit-usulan-tender');
+    Route::post('/usulan-tender/edit/{tender_id}', [UsulanTenderController::class, 'updatedraft'])->name('update-usulan-tender');
 });

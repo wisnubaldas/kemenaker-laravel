@@ -19,6 +19,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
@@ -90,7 +92,7 @@ class UsulanTenderController extends Controller
                 $file = $request->file('file_surat_usulan');
              //   dd($file);
                 $uniqueFileName = Str::random(20) . '.pdf';
-                $file->storeAs('surat_usulan', $uniqueFileName);
+                $file->storeAs('surat_usulan', $uniqueFileName,'public');
                 $model->file_surat_usulan = $uniqueFileName;
             }
             $model->save();
@@ -126,7 +128,7 @@ class UsulanTenderController extends Controller
                                 $model_doc->nama_berkas=$doc["nama_berkas"];
                                 $file = $doc['berkas'];
                                 $uniqueFileName = Str::random(20) . '.pdf';
-                                $file->storeAs('berkas', $uniqueFileName);
+                                $file->storeAs('berkas', $uniqueFileName,'public');
                                 $model_doc->berkas = $uniqueFileName;
                                 $model_doc->save();
                             }else{
@@ -176,7 +178,6 @@ class UsulanTenderController extends Controller
                 .$registeredpokja.' Usulan Anggota Pokja Sudah ada dalam database'
             );
         } catch (Exception $e) {
-            dd($e);
             DB::rollBack();
             return redirect()->route('new-usulan-tender')->withInput();
         }
@@ -220,7 +221,31 @@ class UsulanTenderController extends Controller
         ];
         return view('app.formusulantender', $data); 
     }
+    public function updatedraft(Request $request,$tender_id): RedirectResponse{
+        DB::beginTransaction();
+        try{
+            $tender=ThUsulanTender::find($tender_id);
+            //dd(request()->all(),$tender);
+            $tender->no_surat_usulan=request('no_surat_usulan');
+            $tender->keterangan=request('keterangan');
 
+            if ($request->hasFile('file_surat_usulan')) {
+                $file = $request->file('file_surat_usulan');
+             //   dd($file);
+                $uniqueFileName = Str::random(20) . '.pdf';
+                $file->storeAs('surat_usulan', $uniqueFileName,'public');
+                if (Storage::disk('public')->exists($file)) {
+                    Storage::disk('public')->delete($tender->file_surat_usulan);
+                }
+                $tender->file_surat_usulan = $uniqueFileName;
+            }
+            $tender->save();
+            DB::commit();
+            return redirect()->route('draft-usulan-tender') ->with('success', 'Draft usulan berhasil diperbaharui');
+        }catch(Exception $e){
+            DB::rollBack();
+        }
+    }
     public function draftlist(Request $request): View
     {
 
