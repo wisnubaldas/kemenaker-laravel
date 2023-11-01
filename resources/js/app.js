@@ -81,6 +81,27 @@ createApp({
             this.tenderData.usulan_tender_usul_pokja.push({
                 nip:""
             })
+        },
+        delTender(item,index){
+            if(item.id){
+                item.is_del=true;
+            }else{
+                this.tenderData.usulan_tender_details.splice(index,1)
+            }
+        },
+        delDoc(item,doc,indexdoc){
+            if(doc.berkas){
+                doc.is_del=true;
+            }else{
+                item.usulan_tender_detail_doc.splice(indexdoc,1)
+            }
+        },
+        delMember(item,index){
+            if(item.id){
+                item.is_del=true;
+            }else{
+                this.tenderData.usulan_tender_usul_pokja.splice(index,1)
+            }
         }
     },
 }).mount('#app')
