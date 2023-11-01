@@ -38,7 +38,7 @@
                                     <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="" data-bs-original-title="Remove avatar">
                                         <i class="bi bi-x fs-2"></i>
                                     </span>
-                                    <img class="mw-50px mw-lg-75px" 
+                                    <img class="scale-hover mw-50px mw-lg-75px" 
                                     data-bs-target="#kt_modal_new_card" @click="pathmodalactive='storage/surat_usulan/'+tenderData.file_surat_usulan"
                                     data-bs-toggle="modal" data-bs-target="#kt_modal_new_card"   style="cursor: pointer" src="/assets/media/svg/files/pdf.svg"
                                         alt="image">
@@ -107,7 +107,16 @@
                 </button>
             </div>
             <hr />
-            <div class="card mb-5" v-for="(item,index) in tenderData.usulan_tender_details" :key="index">
+            <div class="image-input w-100 card mb-5" v-for="(item,index) in tenderData.usulan_tender_details" :key="index">
+                <input v-if="isEdit" 
+                        :name="`usulanTenderDetails[${index}][id]`"
+                        :value="isEdit?item.id:''" type="hidden"/>
+                         <label  class="btn btn-icon btn-circle btn-danger w-25px h-25px shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="" 
+                         data-bs-original-title="Hapus Tender">
+                                        <i class="bi bi-trash fs-7"></i>
+                                        <!--begin::Inputs-->
+                                        <!--end::Inputs-->
+                                    </label>
                 <div class="card-body">
                     <div class="row mb-5">
                         <div class="col-6">
@@ -148,22 +157,34 @@
                     </div>
                     <hr />
                     <div class="row" v-for="(i,indexi) in item.usulan_tender_detail_doc">
+                        <input v-if="isEdit" 
+                        :name="`usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][id]`"
+                        :value="isEdit?i.berkas:''" type="hidden"/>
                         <div class="col-2 mb-3">
                             <div>
                                 <input :ref="`berkas_${index}_${indexi}`" hidden @change="updateDocName($event,`berkas_${index}_${indexi}`)" type="file" :name="`usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][berkas]`" />
                               
                                 <div v-if="checkExist(`berkas_${index}_${indexi}`)||i.berkas"
-                                    @click="openDocPicker('berkas_'+index+'_'+indexi)" style="cursor: pointer"
-                                    class="d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-100px me-7 mb-4">
-                                   
-                                    <img class="mw-50px mw-lg-75px" src="/assets/media/svg/files/pdf.svg"
+                                   style="cursor: pointer"
+                                    class="image-input d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-100px me-7 mb-4">
+                                    <label @click="openDocPicker('berkas_'+index+'_'+indexi)"  
+                                    class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" 
+                                    data-bs-toggle="tooltip" title="" data-bs-original-title="Ubah Berkas">
+                                        <i class="bi bi-pencil-fill fs-7"></i>
+                                        <!--begin::Inputs-->
+                                        <!--end::Inputs-->
+                                    </label>
+                                    <img 
+                                    data-bs-target="#kt_modal_new_card" @click="pathmodalactive='storage/berkas/'+i.berkas"
+                                    data-bs-toggle="modal" data-bs-target="#kt_modal_new_card"  
+                                    class="scale-hover mw-50px mw-lg-75px" src="/assets/media/svg/files/pdf.svg"
                                         alt="image">
                                     
                                 </div>
                                 <div v-else @click="openDocPicker('berkas_'+index+'_'+indexi)" style="cursor: pointer"
                                     class="card  flex-center bg-light-primary border-primary border border-dashed p-8">
                                    
-                                    <img src="/assets/media/svg/files/upload.svg" class="h-20px" alt="">
+                                    <img src="/assets/media/svg/files/upload.svg" class=" h-20px" alt="">
                                     <a href="#" class=" fs-6 fw-bolder mb-2">File Upload</a>
                                     
                                 </div>
@@ -211,6 +232,9 @@
                     </div>
                     <hr />
                     <div class="row mb-3" v-for="(member,imember) in tenderData.usulan_tender_usul_pokja">
+                        <input v-if="isEdit" 
+                        :name="`pokja[${imember}][id]`"
+                        :value="isEdit?member.id:''" type="hidden"/>
                         <div class="col-3">
                             <label class="fw-bolder mb-3">NIP</label>
                             <input 

@@ -5,3 +5,10 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
+
+.scale-hover{
+    transition: transform .5s;
+    &:hover{
+        transform: scale(1.5);
+    }
+}

@@ -12,7 +12,7 @@ class ThUsulanTenderDetailDoc extends Model
     use HasFactory;
     protected $table="th_usulan_tender_detail_doc";
 
-    protected $primaryKey = null;
+    protected $primaryKey = 'berkas';
     public $incrementing = false;
     public $timestamps = false;
     protected static function boot()
