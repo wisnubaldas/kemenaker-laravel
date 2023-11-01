@@ -17,7 +17,7 @@ class AppLayout extends Component
     {
         $routename=Route::current()->getName();
         $data=[];
-        if($routename=="new-usulan-tender"||$routename=="edot-usulan-tender"){
+        if($routename=="new-usulan-tender"||$routename=="edit-usulan-tender"){
             $data['btn_save_usulan']=true;
         }
         return view('layouts.app',$data);

@@ -10,5 +10,6 @@ class ThAnggotaPokja extends Model
     use HasFactory;
     protected $table="th_anggota_pokja";
     public $timestamps = false;
+    protected $guarded=[];
 
 }

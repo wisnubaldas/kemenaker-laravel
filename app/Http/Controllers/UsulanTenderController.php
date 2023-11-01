@@ -7,6 +7,7 @@ use App\Models\TaGroup;
 use App\Models\TaUsulanTender;
 use App\Models\ThAnggotaPokja;
 use App\Models\ThUsulanTender;
+use App\Models\ThUsulanTenderAlur;
 use App\Models\ThUsulanTenderDetail;
 use App\Models\ThUsulanTenderDetailDoc;
 use App\Models\ThUsulanTenderPokja;
@@ -106,7 +107,7 @@ class UsulanTenderController extends Controller
                         ]);
                         // dd(request('usulanTenderDetails')[$index]['usulanTenderDetailDoc'][$i]['berkas']);      
                         if (!$membervalidator->fails()) {
-                            $this->savedoc($model_detail->id,$doc);
+                            $this->savedoc($model_detail->id, $doc);
                         } else {
                             $errDocCount++;
                         }
@@ -192,7 +193,8 @@ class UsulanTenderController extends Controller
         ];
         return view('app.formusulantender', $data);
     }
-    private function savedoc($detail_id,$doc){
+    private function savedoc($detail_id, $doc)
+    {
         $model_doc = new ThUsulanTenderDetailDoc();
         $model_doc->thusulantenderdetail_id = $detail_id;
         $model_doc->nama_berkas = $doc["nama_berkas"];
@@ -213,6 +215,54 @@ class UsulanTenderController extends Controller
         $modelPokja->thusulantender_id = $tender_id;
         $modelPokja->save();
         return $modelPokja;
+    }
+    public function send($id)
+    {
+        DB::beginTransaction();
+        try{
+            $model=ThUsulanTender::find($id);
+            $alurlama = $model->alur;
+            $posisilama = $model->posisi;
+            $model->posisi = 3;
+            $model->alur = '0';
+            $user=Auth::user();
+            if ($alurlama == "" && $posisilama == "" && $user->tagroup_id == 2) {
+                if($model->save()){
+                    $model_detail=ThUsulanTenderDetail::where('thusulantender_id',$model->id)->get();
+                    foreach($model_detail as $detail){
+                        $detail->alur='0';
+                        $detail->posisi=3;
+                        $detail->save();
+                        $alur= new ThUsulanTenderAlur();
+                        $alur->thusulantenderdetail_id = $detail->id;
+                        $alur->tagroup_id=$user->tagroup_id;
+                        $alur->alur='0';
+                        $alur->posisi=3;
+                        $alur->save();
+                    }
+
+                    $model_usulpokja=ThUsulanTenderUsulpokja::where('thusulantender_id',$model->id)->get();
+                    foreach($model_usulpokja as $pokja){
+                        $anggota = ThAnggotaPokja::firstOrCreate(
+                            ['nip' => $pokja->nip], 
+                            [
+                                'nama_lengkap' => $pokja->nama_lengkap,
+                                'jabatan' => $pokja->jabatan,
+                                'unit_kerja'=>$pokja->unit_kerja,
+                                'tmunitkerja_id'=>$pokja->tmunitkerja_id,
+                                'status'=>0,
+                            ]
+                        );
+                    }
+                }
+            }
+            DB::commit();
+            return $model; 
+        }catch(Exception $e){
+            //dd($e);
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
     }
     private function savenewdetail($detail, $tender_id)
     {
@@ -260,8 +310,7 @@ class UsulanTenderController extends Controller
                 $model->file_surat_usulan = $uniqueFileName;
             }
             $model->save();
-            $usulanTenderDetails = $request->input('usulanTenderDetails');
-            //dd($usulanTenderDetails);
+            $usulanTenderDetails = $request->input('usulanTenderDetails')??[];
             foreach ($usulanTenderDetails as $index => $detail) {
                 if (isset($detail['id'])) {
                     $model_detail = ThUsulanTenderDetail::find($detail['id']);
@@ -282,7 +331,7 @@ class UsulanTenderController extends Controller
                 } else {
                     $model_detail = $this->savenewdetail($detail, $model->id);
                 }
-                $docs = request('usulanTenderDetails')[$index]['usulanTenderDetailDoc'];
+                $docs = request('usulanTenderDetails')[$index]['usulanTenderDetailDoc']??[];
 
                 foreach ($docs as $i => $doc) {
                     if (isset($doc['id'])) {
@@ -297,7 +346,7 @@ class UsulanTenderController extends Controller
                         $model_doc->nama_berkas = $doc["nama_berkas"];
                         if (isset($doc['berkas'])) {
                             $file = $doc['berkas'];
-                         
+
                             if (Storage::disk('public')->exists('berkas/' . $model_doc->berkas)) {
                                 Storage::disk('public')->delete('berkas/' . $model_doc->berkas);
                             }
@@ -307,16 +356,16 @@ class UsulanTenderController extends Controller
                         }
                         $model_doc->save();
                         // dd($model_doc,$doc);
-                    }else{
-                        $this->savedoc($model_detail->id,$doc);
+                    } else {
+                        $this->savedoc($model_detail->id, $doc);
                     }
                 }
             }
-            $members = $request->input('pokja');
+            $members = $request->input('pokja')??[];
             //dd($members);
             foreach ($members as $member) {
                 if (!isset($member['id'])) {
-                    
+
                     $membervalidator = Validator::make($member, [
                         'nip' => 'required:max:20',
                         'nama_lengkap' => 'nullable|max:100',

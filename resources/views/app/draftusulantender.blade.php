@@ -143,7 +143,7 @@
                                     </td>
                                     <td class="pe-4">
                                         <div class="d-flex justify-content-end flex-shrink-0">
-                                            <a href="#" class="btn btn-icon btn-light-primary btn-sm me-1">
+                                            <div @click="sendUsulan({{$item->id}})" class="btn btn-icon btn-light-primary btn-sm me-1">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen019.svg-->
                                                 <span class="svg-icon svg-icon-3">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -152,7 +152,7 @@
                                                         </svg>     
                                                 </span>
                                                 <!--end::Svg Icon-->
-                                            </a>
+                                            </div>
                                             <a href="/usulan-tender/edit/{{$item->id}}" class="btn btn-icon btn-light-warning btn-sm me-1">
                                                 <!--begin::Svg Icon | path: icons/duotune/art/art005.svg-->
                                                 <span class="svg-icon svg-icon-3">
