@@ -65,15 +65,16 @@ class UsulanTenderController extends Controller
 
         ];
 
-        //dd($data['data']);
+       // dd($data['data']);
         return view('app.usulantender', $data);
     }
     public function detail(Request $request, $usulan_tender_detail_id): View
     {
-        $detailusulanlist = (new ThUsulanTenderDetail())->getCompleteData();
+        $detailusulanlist = ThUsulanTenderDetail::with('usulanTender','tmJenisTender','usulanTenderDetailDoc')->find($usulan_tender_detail_id);
+       // dd($detailusulanlist);
         $data = [
             "title" => "Usulan Tender",
-            "data" => $detailusulanlist->where('th_usulan_tender_detail.id', $usulan_tender_detail_id)->first()
+            "data" => $detailusulanlist
         ];
         return view('app.usulantenderdetail', $data);
     }

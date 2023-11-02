@@ -126,7 +126,8 @@
                         <div class="row mb-5">
                             <div class="col-6">
                                 <label class="mb-3 fw-bolder">Jenis Tender</label>
-                                <select :value="isEdit ? item.tmjenistender_id : ''"
+                                <select 
+                                v-model="item.tmjenistender_id"
                                     :name="`usulanTenderDetails[${index}][tmjenistender_id]`" class="form-control">
                                     <option value="">Pilih Jenis Tender</option>
                                     @foreach ($jenis_tender as $item)
@@ -140,7 +141,7 @@
                                     <div class="me-3">Nama Tender</div>
                                 </label>
                                 <input required :name="`usulanTenderDetails[${index}][nama_tender]`"
-                                    :value="isEdit ? item.nama_tender : ''" class="form-control" />
+                                v-model="item.nama_tender" class="form-control" />
                             </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
@@ -205,7 +206,7 @@
                                     </div>
                                     <input type="text"
                                         :name="`usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][nama_berkas]`"
-                                        :value="isEdit ? i.nama_berkas : ''" class="form-control me-4"
+                                        v-model="i.nama_berkas" class="form-control me-4"
                                         aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
                                     <span class="w-75 mt-3  text-2-row text-wrap"
                                         v-html="docname['berkas_'+index+'_'+indexi]"></span>
@@ -248,17 +249,22 @@
                             type="hidden" />
                         <div class="col-3">
                             <label class="fw-bolder mb-3">NIP</label>
-                            <input :value="isEdit ? member.nip : ''" :name="`pokja[${imember}][nip]`"
+                            <input 
+                            v-model="member.nip" :name="`pokja[${imember}][nip]`"
                                 class="form-control" />
                         </div>
                         <div class="col-3">
                             <label class="fw-bolder mb-3">Nama Lengkap</label>
-                            <input :value="isEdit ? member.nama_lengkap : ''" :name="`pokja[${imember}][nama_lengkap]`"
+                            <input 
+                            v-model="member.nama_lengkap"
+                            :name="`pokja[${imember}][nama_lengkap]`"
                                 class="form-control" />
                         </div>
                         <div class="col-3">
                             <label class="fw-bolder mb-3">Jabatan</label>
-                            <input :value="isEdit ? member.jabatan : ''" :name="`pokja[${imember}][jabatan]`"
+                            <input 
+                            v-model="member.jabatan"
+                           :name="`pokja[${imember}][jabatan]`"
                                 class="form-control" />
                         </div>
                         <div class="col-3">
@@ -266,7 +272,9 @@
                                 <label class="fw-bolder mb-3">No Sertifikat PBJ</label>
                                 <span @click="delMember(member,imember)" style="cursor: pointer" class="text-danger fw-bolder">Hapus</span>
                             </div>
-                            <input :value="isEdit ? member.keterangan : ''" :name="`pokja[${imember}][keterangan]`"
+                            <input 
+                            v-model="member.keterangan"
+                           :name="`pokja[${imember}][keterangan]`"
                                 class="form-control" />
                         </div>
                     </div>

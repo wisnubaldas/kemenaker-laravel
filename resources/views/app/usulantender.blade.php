@@ -5,9 +5,13 @@
         <div class="card-header border-0 pt-5">
             <div class="card-header">
                 <div class="d-flex flex-stack">
+                    
                     <div class="">
+                        @if(auth()->user()->tagroup_id==2)
                         @include('components.tabusulan')
+                        @endif
                     </div>
+                  
                     <div class="d-flex align-items-center py-1">
                         <div class="me-4">
                             <!--begin::Menu-->

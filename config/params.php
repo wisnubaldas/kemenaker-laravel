@@ -56,6 +56,14 @@ return [
         17 => 'Sekretariat menolak Laporan hasil penandatanganan Kontrak dari PPK',
         18 => 'Tender Telah Selesai'
     ],
+    'base-bg-color'=>[
+        0=>'bg-primary',
+        1=>'bg-success',
+        2=>'bg-warning',
+        3=>'bg-info',
+        4=>'bg-secondary',
+        5=>'bg-dark',
+    ],
     'badgecolor' => [
         '' => 'badge-secondary',  // Untuk Draft Usulan Tender
         0 => 'badge-light-primary', // Untuk Usulan Tender Dikirimkan

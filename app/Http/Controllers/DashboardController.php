@@ -15,20 +15,53 @@ class DashboardController extends Controller
 
         $year = '2023';
 
-        $result = TmJenisTender::select('tm_jenis_tender.id', 'tm_jenis_tender.jenis_tender', DB::raw('COUNT(tm_jenis_tender.id) as jmlltender'))
-            ->leftJoin('th_usulan_tender_detail as tutd', 'tm_jenis_tender.id', '=', 'tutd.tmjenistender_id')
-            ->leftJoin('th_usulan_tender as tut', 'tut.id', '=', 'tutd.thusulantender_id')
-            ->whereNotNull('tutd.alur')
+        $summary=(new TmJenisTender())->summary();
+        $result = $summary
             ->whereYear('tut.created_date', $year)
             ->groupBy('tm_jenis_tender.id', 'tm_jenis_tender.jenis_tender')
             ->get();
+
+        $alltendersum=(new TmJenisTender())->summary()->groupBy('tm_jenis_tender.id', 'tm_jenis_tender.jenis_tender')
+        ->get();
+        $sum=$alltendersum->sum('jmlltender');
+       // dd($alltendersum);
         $usulan=ThUsulanTender::whereYear('created_date', $year)
         ->whereNotNull('alur')
         ->count('no_surat_usulan');
+
+      //  $datacart = $alltendersum->pluck('jmlltender')->toArray();
+        $labelscart = $alltendersum->pluck('jenis_tender')->toArray();
+        //$count = count($datacart);
+        
+       // data: { datasets: [{ data: [50, 40, 10], backgroundColor: ["#00A3FF", "#50CD89", "#E4E6EF"] }], labels: ["Active", "Completed", "Yet to start"] },
+        $values=[];
+        $bgColor=[];
+        $baseBgColors =["#009EF7","#50CD89","#FFC700","#7239EA","#E4E6EF","#F1416C"];
+        $i=0;
+        foreach($alltendersum as $tender){
+            if($i>$alltendersum->count()){
+                $i=0;
+            }
+            array_push($values,$tender->jmlltender);
+            array_push($bgColor,$baseBgColors[$i]);
+            $i++;
+        }
+        $datasets[] = [
+            'data' => $values,
+            'backgroundColor' => $baseBgColors,
+        ]; 
+      
+        
+        $chartData = [
+            'datasets' => $datasets,
+            'labels' => $labelscart,
+        ];
         $data = [
             "title" => "Dashboard",
             "tenders" => $result,
-            "usulan"=>$usulan
+            "usulan"=>$usulan,
+            "cartsum"=>$alltendersum,
+            "chartData"=>$chartData
         ];
         return view('app.dashboard', $data);
     }
