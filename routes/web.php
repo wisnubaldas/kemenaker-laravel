@@ -47,3 +47,11 @@ Route::group(['middleware'=>'role:2'],function () {
     Route::post('/usulan-tender/edit/{tender_id}', [UsulanTenderController::class, 'updatedraft'])->name('update-usulan-tender');
     Route::post('/usulan-tender/send/{tender_id}', [UsulanTenderController::class, 'send'])->name('send-usulan-tender');
 });
+
+Route::group(['middleware'=>'role:3'],function () {
+    Route::get('/test',function(){
+        return "OK";
+    });
+    Route::post('/usulan-tender/approve/{tender_detail_id}', [UsulanTenderController::class, 'approvetender'])->name('approve-usulan-tender');
+    Route::post('/usulan-tender/reject/{tender_detail_id}', [UsulanTenderController::class, 'rejecttender'])->name('reject-usulan-tender');
+});

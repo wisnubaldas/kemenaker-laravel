@@ -1,6 +1,9 @@
 import "./bootstrap";
 import Swal from "sweetalert2";
 import axios from "axios";
+
+const csrfToken = document.head.querySelector('meta[name="csrf-token"]').content;
+axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
 const { createApp, ref } = Vue;
 var i = 0;
 
@@ -18,22 +21,12 @@ createApp({
             pathmodalactive: null,
             isEdit: window.isEditDraft,
             tenderData: window.tenderData,
-            tenderlist: [
-                {
-                    jenis_tender: "",
-                    nama_tender: "",
-                    berkaslist: [
-                        {
-                            nama_berkas: "",
-                        },
-                    ],
-                },
-            ],
             docname: {},
             tabusulan_active: 1,
             rowdraftactive: null,
             file_surat_usulan_name: null,
             members: [{}],
+            catatan:""
         };
     },
     methods: {
@@ -141,6 +134,84 @@ createApp({
                 }
             });
         },
+        approveUsulan(tenderId) {
+            Swal.fire({
+                title: "Apakah data ini akan diterima?",
+                text: "Pastikan anda telah yakin menerima data ini!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya! Terima",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                 
+                    axios
+                        .post(`/usulan-tender/approve/${tenderId}`,{catatan:this.catatan})
+                        .then((response) => {
+                            Swal.fire({
+                                title: "Diterima!",
+                                text: "Usulan Tender Telah Diterima.",
+                                icon: "success",
+                                didClose: () => {
+                                    // Redirect ke halaman '/usulan-tender' setelah SweetAlert ditutup
+                                    window.location.reload()
+                                }
+                            });
+                            
+                         //   window.location.href = '/usulan-tender';
+                        })
+                        .catch((error) => {
+                            // Handle error jika request gagal
+                            console.error(error); // Outputkan pesan error jika diperlukan
+                            Swal.fire(
+                                "Error!",
+                              error.response.data.message,
+                                "error"
+                            );
+                        });
+                }
+            });
+        },
+        rejectUsulan(tenderId) {
+            Swal.fire({
+                title: "Apakah data ini akan ditolak?",
+                text: "Pastikan anda telah yakin menolak data ini!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya! Tolak",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                 
+                    axios
+                        .post(`/usulan-tender/reject/${tenderId}`,{catatan:this.catatan})
+                        .then((response) => {
+                            Swal.fire({
+                                title: "Diterima!",
+                                text: "Usulan Tender Telah Ditolak",
+                                icon: "success",
+                                didClose: () => {
+                                    // Redirect ke halaman '/usulan-tender' setelah SweetAlert ditutup
+                                    window.location.reload()
+                                }
+                            });
+                            
+                         //   window.location.href = '/usulan-tender';
+                        })
+                        .catch((error) => {
+                            // Handle error jika request gagal
+                            console.error(error); // Outputkan pesan error jika diperlukan
+                            Swal.fire(
+                                "Error!",
+                              error.response.data.message,
+                                "error"
+                            );
+                        });
+                }
+            });
+        },
     },
 }).mount("#app");
 "use strict";
@@ -155,12 +226,15 @@ var KTProjectOverview = (function () {
         init: function () {
             var s, i;
             !(function () {
-                var chartData = document.getElementById("project_overview_chart").getAttribute("data-chart-data");
-                if (chartData) {
-                    var parsedData = JSON.parse(chartData);
-                    var t = document.getElementById("project_overview_chart");
-                   
+                var t = document.getElementById("project_overview_chart");
+              
                 if (t) {
+                    var chartData = document.getElementById("project_overview_chart").getAttribute("data-chart-data");
+                    var parsedData = JSON.parse(chartData);
+                    
+                   
+                if (chartData) {
+                   
                     var e = t.getContext("2d");
                     new Chart(e, {
                         type: "doughnut",

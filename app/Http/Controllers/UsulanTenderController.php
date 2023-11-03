@@ -70,11 +70,16 @@ class UsulanTenderController extends Controller
     }
     public function detail(Request $request, $usulan_tender_detail_id): View
     {
-        $detailusulanlist = ThUsulanTenderDetail::with('usulanTender','tmJenisTender','usulanTenderDetailDoc')->find($usulan_tender_detail_id);
-       // dd($detailusulanlist);
+        $detailusulanlist = ThUsulanTenderDetail::with(['usulanTender','usulanTender.usulanTenderUsulPokja','tmJenisTender','usulanTenderDetailDoc','usulanTenderPokja'])->find($usulan_tender_detail_id);
+        //dd($detailusulanlist);
+        $anggota= ThAnggotaPokja::select('id', DB::raw('nip || \' / \' || nama_lengkap || \' / \' || jabatan || \' \' || unit_kerja as nama_lengkap'))
+        ->where('status', 1)
+        ->orderBy('id')
+        ->get();
         $data = [
             "title" => "Usulan Tender",
-            "data" => $detailusulanlist
+            "data" => $detailusulanlist,
+            "anggotas"=>$anggota
         ];
         return view('app.usulantenderdetail', $data);
     }
@@ -433,5 +438,43 @@ class UsulanTenderController extends Controller
 
         //dd($data['data']);
         return view('app.draftusulantender', $data);
+    }
+    public function verifikasi(Request $request,$usulan_tender_detail_id){
+        $model_detail=ThUsulanTenderDetail::find($usulan_tender_detail_id);
+        $model=ThUsulanTender::find($model_detail->thusulantender_id);
+        $model_alur=new ThUsulanTenderAlur();
+
+
+    }
+    private function isApprove(Request $request,$usulan_tender_detail_id,$is_approve){
+        $user=Auth::user();
+        $model_detail=ThUsulanTenderDetail::find($usulan_tender_detail_id);
+        $model=ThUsulanTender::find($model_detail->thusulantender_id);
+        if($is_approve){
+            $alur='3';
+            $posisi='4';
+        }else{
+            $alur='2';
+            $posisi='2';
+        }
+        
+        $model_detail->alur=$alur;
+        $model_detail->posisi=$posisi;
+        $model_detail->catatan=request('catatan');
+        $model_detail->save();
+
+        $model_alur=new ThUsulanTenderAlur();
+        $model_alur->thusulantenderdetail_id=$model_detail->id;
+        $model_alur->tagroup_id=$user->tagroup_id;
+        $model_alur->alur=$alur; //perlu riset lagi
+        $model_alur->keterangan=request('catatan');
+        $model_alur->posisi = $posisi;
+        $model_alur->save();
+    }
+    public function approvetender(Request $request,$usulan_tender_detail_id){
+        $this->isApprove($request,$usulan_tender_detail_id,true);
+    }
+    public function rejecttender(Request $request,$usulan_tender_detail_id){
+        $this->isApprove($request,$usulan_tender_detail_id,false);
     }
 }

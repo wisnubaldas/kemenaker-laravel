@@ -37,6 +37,7 @@ class ThUsulanTenderDetail extends Model
     {   
         return $this->belongsTo(ThUsulanTender::class, 'thusulantender_id', 'id');
     }
+  
     public function usulanTenderDetailDoc()
     {   
         return $this->hasMany(ThUsulanTenderDetailDoc::class, 'thusulantenderdetail_id', 'id');
@@ -49,7 +50,7 @@ class ThUsulanTenderDetail extends Model
 
     public function usulanTenderPokja()
     {
-        return $this->hasOne(ThUsulanTenderPokja::class, 'thusulantenderdetail_id', 'id');
+        return $this->hasMany(ThUsulanTenderPokja::class, 'thusulantenderdetail_id', 'id');
     }
 
     // Relasi dengan TmUnitKerja mungkin tidak terlihat dalam kueri SQL Anda
