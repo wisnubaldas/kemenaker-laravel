@@ -23,7 +23,7 @@
                         <!--begin::Image-->
                         <div class="me-2">
                             <label class="fw-bolder mb-3">Berkas</label>
-                            <input hidden {{-- value="{{ $is_edit ? $data->file_surat_usulan : @old('file_surat_usulan') }}" --}} ref="file_surat_usulan" @change="updateFileName"
+                            <input hidden {{-- value="{{ $is_edit ? $data->file_surat_usulan : @old('file_surat_usulan') }}" --}} ref="file_surat_usulan" @change="updateFileName($event,'file_surat_usulan_name')"
                                 type="file" name="file_surat_usulan" />
                             <div v-if="file_surat_usulan_name||tenderData.file_surat_usulan"
                                 class="image-input d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-150px me-7 mb-4">

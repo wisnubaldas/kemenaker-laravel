@@ -58,7 +58,10 @@ class ThUsulanTenderDetail extends Model
     {
         return $this->belongsTo(TmUnitKerja::class, 'unit_kerja_id', 'id');
     }
-
+    public function usulanTenderAlur()
+    {
+        return $this->hasMany(ThUsulanTenderAlur::class, 'thusulantenderdetail_id', 'id');
+    }
     public function getCompleteData(){
         return $this->select(
             'th_usulan_tender_detail.*',
@@ -68,6 +71,9 @@ class ThUsulanTenderDetail extends Model
             'tm_unitkerja.unitkerja',
             'tm_jenis_tender.jenis_tender'
         )
+        ->with(['usulanTenderAlur.user' => function ($query) {
+            $query->orderBy('created_date', 'desc');
+        }])
         ->leftJoin('th_usulan_tender', 'th_usulan_tender_detail.thusulantender_id', '=', 'th_usulan_tender.id')
         ->leftJoin('tm_unitkerja', 'th_usulan_tender.tmunitkerja_id', '=', 'tm_unitkerja.id')
         ->leftJoin('tm_jenis_tender', 'th_usulan_tender_detail.tmjenistender_id', '=', 'tm_jenis_tender.id')

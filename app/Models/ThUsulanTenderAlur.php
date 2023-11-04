@@ -25,5 +25,8 @@ class ThUsulanTenderAlur extends Model
             $model->created_date = Carbon::now();
         });
     }
+    public function user(){
+        return $this->hasOne(User::class,'id','created_by');
+    }
 
 }

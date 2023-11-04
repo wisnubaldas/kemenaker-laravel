@@ -5,7 +5,9 @@
             var tenderData = @json($data);
         </script>
         @include('components.modalpdf')
+       
         <div class="card mb-6 mb-xl-9">
+           
             <div class="card-body pt-9 pb-0">
                 <div class="row">
                     <div class="col-7">
@@ -51,7 +53,7 @@
                                                                 fill="black" />
                                                         </svg></span>
                                                     <a href="#"
-                                                        class="text-gray-800 text-hover-primary fs-2 fw-bolder me-3">{{ $data->nama_tender }}</a>
+                                                        class="text-gray-800 text-hover-primary fs-4 fw-bolder me-3">{{ $data->nama_tender }}</a>
                                                 </div>
                                                 <a href="#"
                                                     class="text-gray-600 text-hover-primary fs-6 fw-bolder me-3">#{{ $data->tmJenisTender->jenis_tender }}</a>
@@ -67,106 +69,182 @@
 
                                     <!--end::Actions-->
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div class="fs-3 fw-bold mb-5">Daftar Pokja</div>
-                        <div class="separator"></div>
-                        <div class="table-responsive">
-                            <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer">
-                                <thead>
-                                    <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                        <td>Nip & Nama</td>
-                                        <td>Jabatan</td>
-                                        <td>Unit Kerja</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($data->usulanTenderPokja as $pokja)
-                                        <tr>
-                                            <td class="d-flex align-items-center">
-                                                <!--begin:: Avatar -->
-                                                <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-                                                    <a href="../../demo1/dist/apps/user-management/users/view.html">
-                                                        <div class="symbol-label fs-3 bg-light-primary text-primary">
-                                                            {{ ($pokja->nama_lengkap ?? '-')[0] }}</div>
-                                                    </a>
-                                                </div>
-                                                <!--end::Avatar-->
-                                                <!--begin::User details-->
-                                                <div class="d-flex flex-column">
-                                                    <a href="../../demo1/dist/apps/user-management/users/view.html"
-                                                        class="text-gray-800 fw-bolder mb-1">{{ $pokja->nama_lengkap ?? '-' }}</a>
-                                                    <span>{{ $pokja->nip ?? '-' }}</span>
-                                                </div>
-                                                <!--begin::User details-->
-                                            </td>
-                                            <td>
-                                                {{ $pokja->jabatan ?? '-' }}
-                                            </td>
-                                            <td>
-                                                {{ $pokja->unit_kerja ?? '-' }}
-                                            </td>
+                        <div class="separator mb-4"></div>
+                        @if (count($data->usulanTenderPokja) < 1)
+                            <img src="/images/notFound.png" class="img h-80px" />
+                        @else
+                            <div class="table-responsive">
+                                <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer">
+                                    <thead>
+                                        <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                            <td>Nip & Nama</td>
+                                            <td>Jabatan</td>
+                                            <td>Unit Kerja</td>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($data->usulanTenderPokja as $pokja)
+                                            <tr>
+                                                <td class="d-flex align-items-center">
+                                                    <!--begin:: Avatar -->
+                                                    <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+                                                        <a href="../../demo1/dist/apps/user-management/users/view.html">
+                                                            <div
+                                                                class="symbol-label fs-3 bg-light-primary text-primary">
+                                                                {{ ($pokja->nama_lengkap ?? '-')[0] }}</div>
+                                                        </a>
+                                                    </div>
+                                                    <!--end::Avatar-->
+                                                    <!--begin::User details-->
+                                                    <div class="d-flex flex-column">
+                                                        <a href="../../demo1/dist/apps/user-management/users/view.html"
+                                                            class="text-gray-800 fw-bolder mb-1">{{ $pokja->nama_lengkap ?? '-' }}</a>
+                                                        <span>{{ $pokja->nip ?? '-' }}</span>
+                                                    </div>
+                                                    <!--begin::User details-->
+                                                </td>
+                                                <td>
+                                                    {{ $pokja->jabatan ?? '-' }}
+                                                </td>
+                                                <td>
+                                                    {{ $pokja->unit_kerja ?? '-' }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
                     </div>
                     <div class="col-5">
-                        @if ($data->alur == 0)
-                            <form class="form-control">
-                                <label class="fs-3 mb-3">Verifikasi Usulan Tender</label>
-                                <div class="separator mb-3"></div>
-
-                                <label class="mb-3">Keterangan</label>
-                                <textarea v-model="catatan" class="form-control mb-3"></textarea>
-                                <div class="d-flex justify-content-end">
-                                    <button @click="rejectUsulan({{ Route::current()->parameter('tender_detail_id') }})"
-                                        type="button" class="btn btn-sm btn-light-danger me-3">Tolak</button>
-                                    <button
-                                        @click="approveUsulan({{ Route::current()->parameter('tender_detail_id') }})"
-                                        type="button" class="btn btn-sm btn-light-primary">Terima</button>
+                        <div class="border border-gray-300 border-dashed rounded w-100 py-5 px-4 mb-3">
+                            <div class="fw-bolder fs-4 mb-3">Surat Tugas</div>
+                            <div class="separator mb-4"></div>
+                            @if (!$data->nomor_st)
+                                <img src="/images/notFound.png" class="img h-80px" />
+                            @else
+                                <div class="d-flex align-items-center">
+                                    <img class="scale-hover mw-50px mw-lg-75px me-5" data-bs-target="#kt_modal_new_card"
+                                        @click="pathmodalactive='storage/surat_st/'+{{$data->nomor_st}}"
+                                        data-bs-toggle="modal" data-bs-target="#kt_modal_new_card"
+                                        style="cursor: pointer" src="/assets/media/svg/files/pdf.svg" alt="image">
+                                    <div>
+                                        <div class="border border-gray-300 border-dashed rounded w-100 py-3 px-4 mb-3">
+                                        <div>Nomor Surat Tugas : </div>
+                                        <div class="text-gray-800 text-hover-primary fs-4  fw-bolder me-3">
+                                            {{ $data->nomor_st ?? 'Surat tugas belum di tentukan' }}</div>
+                                        </div>
+                                        <div class="border border-gray-300 border-dashed rounded w-100 py-3 px-4">
+                                        <div>Tanggal Surat Tugas : </div>
+                                        <div class="fw-bolder fs-5">
+                                            {{ $data->tgl_st ?? 'Tanggal surat tugas belum di tentukan' }}</div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </form>
+                            @endif
+
+                        </div>
+                        @if ($data->alur == 0)
+                            @if (auth()->user()->tagroup_id == 3)
+                                <form class="form-control">
+                                    <label class="fs-3 mb-3">Verifikasi Usulan Tender</label>
+                                    <div class="separator mb-3"></div>
+
+                                    <label class="mb-3">Keterangan</label>
+                                    <textarea v-model="catatan" class="form-control mb-3"></textarea>
+                                    <div class="d-flex justify-content-end">
+                                        <button
+                                            @click="rejectUsulan({{ Route::current()->parameter('tender_detail_id') }})"
+                                            type="button" class="btn btn-sm btn-light-danger me-3">Tolak</button>
+                                        <button
+                                            @click="approveUsulan({{ Route::current()->parameter('tender_detail_id') }})"
+                                            type="button" class="btn btn-sm btn-light-primary">Terima</button>
+                                    </div>
+                                </form>
+                            @endif
                         @endif
-                        <form class="form-control">
-                            <label class="fs-3 mb-3">Form Surat Tugas</label>
-                            <div class="separator mb-3"></div>
-                            <input hidden  
-                                ref="file_st" @change="updateFileName"
-                                type="file" name="file_st" />
-                            <div @click="openFilePicker('file_st')" style="cursor: pointer"
-                                class="card h-75 flex-center bg-light-primary border-primary border border-dashed p-8 mb-4">
+                        @if ($data->alur == 3)
+                            @if (auth()->user()->tagroup_id == 3)
+                                <form action="/usulan-tender/st/{{ Route::current()->parameter('tender_detail_id') }}"
+                                    method="POST" enctype="multipart/form-data" class="form-control">
+                                    @csrf
+                                    <label class="fs-3 mb-3">Form Surat Tugas</label>
+                                    <div class="separator mb-3"></div>
+                                    <input hidden ref="surat_st" @change="updateFileName($event,'surat_st_name')"
+                                        type="file" name="surat_st" />
+                                    <div v-if="surat_st_name"
+                                        class="image-input d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-150px me-7 mb-4">
+                                        <label @click="openFilePicker('surat_st')"
+                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                            data-kt-image-input-action="change" data-bs-toggle="tooltip"
+                                            title="" data-bs-original-title="Change avatar">
+                                            <i class="bi bi-pencil-fill fs-7"></i>
+                                            <!--begin::Inputs-->
+                                            <input type="hidden" name="avatar_remove">
+                                            <!--end::Inputs-->
+                                        </label>
+                                        <span
+                                            class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                            data-kt-image-input-action="remove" data-bs-toggle="tooltip"
+                                            title="" data-bs-original-title="Remove avatar">
+                                            <i class="bi bi-x fs-2"></i>
+                                        </span>
+                                        <img class="scale-hover mw-50px mw-lg-75px"
+                                            data-bs-target="#kt_modal_new_card"
+                                            @click="pathmodalactive='storage/surat_usulan/'+tenderData.file_surat_usulan"
+                                            data-bs-toggle="modal" data-bs-target="#kt_modal_new_card"
+                                            style="cursor: pointer" src="/assets/media/svg/files/pdf.svg"
+                                            alt="image">
+                                        <span class="w-75 mt-3 text-center text-2-row text-wrap"
+                                            v-html="file_surat_usulan_name"></span>
+                                    </div>
+                                    <div v-else @click="openFilePicker('surat_st')" style="cursor: pointer"
+                                        class="card h-75 flex-center bg-light-primary border-primary border border-dashed p-8 mb-4">
 
-                                <img src="/assets/media/svg/files/upload.svg" class="h-20px" alt="">
-                                <a href="#" class=" fs-6 fw-bolder mb-2">File Upload</a>
+                                        <img src="/assets/media/svg/files/upload.svg" class="h-20px" alt="">
+                                        <a href="#" class=" fs-6 fw-bolder mb-2">File Upload</a>
 
-                            </div>
-                            <label class="mb-3 required">Nomor Surat Tugas</label>
-                            <input class="form-control mb-3" />
-                            <label class="mb-3 required">Tanggal Surat Tugas</label>
-                            <input class="form-control mb-3" />
-                            <label class="mb-3 required">Anggota Pokja</label>
-                            <select class="form-select form-select-solid mb-3" 
-                            multiple="multiple" 
-                            data-control="select2" 
-                            data-placeholder="Select an option" 
-                            data-allow-clear="true">
-                                <option></option>
-                                @foreach($anggotas as $anggota)
-                                <option value="1">{{$anggota->nama_lengkap}}</option>
-                                @endforeach
-                            </select>
+                                    </div>
+
+                                    <label class="mb-3 required">Nomor Surat Tugas</label>
+                                    <input name="nomor_st" value="{{ @old('nomor_st') }}"
+                                        class="form-control {{ $errors->has('nomor_st') ? 'is-invalid' : 'mb-3' }}" />
+                                    @error('nomor_st')
+                                        <div class="invalid-feedback d-block mb-3">{{ $message }}</div>
+                                    @enderror
+                                    <label class="mb-3 required">Tanggal Surat Tugas</label>
+                                    <input type="date" value="{{ @old('tgl_st') }}" name="tgl_st"
+                                        id="kt_datepicker_1"
+                                        class="form-control form-control-solid {{ $errors->has('tgl_st') ? 'is-invalid' : 'mb-3' }}" />
+                                    @error('tgl_st')
+                                        <div class="invalid-feedback d-block mb-3">{{ $message }}</div>
+                                    @enderror
+                                    <label class="mb-3 required">Anggota Pokja</label>
+                                    <select name="anggota[]"
+                                        class="form-select form-select-solid {{ $errors->has('anggota') ? 'is-invalid' : 'mb-3' }}"
+                                        multiple="multiple" data-control="select2"
+                                        data-placeholder="Select an option" data-allow-clear="true">
+                                        <option></option>
+                                        @foreach ($anggotas as $anggota)
+                                            <option value="{{ $anggota->id }}">{{ $anggota->nama_lengkap }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('anggota')
+                                        <div class="invalid-feedback d-block mb-3">{{ $message }}</div>
+                                    @enderror
 
 
-                            <div class="d-flex justify-content-end">
-                                <button @click="rejectUsulan({{ Route::current()->parameter('tender_detail_id') }})"
-                                    type="button" class="btn btn-sm btn-light-danger me-3">Tolak</button>
-                                <button @click="approveUsulan({{ Route::current()->parameter('tender_detail_id') }})"
-                                    type="button" class="btn btn-sm btn-light-primary">Terima</button>
-                            </div>
-                        </form>
+                                    <div class="d-flex justify-content-end">
+
+                                        <button type="submit" class="btn btn-sm btn-light-primary">Simpan</button>
+                                    </div>
+                                </form>
+                            @endif
+                        @endif
                     </div>
                 </div>
                 <!--begin::Details-->
@@ -179,8 +257,8 @@
                         <div
                             class="border border-gray-300 border-dashed text-center rounded w-125px py-3 px-4 me-6 mb-3">
                             <img class="scale-hover mw-50px mw-lg-75px" data-bs-target="#kt_modal_new_card"
-                                @click="pathmodalactive='storage/berkas/'+'{{ $doc->berkas }}'" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_new_card" style="cursor: pointer"
+                                @click="pathmodalactive='storage/berkas/'+'{{ $doc->berkas }}'"
+                                data-bs-toggle="modal" data-bs-target="#kt_modal_new_card" style="cursor: pointer"
                                 src="/assets/media/svg/files/pdf.svg" alt="image">
                             <label class="mt-3">{{ $doc->nama_berkas }}</label>
                         </div>
@@ -234,4 +312,5 @@
             </div>
         </div>
     </section>
+   
 </x-app-layout>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\NewDraftUsulanRequest;
+use App\Http\Requests\STRequest;
 use App\Models\TaGroup;
 use App\Models\TaUsulanTender;
 use App\Models\ThAnggotaPokja;
@@ -65,21 +66,21 @@ class UsulanTenderController extends Controller
 
         ];
 
-       // dd($data['data']);
+        // dd($data['data']);
         return view('app.usulantender', $data);
     }
     public function detail(Request $request, $usulan_tender_detail_id): View
     {
-        $detailusulanlist = ThUsulanTenderDetail::with(['usulanTender','usulanTender.usulanTenderUsulPokja','tmJenisTender','usulanTenderDetailDoc','usulanTenderPokja'])->find($usulan_tender_detail_id);
+        $detailusulanlist = ThUsulanTenderDetail::with(['usulanTender', 'usulanTender.usulanTenderUsulPokja', 'tmJenisTender', 'usulanTenderDetailDoc', 'usulanTenderPokja'])->find($usulan_tender_detail_id);
         //dd($detailusulanlist);
-        $anggota= ThAnggotaPokja::select('id', DB::raw('nip || \' / \' || nama_lengkap || \' / \' || jabatan || \' \' || unit_kerja as nama_lengkap'))
-        ->where('status', 1)
-        ->orderBy('id')
-        ->get();
+        $anggota = ThAnggotaPokja::select('id', DB::raw('nip || \' / \' || nama_lengkap || \' / \' || jabatan || \' \' || unit_kerja as nama_lengkap'))
+            ->where('status', 1)
+            ->orderBy('id')
+            ->get();
         $data = [
             "title" => "Usulan Tender",
             "data" => $detailusulanlist,
-            "anggotas"=>$anggota
+            "anggotas" => $anggota
         ];
         return view('app.usulantenderdetail', $data);
     }
@@ -225,46 +226,46 @@ class UsulanTenderController extends Controller
     public function send($id)
     {
         DB::beginTransaction();
-        try{
-            $model=ThUsulanTender::find($id);
+        try {
+            $model = ThUsulanTender::find($id);
             $alurlama = $model->alur;
             $posisilama = $model->posisi;
             $model->posisi = 3;
             $model->alur = '0';
-            $user=Auth::user();
+            $user = Auth::user();
             if ($alurlama == "" && $posisilama == "" && $user->tagroup_id == 2) {
-                if($model->save()){
-                    $model_detail=ThUsulanTenderDetail::where('thusulantender_id',$model->id)->get();
-                    foreach($model_detail as $detail){
-                        $detail->alur='0';
-                        $detail->posisi=3;
+                if ($model->save()) {
+                    $model_detail = ThUsulanTenderDetail::where('thusulantender_id', $model->id)->get();
+                    foreach ($model_detail as $detail) {
+                        $detail->alur = '0';
+                        $detail->posisi = 3;
                         $detail->save();
-                        $alur= new ThUsulanTenderAlur();
+                        $alur = new ThUsulanTenderAlur();
                         $alur->thusulantenderdetail_id = $detail->id;
-                        $alur->tagroup_id=$user->tagroup_id;
-                        $alur->alur='0';
-                        $alur->posisi=3;
+                        $alur->tagroup_id = $user->tagroup_id;
+                        $alur->alur = '0';
+                        $alur->posisi = 3;
                         $alur->save();
                     }
 
-                    $model_usulpokja=ThUsulanTenderUsulpokja::where('thusulantender_id',$model->id)->get();
-                    foreach($model_usulpokja as $pokja){
+                    $model_usulpokja = ThUsulanTenderUsulpokja::where('thusulantender_id', $model->id)->get();
+                    foreach ($model_usulpokja as $pokja) {
                         $anggota = ThAnggotaPokja::firstOrCreate(
-                            ['nip' => $pokja->nip], 
+                            ['nip' => $pokja->nip],
                             [
                                 'nama_lengkap' => $pokja->nama_lengkap,
                                 'jabatan' => $pokja->jabatan,
-                                'unit_kerja'=>$pokja->unit_kerja,
-                                'tmunitkerja_id'=>$pokja->tmunitkerja_id,
-                                'status'=>0,
+                                'unit_kerja' => $pokja->unit_kerja,
+                                'tmunitkerja_id' => $pokja->tmunitkerja_id,
+                                'status' => 0,
                             ]
                         );
                     }
                 }
             }
             DB::commit();
-            return $model; 
-        }catch(Exception $e){
+            return $model;
+        } catch (Exception $e) {
             //dd($e);
             DB::rollBack();
             throw new Exception($e->getMessage());
@@ -300,6 +301,8 @@ class UsulanTenderController extends Controller
     {
         $registeredpokja = 0;
         $errMemberCount = 0;
+        $errDocCount=0;
+        $errTenderDetCount=0;
         DB::beginTransaction();
         try {
             $model = ThUsulanTender::find($tender_id);
@@ -316,7 +319,7 @@ class UsulanTenderController extends Controller
                 $model->file_surat_usulan = $uniqueFileName;
             }
             $model->save();
-            $usulanTenderDetails = $request->input('usulanTenderDetails')??[];
+            $usulanTenderDetails = $request->input('usulanTenderDetails') ?? [];
             foreach ($usulanTenderDetails as $index => $detail) {
                 if (isset($detail['id'])) {
                     $model_detail = ThUsulanTenderDetail::find($detail['id']);
@@ -335,9 +338,18 @@ class UsulanTenderController extends Controller
                         $model_detail->save();
                     }
                 } else {
-                    $model_detail = $this->savenewdetail($detail, $model->id);
+                    $validator = Validator::make($detail, [
+                        'nama_tender' => 'required',
+                        'tmjenistender_id' => 'required'
+                    ]);
+                    // dd(request()->all());
+                    if ($validator->fails()) {
+                        $errTenderDetCount++;
+                    } else {
+                        $model_detail = $this->savenewdetail($detail, $model->id);
+                    }
                 }
-                $docs = request('usulanTenderDetails')[$index]['usulanTenderDetailDoc']??[];
+                $docs = request('usulanTenderDetails')[$index]['usulanTenderDetailDoc'] ?? [];
 
                 foreach ($docs as $i => $doc) {
                     if (isset($doc['id'])) {
@@ -363,11 +375,21 @@ class UsulanTenderController extends Controller
                         $model_doc->save();
                         // dd($model_doc,$doc);
                     } else {
-                        $this->savedoc($model_detail->id, $doc);
+
+                         $membervalidator = Validator::make($doc, [
+                            'nama_berkas' => 'nullable',
+                            'berkas' => 'required|file|mimes:pdf|max:25000',
+                        ]);
+                        // dd(request('usulanTenderDetails')[$index]['usulanTenderDetailDoc'][$i]['berkas']);      
+                        if (!$membervalidator->fails()) {
+                            $this->savedoc($model_detail->id, $doc);
+                        } else {
+                            $errDocCount++;
+                        }
                     }
                 }
             }
-            $members = $request->input('pokja')??[];
+            $members = $request->input('pokja') ?? [];
             //dd($members);
             foreach ($members as $member) {
                 if (!isset($member['id'])) {
@@ -408,11 +430,16 @@ class UsulanTenderController extends Controller
                 }
             }
             DB::commit();
-            return redirect()->route('draft-usulan-tender')->with(
+            return redirect()->route('draft-usulan-tender')
+            ->with(
                 'success',
-                'Draft usulan berhasil diperbaharui'
+                'Usulan berhasil diperbarui. '
+                    . $errTenderDetCount . ' Tender Gagal Tersimpan dan '
+                    . $errDocCount . ' Dokumen Gagal Tersimpan dan '
+                    . $errMemberCount . ' Anggota Gagal Tersimpan dan '
                     . $registeredpokja . ' Usulan Anggota Pokja Sudah ada dalam database'
             );
+          
         } catch (Exception $e) {
             dd($e);
             DB::rollBack();
@@ -439,42 +466,104 @@ class UsulanTenderController extends Controller
         //dd($data['data']);
         return view('app.draftusulantender', $data);
     }
-    public function verifikasi(Request $request,$usulan_tender_detail_id){
-        $model_detail=ThUsulanTenderDetail::find($usulan_tender_detail_id);
-        $model=ThUsulanTender::find($model_detail->thusulantender_id);
-        $model_alur=new ThUsulanTenderAlur();
-
-
+    public function verifikasi(Request $request, $usulan_tender_detail_id)
+    {
+        $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
+        $model = ThUsulanTender::find($model_detail->thusulantender_id);
+        $model_alur = new ThUsulanTenderAlur();
     }
-    private function isApprove(Request $request,$usulan_tender_detail_id,$is_approve){
-        $user=Auth::user();
-        $model_detail=ThUsulanTenderDetail::find($usulan_tender_detail_id);
-        $model=ThUsulanTender::find($model_detail->thusulantender_id);
-        if($is_approve){
-            $alur='3';
-            $posisi='4';
-        }else{
-            $alur='2';
-            $posisi='2';
+    private function isApprove(Request $request, $usulan_tender_detail_id, $is_approve)
+    {
+        $user = Auth::user();
+        $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
+        $model = ThUsulanTender::find($model_detail->thusulantender_id);
+        if ($is_approve) {
+            $alur = '3';
+            $posisi = '4';
+        } else {
+            $alur = '2';
+            $posisi = '2';
         }
-        
-        $model_detail->alur=$alur;
-        $model_detail->posisi=$posisi;
-        $model_detail->catatan=request('catatan');
+
+        $model_detail->alur = $alur;
+        $model_detail->posisi = $posisi;
+        $model_detail->catatan = request('catatan');
         $model_detail->save();
 
-        $model_alur=new ThUsulanTenderAlur();
-        $model_alur->thusulantenderdetail_id=$model_detail->id;
-        $model_alur->tagroup_id=$user->tagroup_id;
-        $model_alur->alur=$alur; //perlu riset lagi
-        $model_alur->keterangan=request('catatan');
+        $this->savealur($alur, $posisi, $usulan_tender_detail_id);
+    }
+    public function approvetender(Request $request, $usulan_tender_detail_id)
+    {
+        $this->isApprove($request, $usulan_tender_detail_id, true);
+    }
+    public function rejecttender(Request $request, $usulan_tender_detail_id)
+    {
+        $this->isApprove($request, $usulan_tender_detail_id, false);
+    }
+    private function savealur($alur, $posisi, $detail_id)
+    {
+        $user = Auth::user();
+        $model_alur = new ThUsulanTenderAlur();
+        $model_alur->thusulantenderdetail_id = $detail_id;
+        $model_alur->tagroup_id = $user->tagroup_id;
+        $model_alur->alur = $alur; //perlu riset lagi
+        $model_alur->keterangan = request('catatan');
         $model_alur->posisi = $posisi;
         $model_alur->save();
+        return $model_alur;
     }
-    public function approvetender(Request $request,$usulan_tender_detail_id){
-        $this->isApprove($request,$usulan_tender_detail_id,true);
-    }
-    public function rejecttender(Request $request,$usulan_tender_detail_id){
-        $this->isApprove($request,$usulan_tender_detail_id,false);
+    public function submit_st(STRequest $request, $usulan_tender_detail_id): RedirectResponse
+    {
+        DB::beginTransaction();
+
+        try {
+            $data = request()->all();
+
+            $user = Auth::user();
+            $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
+            $model = ThUsulanTender::find($model_detail->thusulantender_id);
+
+            $model_detail->nomor_st = request('nomor_st');
+            $model_detail->tgl_st = request('tgl_st');
+            //dd($request->hasFile('surat_st'));
+            if ($request->hasFile('surat_st')) {
+                $file = $request->file('surat_st');
+                //   dd($file);
+                $uniqueFileName = Str::uuid(30)->toString() . '.pdf';
+                $file->storeAs('surat_st', $uniqueFileName, 'public');
+                $model_detail->surat_st = $uniqueFileName;
+            }
+            $model_detail->save();
+            //dd($data);
+            $jmlpokja = 0;
+
+            foreach ($data['anggota'] as $anggota) {
+                $anggotanya = ThAnggotaPokja::find($anggota);
+                if(!$anggotanya){
+                    dd($anggota);
+                }
+                $pokja = new ThUsulanTenderPokja();
+                $pokja->nip = $anggotanya->nip;
+                $pokja->jabatan = $anggotanya->jabatan;
+                $pokja->unit_kerja = $anggotanya->unit_kerja;
+                $pokja->nama_lengkap = $anggotanya->nama_lengkap;
+                $pokja->thusulananggotapokja_id = $anggotanya->id;
+                $pokja->thusulantenderdetail_id = $usulan_tender_detail_id;
+                $pokja->tmunitkerja_id = $anggotanya->tmunitkerja_id;
+                $pokja->save();
+            }
+            $this->savealur(6, 5, $usulan_tender_detail_id);
+            $model_detail->alur = 6;
+            $model_detail->posisi = 5;
+            $model_detail->save();
+            DB::commit();
+            return redirect()->route('usulan-tender')->with(
+                'success',
+                'Berhasil Update Nomor Surat Tugas.'
+            );;
+        } catch (Exception $e) {
+            dd($e);
+            DB::rollBack();
+        }
     }
 }

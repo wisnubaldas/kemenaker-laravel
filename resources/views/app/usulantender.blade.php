@@ -1,8 +1,13 @@
 <x-app-layout>
     <x-slot name="title">{{ $title ?? '' }}</x-slot>
     <section>
-      
+        @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
         <div class="card-header border-0 pt-5">
+            @include('components.logdrawer')
             <div class="card-header">
                 <div class="d-flex flex-stack">
                     
@@ -43,13 +48,14 @@
                                     <script>
                                         // Dapatkan elemen select menggunakan ID
                                         var selectElement = document.getElementById('tm_unitkerja_select');
-
+                                        if(selectElement){
                                         // Set nilai awal pada elemen Select2
-                                        selectElement.value = '{{ request('tm_unitkerja_id') }}';
+                                            selectElement.value = '{{ request('tm_unitkerja_id') }}';
 
                                         // Trigger event change agar Select2 memperbarui tampilan
-                                        var event = new Event('change');
-                                        selectElement.dispatchEvent(event);
+                                            var event = new Event('change');
+                                            selectElement.dispatchEvent(event);
+                                        }
                                     </script>
                                     <form method="GET" action="">
                                         @csrf
@@ -149,8 +155,8 @@
                                     <td>{{ $item->nama_tender }}</td>
                                     <td>{{ $item->jenis_tender }}</td>
                                     <td>{{ $item->nama_group }}</td>
-                                    <td><span
-                                            class="w-100 badge {{ config('params.badgecolor.' . $item->alur) }} text-wrap">{{ config('params.alur.' . $item->alur) }}</span>
+                                    <td><span @click="showlog({{$item}})" id="kt_drawer_example_basic_button" 
+                                            class="btn w-100 badge {{ config('params.badgecolor.' . $item->alur) }} text-wrap">{{ config('params.alur.' . $item->alur) }}</span>
                                     </td>
                                     <td class="pe-4">
                                         <div class="d-flex justify-content-end flex-shrink-0">

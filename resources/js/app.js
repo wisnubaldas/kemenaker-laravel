@@ -25,11 +25,49 @@ createApp({
             tabusulan_active: 1,
             rowdraftactive: null,
             file_surat_usulan_name: null,
+            surat_st_name:null,
             members: [{}],
-            catatan:""
-        };
+            catatan:"",
+            logs:[],
+            logname:"",
+            alurTender : {
+                    '': 'Draft Usulan Tender',
+                    0: 'Usulan Tender Dikirimkan',
+                    1: 'Verifikasi Berkas Usulan Tender dan Input Surat Tugas',
+                    2: 'Sekretariat menolak Usulan Tender',
+                    3: 'Sekretariat menerima Usulan Tender dan memilih anggota pokja',
+                    4: 'Kepala UKPBJ mem-verikasi ST dan anggota pokja',
+                    5: 'Kepala UKPBJ menolak ST dan anggota pokja',
+                    6: 'Unggah Berita Acara Kaji Ulang',
+                    7: 'Verifikasi Berita Acara Kaji Ulang',
+                    8: 'Sekretariat menolak BA Kaji Ulang Dari Pokja',
+                    9: 'Input Kode Tender',
+                    10: 'Delegasi Paket ke Kelompok Kerja Pemilihan',
+                    11: 'Verifikasi Paket Tayang pada LPSE',
+                    12: 'Paket Tayang pada LPSE dan Unggah Berita Acara Hasil Pemilihan',
+                    13: 'Verifikasi Berita Acara Hasil Pemilihan',
+                    14: 'PPK Menolak BAHP dari Pokja',
+                    15: 'Unggah Hasil Penandatanganan Kontrak',
+                    16: 'Verifikasi Hasil Penandatanganan Kontrak',
+                    17: 'Sekretariat menolak Laporan hasil penandatanganan Kontrak dari PPK',
+                    18: 'Tender Telah Selesai'
+                }            
+            };
     },
     methods: {
+        objectDate(tglStr){
+            const tanggalObj= new Date(tglStr);
+            var tgl = tanggalObj.getDate();
+            var bln = tanggalObj.toLocaleString('default', { month: 'short' });
+            var thn = tanggalObj.getFullYear();
+            var jam = tanggalObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });      
+            // Mengembalikan objek dengan properti tgl, bln, thn, dan jam
+            return { tgl, bln, thn, jam };
+        },
+        showlog(item){
+            this.logs=item.usulan_tender_alur
+            this.logname=item.nama_tender
+        },
         checkExist(name) {
             var ret = false;
             if (this.docname[name]) {
@@ -64,11 +102,11 @@ createApp({
 
             this.docname[name] = fileName;
         },
-        updateFileName(event) {
+        updateFileName(event,name) {
             var fileName = event.target.files[0]
                 ? event.target.files[0].name
                 : "";
-            this.file_surat_usulan_name = fileName;
+            this[name] = fileName;
         },
         onAddAnggota() {
             this.tenderData.usulan_tender_usul_pokja.push({
@@ -193,7 +231,6 @@ createApp({
                                 text: "Usulan Tender Telah Ditolak",
                                 icon: "success",
                                 didClose: () => {
-                                    // Redirect ke halaman '/usulan-tender' setelah SweetAlert ditutup
                                     window.location.reload()
                                 }
                             });
@@ -274,4 +311,5 @@ var KTProjectOverview = (function () {
 KTUtil.onDOMContentLoaded(function () {
     KTProjectOverview.init();
 });
+$("#kt_datepicker_1").flatpickr();
 

@@ -22,17 +22,8 @@ class ThUsulanTenderPokja extends Model
         // Hook creating untuk mengisi kolom-kolom secara otomatis sebelum menyimpan data
         static::creating(function ($model) {
             $user = Auth::user();
-            $unitkerja=TmUnitkerja::find($user->tmunitkerja_id);
             $model->created_by = $user->id;
             $model->created_date = Carbon::now();
-            $model->updated_date = Carbon::now();
-            $model->unit_kerja = $unitkerja->unitkerja;
-            $model->tmunitkerja_id = $user->tmunitkerja_id;
-        });
-        static::updating(function ($model) {
-            $user = Auth::user();
-            $model->updated_by = $user->id;
-            $model->updated_date = Carbon::now();
         });
     }
 
