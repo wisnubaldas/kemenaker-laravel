@@ -83,7 +83,7 @@
                         <div class="fs-3 fw-bold mb-5">Daftar Pokja</div>
                         <div class="separator mb-4"></div>
                         @if (count($data->usulanTenderPokja) < 1)
-                            <img src="/images/notFound.png" class="img h-80px" />
+                            <img src="/images/notFound.png" class="img h-70px" />
                         @else
                             <div class="table-responsive">
                                 <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer">
@@ -131,95 +131,109 @@
                     <div class="col-5">
 
                         <div class="border border-gray-300 border-dashed rounded w-100 py-5 px-4 mb-3">
-                            <label class="fs-4 fw-bolder mb-3">Kaji Ulang</label>
-                            <div class="separator mb-3"></div>
-                            @if ($data->alur == 6 && auth()->user()->tagroup_id == 5)
-                                <form action="/usulan-tender/ba/{{ Route::current()->parameter('tender_detail_id') }}"
+                            <div class="fs-4 fw-bolder mb-5">Informasi LPSE</div>
+                            <div class="separator"></div>
+                            @if ($data->alur == 9 && auth()->user()->tagroup_id == 2)
+                                <form
+                                    action="/usulan-tender/lpse/{{ Route::current()->parameter('tender_detail_id') }}"
                                     method="POST" enctype="multipart/form-data" class="form-control">
                                     @csrf
-                                    <input hidden ref="ba_kaji_ulang"
-                                        @change="updateFileName($event,'ba_kaji_ulang_name')" type="file"
-                                        name="ba_kaji_ulang" />
-                                    <div v-if="ba_kaji_ulang_name"
-                                        class="image-input d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-150px me-7 mb-4">
-                                        <label @click="openFilePicker('ba_kaji_ulang')"
-                                            class="btn btn-icon btn-circle  w-25px h-25px bg-body shadow"
-                                            data-kt-image-input-action="change" data-bs-toggle="tooltip" title=""
-                                            data-bs-original-title="Change avatar">
-                                            <i class="bi bi-pencil-fill fs-7"></i>
-                                            <!--end::Inputs-->
-                                        </label>
-
-                                        <img class="scale-hover mw-50px mw-lg-75px" data-bs-target="#kt_modal_new_card"
-                                            @click="openFilePicker('ba_kaji_ulang')" data-bs-toggle="modal"
-                                            data-bs-target="#kt_modal_new_card" style="cursor: pointer"
-                                            src="/assets/media/svg/files/pdf.svg" alt="image">
-                                        <span class="w-75 mt-3 text-center text-2-row text-wrap"
-                                            v-html="ba_kaji_ulang_name"></span>
-                                    </div>
-                                    <div v-else @click="openFilePicker('ba_kaji_ulang')" style="cursor: pointer"
-                                        class="card h-75 flex-center {{ $errors->has('ba_kaji_ulang') ? 'bg-light-danger border-danger' : 'bg-light-primary border-primary' }} border border-dashed p-8 mb-4">
-
-                                        <img src="/assets/media/svg/files/upload.svg" class="h-20px" alt="">
-                                        <a href="#" class=" fs-6 fw-bolder mb-2">Unggah BA Kaji Ulang</a>
-                                        @error('ba_kaji_ulang')
-                                            <div class="text-center invalid-feedback d-block mb-3">{{ $message }}
-                                            </div>
-                                        @enderror
-
-
-                                    </div>
+                                    <label class="mb-2 fw-bold">Kode Tender</label>
+                                    <input
+                                        class="form-control {{ $errors->has('kode_tender') ? 'is-invalid' : 'mb-3' }} "
+                                        name="kode_tender" />
+                                    @error('kode_tender')
+                                        <div class="invalid-feedback d-block mb-3">{{ $message }}</div>
+                                    @enderror
+                                    <label class="mb-2 fw-bold">Kode Rup</label>
+                                    <input class="form-control {{ $errors->has('kode_rup') ? 'is-invalid' : 'mb-3' }} "
+                                        name="kode_rup" />
+                                    @error('kode_rup')
+                                        <div class="invalid-feedback d-block mb-3">{{ $message }}</div>
+                                    @enderror
                                     <div class="d-flex justify-content-end">
-                                        <button type="submit" class="btn btn-sm btn-light-primary">Unggah</button>
+                                        <button type="submit" class="btn btn-sm btn-light-primary">
+                                            Submit
+                                        </button>
                                     </div>
                                 </form>
                             @else
-                                @if (!$data->ba_kaji_ulang)
-                                    <img src="/images/notFound.png" class="img h-80px" />
+                                @if ($data->kode_rup && $data->kode_tender)
+                                    <div class="row">
+                                        <div class="col-6 p-2">
+                                            <div
+                                                class="border border-gray-300 border-dashed rounded w-100 py-5 px-4 mb-3">
+                                                <div class="fs-7 text-muted fw-bolder ">Kode Tender</div>
+                                                <div class="fs-5 fw-bolder ">{{ $data->kode_tender }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 p-2">
+                                            <div
+                                                class="border border-gray-300 border-dashed rounded w-100 py-5 px-4 mb-3">
+                                                <div class="fs-7 text-muted fw-bolder ">Kode RUP</div>
+                                                <div class="fs-5 fw-bolder ">{{ $data->kode_rup }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if ($data->alur == 10 && auth()->user()->tagroup_id == 4)
+                                        <div>
+                                            <div class="fw-bold mb-3">Delegasikan paket ke pokja</div>
+
+                                            <form
+                                                action="/usulan-tender/delegate/{{ Route::current()->parameter('tender_detail_id') }}"
+                                                method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                <div class="form-check form-switch form-check-custom form-check-solid">
+                                                    <input class="form-check-input" name="delegasi" type="checkbox"
+                                                        value="YES" id="flexSwitchChecked" />
+                                                    <label class="form-check-label" for="flexSwitchChecked">
+                                                        Delegasikan
+                                                    </label>
+                                                </div>
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="submit" class="btn btn-sm btn-light-primary">
+                                                        Submit
+                                                    </button>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    @endif
+                                    @if ($data->alur == 11 && auth()->user()->tagroup_id == 3)
+                                        <div>
+                                            <div class="fw-bold mb-3">Apakah paket telah tayang di LPSE</div>
+
+                                            <form
+                                                action="/usulan-tender/deploy/{{ Route::current()->parameter('tender_detail_id') }}"
+                                                method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                <div class="form-check form-switch form-check-custom form-check-solid">
+                                                    <input class="form-check-input" name="delegasi" type="checkbox"
+                                                        value="YES" id="flexSwitchChecked" />
+                                                    <label class="form-check-label" for="flexSwitchChecked">
+                                                        Telah Tayang
+                                                    </label>
+                                                </div>
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="submit" class="btn btn-sm btn-light-primary">
+                                                        Submit
+                                                    </button>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    @endif
                                 @else
-                                    <img class="scale-hover mw-50px mw-lg-75px" data-bs-target="#kt_modal_new_card"
-                                        @click="pathmodalactive='storage/ba_kaji/'+'{{ $data->ba_kaji_ulang }}'"
-                                        data-bs-toggle="modal" data-bs-target="#kt_modal_new_card"
-                                        style="cursor: pointer" src="/assets/media/svg/files/pdf.svg" alt="image">
+                                    <img src="/images/notFound.png" class="img h-70px mt-3" />
                                 @endif
                             @endif
                         </div>
 
-
-
-                        <div class="border border-gray-300 border-dashed rounded w-100 py-5 px-4 mb-3">
-                            <div class="fw-bolder fs-4 mb-3">Surat Tugas</div>
-                            <div class="separator mb-4"></div>
-                            @if (!$data->nomor_st)
-                                <img src="/images/notFound.png" class="img h-80px" />
-                            @else
-                                <div class="d-flex align-items-center">
-                                    <img class="scale-hover mw-50px mw-lg-75px me-5"
-                                        data-bs-target="#kt_modal_new_card"
-                                        @click="pathmodalactive='storage/surat_st/'+{{ $data->nomor_st }}"
-                                        data-bs-toggle="modal" data-bs-target="#kt_modal_new_card"
-                                        style="cursor: pointer" src="/assets/media/svg/files/pdf.svg" alt="image">
-                                    <div>
-                                        <div class="border border-gray-300 border-dashed rounded w-100 py-3 px-4 mb-3">
-                                            <div>Nomor Surat Tugas : </div>
-                                            <div class="text-gray-800 text-hover-primary fs-4  fw-bolder me-3">
-                                                {{ $data->nomor_st ?? 'Surat tugas belum di tentukan' }}</div>
-                                        </div>
-                                        <div class="border border-gray-300 border-dashed rounded w-100 py-3 px-4">
-                                            <div>Tanggal Surat Tugas : </div>
-                                            <div class="fw-bolder fs-5">
-                                                {{ $data->tgl_st ?? 'Tanggal surat tugas belum di tentukan' }}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-
-                        </div>
                         @if ($data->alur == 0 || $data->alur == 7)
                             @if (auth()->user()->tagroup_id == 3)
                                 <form class="form-control">
                                     <label
-                                        class="fs-3 mb-3">{{ $data->alur == 0 ? 'Verifikasi Usulan Tender' : 'Verifikasi BA Kaji Ulang' }}</label>
+                                        class="fs-3 mb-3">{{ $data->alur == 0 ? 'Verifikasi Usulan Tender' : 'Verifikasi Berita Aacara Kaji Ulang' }}</label>
                                     <div class="separator mb-3"></div>
 
                                     <label class="mb-3">Keterangan</label>
@@ -313,6 +327,171 @@
                                 </form>
                             @endif
                         @endif
+
+                        <div class="border border-gray-300 border-dashed rounded w-100 py-5 px-4 mb-3">
+                            <label class="fs-4 fw-bolder mb-3">Unggahan Berkas</label>
+                            <div class="separator mb-3"></div>
+                            @if ($data->alur == 6 && auth()->user()->tagroup_id == 5)
+                                <form action="/usulan-tender/ba/{{ Route::current()->parameter('tender_detail_id') }}"
+                                    method="POST" enctype="multipart/form-data" class="form-control">
+                                    @csrf
+                                    <input hidden ref="ba_kaji_ulang"
+                                        @change="updateFileName($event,'ba_kaji_ulang_name')" type="file"
+                                        name="ba_kaji_ulang" />
+                                    <div v-if="ba_kaji_ulang_name"
+                                        class="image-input d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-150px me-7 mb-4">
+                                        <label @click="openFilePicker('ba_kaji_ulang')"
+                                            class="btn btn-icon btn-circle  w-25px h-25px bg-body shadow"
+                                            data-kt-image-input-action="change" data-bs-toggle="tooltip"
+                                            title="" data-bs-original-title="Change avatar">
+                                            <i class="bi bi-pencil-fill fs-7"></i>
+                                            <!--end::Inputs-->
+                                        </label>
+
+                                        <img class="scale-hover mw-50px mw-lg-75px"
+                                            data-bs-target="#kt_modal_new_card"
+                                            @click="openFilePicker('ba_kaji_ulang')" data-bs-toggle="modal"
+                                            data-bs-target="#kt_modal_new_card" style="cursor: pointer"
+                                            src="/assets/media/svg/files/pdf.svg" alt="image">
+                                        <span class="w-75 mt-3 text-center text-2-row text-wrap"
+                                            v-html="ba_kaji_ulang_name"></span>
+                                    </div>
+                                    <div v-else @click="openFilePicker('ba_kaji_ulang')" style="cursor: pointer"
+                                        class="card h-75 flex-center {{ $errors->has('ba_kaji_ulang') ? 'bg-light-danger border-danger' : 'bg-light-primary border-primary' }} border border-dashed p-8 mb-4">
+
+                                        <img src="/assets/media/svg/files/upload.svg" class="h-20px" alt="">
+                                        <a href="#" class=" fs-6 fw-bolder mb-2">Unggah Berita Acara Kaji
+                                            Ulang</a>
+                                        @error('ba_kaji_ulang')
+                                            <div class="text-center invalid-feedback d-block mb-3">{{ $message }}
+                                            </div>
+                                        @enderror
+
+
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-sm btn-light-primary">Unggah</button>
+                                    </div>
+                                </form>
+                            @else
+                                <div
+                                    class="d-flex align-items-center border border-gray-300 border-dashed rounded w-100 py-5 px-4 mb-3">
+                                    @if (!$data->ba_kaji_ulang)
+                                        <img src="/images/notFound.png" class="img h-70px" />
+                                    @else
+                                        <img class="scale-hover mw-50px mw-lg-75px"
+                                            data-bs-target="#kt_modal_new_card"
+                                            @click="pathmodalactive='storage/ba_kaji/'+'{{ $data->ba_kaji_ulang }}'"
+                                            data-bs-toggle="modal" data-bs-target="#kt_modal_new_card"
+                                            style="cursor: pointer" src="/assets/media/svg/files/pdf.svg"
+                                            alt="image">
+                                    @endif
+                                    <div class="fs-5 fw-bolder ms-3">
+                                        Berkas Berita Acara Kaji Ulang
+                                    </div>
+
+                                </div>
+                                @if ($data->alur == 12 && auth()->user()->tagroup_id == 5)
+                                    <form
+                                        action="/usulan-tender/ba-choose/{{ Route::current()->parameter('tender_detail_id') }}"
+                                        method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        <input hidden ref="ba_hasil_pemilihan"
+                                            @change="updateFileName($event,'ba_hasil_pemilihan_name')" type="file"
+                                            name="ba_hasil_pemilihan" />
+                                        <div v-if="ba_hasil_pemilihan_name"
+                                            class="image-input d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-150px me-7 mb-4">
+                                            <label @click="openFilePicker('ba_hasil_pemilihan')"
+                                                class="btn btn-icon btn-circle  w-25px h-25px bg-body shadow"
+                                                data-kt-image-input-action="change" data-bs-toggle="tooltip"
+                                                title="" data-bs-original-title="Change avatar">
+                                                <i class="bi bi-pencil-fill fs-7"></i>
+                                                <!--end::Inputs-->
+                                            </label>
+
+                                            <img class="scale-hover mw-50px mw-lg-75px"
+                                                data-bs-target="#kt_modal_new_card"
+                                                @click="openFilePicker('ba_hasil_pemilihan')" data-bs-toggle="modal"
+                                                data-bs-target="#kt_modal_new_card" style="cursor: pointer"
+                                                src="/assets/media/svg/files/pdf.svg" alt="image">
+                                            <span class="w-75 mt-3 text-center text-2-row text-wrap"
+                                                v-html="ba_hasil_pemilihan_name"></span>
+                                        </div>
+                                        <div v-else @click="openFilePicker('ba_hasil_pemilihan')"
+                                            style="cursor: pointer"
+                                            class="card h-75 flex-center {{ $errors->has('ba_hasil_pemilihan') ? 'bg-light-danger border-danger' : 'bg-light-primary border-primary' }} border border-dashed p-8 mb-4">
+
+                                            <img src="/assets/media/svg/files/upload.svg" class="h-20px"
+                                                alt="">
+                                            <a href="#" class=" fs-6 fw-bolder mb-2">Unggah Berita Acara Hasil
+                                                Pemilihan
+                                            </a>
+                                            @error('ba_hasil_pemilihan')
+                                                <div class="text-center invalid-feedback d-block mb-3">{{ $message }}
+                                                </div>
+                                            @enderror
+
+
+                                        </div>
+                                        <div class="d-flex justify-content-end">
+                                            <button type="submit"
+                                                class="btn btn-sm btn-light-primary">Unggah</button>
+                                        </div>
+                                    </form>
+                                @else
+                                    <div
+                                        class="d-flex align-items-center border border-gray-300 border-dashed rounded w-100 py-5 px-4 mb-3">
+                                        @if (!$data->ba_hasil_pemilihan)
+                                            <img src="/images/notFound.png" class="img h-70px" />
+                                        @else
+                                            <img class="scale-hover mw-50px mw-lg-75px"
+                                                data-bs-target="#kt_modal_new_card"
+                                                @click="pathmodalactive='storage/ba_hasil/'+'{{ $data->ba_kaji_ulang }}'"
+                                                data-bs-toggle="modal" data-bs-target="#kt_modal_new_card"
+                                                style="cursor: pointer" src="/assets/media/svg/files/pdf.svg"
+                                                alt="image">
+                                        @endif
+                                        <div class="fs-5 fw-bolder ms-3">
+                                            Berita Acara Hasil Pemilihan
+                                        </div>
+
+                                    </div>
+                                @endif
+                            @endif
+                        </div>
+
+
+
+
+                        <div class="border border-gray-300 border-dashed rounded w-100 py-5 px-4 mb-3">
+                            <div class="fw-bolder fs-4 mb-3">Surat Tugas</div>
+                            <div class="separator mb-4"></div>
+                            @if (!$data->nomor_st)
+                                <img src="/images/notFound.png" class="img h-70px" />
+                            @else
+                                <div class="d-flex align-items-center">
+                                    <img class="scale-hover mw-50px mw-lg-75px me-5"
+                                        data-bs-target="#kt_modal_new_card"
+                                        @click="pathmodalactive='storage/surat_st/'+{{ $data->nomor_st }}"
+                                        data-bs-toggle="modal" data-bs-target="#kt_modal_new_card"
+                                        style="cursor: pointer" src="/assets/media/svg/files/pdf.svg" alt="image">
+                                    <div>
+                                        <div class="border border-gray-300 border-dashed rounded w-100 py-3 px-4 mb-3">
+                                            <div>Nomor Surat Tugas : </div>
+                                            <div class="text-gray-800 text-hover-primary fs-4  fw-bolder me-3">
+                                                {{ $data->nomor_st ?? 'Surat tugas belum di tentukan' }}</div>
+                                        </div>
+                                        <div class="border border-gray-300 border-dashed rounded w-100 py-3 px-4">
+                                            <div>Tanggal Surat Tugas : </div>
+                                            <div class="fw-bolder fs-5">
+                                                {{ $data->tgl_st ?? 'Tanggal surat tugas belum di tentukan' }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                        </div>
+
                     </div>
                 </div>
                 <!--begin::Details-->

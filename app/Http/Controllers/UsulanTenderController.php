@@ -37,7 +37,7 @@ class UsulanTenderController extends Controller
         switch ($role) {
             case 1:
                 $detailusulanlist
-                    ->join('th_usulan_tender_pokja', function ($join)use($user) {
+                    ->join('th_usulan_tender_pokja', function ($join) use ($user) {
                         $join->on('th_usulan_tender_pokja.thusulantenderdetail_id', '=', 'th_usulan_tender_detail.id')
                             ->where('th_usulan_tender_pokja.thusulananggotapokja_id', '=', $user->thanggotapokja_id);
                     });
@@ -46,13 +46,13 @@ class UsulanTenderController extends Controller
                 $detailusulanlist
                     ->where('th_usulan_tender.tmunitkerja_id', $user->tmunitkerja_id)
                     ->where('th_usulan_tender.created_by', $user->id);
-                    break;
+                break;
             case 5:
                 $detailusulanlist
-                ->join('th_usulan_tender_pokja', function ($join)use($user) {
-                    $join->on('th_usulan_tender_pokja.thusulantenderdetail_id', '=', 'th_usulan_tender_detail.id')
-                        ->where('th_usulan_tender_pokja.thusulananggotapokja_id', '=', $user->thanggotapokja_id);
-                });
+                    ->join('th_usulan_tender_pokja', function ($join) use ($user) {
+                        $join->on('th_usulan_tender_pokja.thusulantenderdetail_id', '=', 'th_usulan_tender_detail.id')
+                            ->where('th_usulan_tender_pokja.thusulananggotapokja_id', '=', $user->thanggotapokja_id);
+                    });
                 break;
         }
         $data = [
@@ -309,8 +309,8 @@ class UsulanTenderController extends Controller
     {
         $registeredpokja = 0;
         $errMemberCount = 0;
-        $errDocCount=0;
-        $errTenderDetCount=0;
+        $errDocCount = 0;
+        $errTenderDetCount = 0;
         DB::beginTransaction();
         try {
             $model = ThUsulanTender::find($tender_id);
@@ -384,7 +384,7 @@ class UsulanTenderController extends Controller
                         // dd($model_doc,$doc);
                     } else {
 
-                         $membervalidator = Validator::make($doc, [
+                        $membervalidator = Validator::make($doc, [
                             'nama_berkas' => 'nullable',
                             'berkas' => 'required|file|mimes:pdf|max:25000',
                         ]);
@@ -438,15 +438,14 @@ class UsulanTenderController extends Controller
             }
             DB::commit();
             return redirect()->route('draft-usulan-tender')
-            ->with(
-                'success',
-                'Usulan berhasil diperbarui. '
-                    . $errTenderDetCount . ' Tender Gagal Tersimpan dan '
-                    . $errDocCount . ' Dokumen Gagal Tersimpan dan '
-                    . $errMemberCount . ' Anggota Gagal Tersimpan dan '
-                    . $registeredpokja . ' Usulan Anggota Pokja Sudah ada dalam database'
-            );
-          
+                ->with(
+                    'success',
+                    'Usulan berhasil diperbarui. '
+                        . $errTenderDetCount . ' Tender Gagal Tersimpan dan '
+                        . $errDocCount . ' Dokumen Gagal Tersimpan dan '
+                        . $errMemberCount . ' Anggota Gagal Tersimpan dan '
+                        . $registeredpokja . ' Usulan Anggota Pokja Sudah ada dalam database'
+                );
         } catch (Exception $e) {
             dd($e);
             DB::rollBack();
@@ -485,24 +484,24 @@ class UsulanTenderController extends Controller
         $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
         $model = ThUsulanTender::find($model_detail->thusulantender_id);
         if ($is_approve) {
-            if($model_detail->alur==7){
+            if ($model_detail->alur == 7) {
                 $alur = '9';
                 $posisi = null;
-                $tender_posisi='2';
-            }else{
+                $tender_posisi = '2';
+            } else {
                 $alur = '3';
                 $posisi = '4';
-                $tender_posisi='4';
+                $tender_posisi = '4';
             }
         } else {
-            if($model_detail->alur==7){
+            if ($model_detail->alur == 7) {
                 $alur = '8';
                 $posisi = null;
-                $tender_posisi='5';
-            }else{
+                $tender_posisi = '5';
+            } else {
                 $alur = '2';
                 $posisi = '2';
-                $tender_posisi='2';
+                $tender_posisi = '2';
             }
         }
 
@@ -533,18 +532,55 @@ class UsulanTenderController extends Controller
         $model_alur->save();
         return $model_alur;
     }
+    public function submit_ba_pemilihan(Request $request, $usulan_tender_detail_id): RedirectResponse
+    {
+        DB::beginTransaction();
+        $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
+        $validated = $request->validate([
+            'ba_hasil_pemilihan' => 'required|file|mimes:pdf|max:25000',
+        ], [
+            'ba_hasil_pemilihan.required' => "Ba kaji ulang tidak boleh kosong",
+            'ba_hasil_pemilihan.file' => "Data harus berupa file",
+            'ba_kajba_hasil_pemilihani_ulang.mimes' => 'File harus berpa pdf',
+            'ba_hasil_pemilihan.max' => 'File tidak boleh leboh dari 25Mb'
+        ]);
+        try {
+            $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
+            if ($request->hasFile('ba_hasil_pemilihan')) {
+                $file = $request->file('ba_hasil_pemilihan');
+                //   dd($file);
+                $uniqueFileName = Str::uuid(30)->toString() . '.pdf';
+                $file->storeAs('ba_hasil', $uniqueFileName, 'public');
+                $model_detail->ba_hasil_pemilihan = $uniqueFileName;
+            } else {
+                throw new Exception("File Not Found");
+            }
+
+            $this->savealur(13, 2, $usulan_tender_detail_id);
+            $model_detail->alur = 13;
+            $model_detail->posisi = 2;
+            $model_detail->save();
+            DB::commit();   
+            return redirect()->route('usulan-tender')->with(
+                'success',
+                'Unggah BA Hasil Pemilihan Berhasil.'
+            );;
+        } catch (Exception $e) {
+            DB::rollBack();
+        }
+    }
     public function submit_ba(Request $request, $usulan_tender_detail_id): RedirectResponse
     {
         DB::beginTransaction();
         //dd(request()->all());
         $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
         $validated = $request->validate([
-            'ba_kaji_ulang' =>'required|file|mimes:pdf|max:25000',
-        ],[
-            'ba_kaji_ulang.required'=>"Ba kaji ulang tidak boleh kosong",
-            'ba_kaji_ulanng.file'=>"Data harus berupa file",
-            'ba_kaji_ulang.mimes'=>'File harus berpa pdf',
-            'ba_kaji_ulang.max'=>'File tidak boleh leboh dari 25Mb'
+            'ba_kaji_ulang' => 'required|file|mimes:pdf|max:25000',
+        ], [
+            'ba_kaji_ulang.required' => "Ba kaji ulang tidak boleh kosong",
+            'ba_kaji_ulanng.file' => "Data harus berupa file",
+            'ba_kaji_ulang.mimes' => 'File harus berpa pdf',
+            'ba_kaji_ulang.max' => 'File tidak boleh leboh dari 25Mb'
         ]);
         try {
             $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
@@ -554,10 +590,10 @@ class UsulanTenderController extends Controller
                 $uniqueFileName = Str::uuid(30)->toString() . '.pdf';
                 $file->storeAs('ba_kaji', $uniqueFileName, 'public');
                 $model_detail->ba_kaji_ulang = $uniqueFileName;
-            }else{
+            } else {
                 throw new Exception("File Not Found");
             }
-           
+
             $this->savealur(7, 3, $usulan_tender_detail_id);
             $model_detail->alur = 7;
             $model_detail->posisi = 3;
@@ -565,9 +601,9 @@ class UsulanTenderController extends Controller
             DB::commit();
             return redirect()->route('usulan-tender')->with(
                 'success',
-                'Berhasil unggah surat BA.'
+                'Berhasil unggah surat Berita Acara.'
             );;
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
         }
     }
@@ -598,7 +634,7 @@ class UsulanTenderController extends Controller
 
             foreach ($data['anggota'] as $anggota) {
                 $anggotanya = ThAnggotaPokja::find($anggota);
-                if(!$anggotanya){
+                if (!$anggotanya) {
                     dd($anggota);
                 }
                 $pokja = new ThUsulanTenderPokja();
@@ -619,7 +655,91 @@ class UsulanTenderController extends Controller
             return redirect()->route('usulan-tender')->with(
                 'success',
                 'Berhasil Update Nomor Surat Tugas.'
-            );;
+            );
+        } catch (Exception $e) {
+            dd($e);
+            DB::rollBack();
+        }
+    }
+    public function updatelpse(Request $request, $usulan_tender_detail_id): RedirectResponse
+    {
+
+        DB::beginTransaction();
+        $validated = $request->validate([
+            'kode_tender' => 'required',
+            'kode_rup' => 'required',
+        ], [
+            'kode_tender.required' => "Kode tender tidak boleh kosong",
+            'kode_rup.required' => "Kode RUP tidak boleh kosong",
+        ]);
+        try {
+
+            $data = request()->all();
+            $user = Auth::user();
+            $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
+            $model_detail->kode_tender = request('kode_tender');
+            $model_detail->kode_rup = request('kode_rup');
+            $model_detail->alur = 10;
+            $model_detail->posisi = 4;
+            $model_detail->save();
+            $this->savealur(10, 4, $usulan_tender_detail_id);
+            DB::commit();
+            return redirect()->route('usulan-tender')->with(
+                'success',
+                'Berhasil Paket LPSE telah dibuat oleh PPK.'
+            );
+        } catch (Exception $e) {
+            dd($e);
+            DB::rollBack();
+        }
+    }
+    public function submit_delegate(Request $request, $usulan_tender_detail_id): RedirectResponse
+    {
+
+      //  dd(request()->all());
+        DB::beginTransaction();
+       
+        try {
+            if (request('delegasi') == 'YES') {
+                $data = request()->all();
+                $user = Auth::user();
+                $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
+                $model_detail->alur = 11;
+                $model_detail->posisi = 3;
+                $model_detail->save();
+                $this->savealur(11, 3, $usulan_tender_detail_id);
+                DB::commit();
+            }
+            return redirect()->route('usulan-tender')->with(
+                'success',
+                'Berhasil mem-verifikasi untuk mendelegasikan paket ke pokja.'
+            );
+        } catch (Exception $e) {
+            dd($e);
+            DB::rollBack();
+        }
+    }
+    public function deploy_lpse(Request $request, $usulan_tender_detail_id): RedirectResponse
+    {
+
+      //  dd(request()->all());
+        DB::beginTransaction();
+       
+        try {
+            if (request('delegasi') == 'YES') {
+                $data = request()->all();
+                $user = Auth::user();
+                $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
+                $model_detail->alur = 12;
+                $model_detail->posisi = 5;
+                $model_detail->save();
+                $this->savealur(12, 5, $usulan_tender_detail_id);
+                DB::commit();
+            }
+            return redirect()->route('usulan-tender')->with(
+                'success',
+                'Berhasil mem-verifikasi penayangan LPSE.'
+            );
         } catch (Exception $e) {
             dd($e);
             DB::rollBack();

@@ -46,6 +46,7 @@ Route::group(['middleware'=>'role:2'],function () {
     Route::get('/usulan-tender/edit/{tender_id}', [UsulanTenderController::class, 'editdraft'])->name('edit-usulan-tender');
     Route::post('/usulan-tender/edit/{tender_id}', [UsulanTenderController::class, 'updatedraft'])->name('update-usulan-tender');
     Route::post('/usulan-tender/send/{tender_id}', [UsulanTenderController::class, 'send'])->name('send-usulan-tender');
+    Route::post('/usulan-tender/lpse/{tender_detail_id}', [UsulanTenderController::class, 'updatelpse'])->name('submit-lpse-usulan-tender');
 });
 
 Route::group(['middleware'=>'role:3'],function () {
@@ -55,8 +56,13 @@ Route::group(['middleware'=>'role:3'],function () {
     Route::post('/usulan-tender/approve/{tender_detail_id}', [UsulanTenderController::class, 'approvetender'])->name('approve-usulan-tender');
     Route::post('/usulan-tender/reject/{tender_detail_id}', [UsulanTenderController::class, 'rejecttender'])->name('reject-usulan-tender');
     Route::post('/usulan-tender/st/{tender_detail_id}', [UsulanTenderController::class, 'submit_st'])->name('submit-st-usulan-tender');
+    Route::post('/usulan-tender/deploy/{tender_detail_id}', [UsulanTenderController::class, 'deploy_lpse'])->name('deploy-usulan-tender');
+   
+});
+Route::group(['middleware'=>'role:4'],function () {
+    Route::post('/usulan-tender/delegate/{tender_detail_id}', [UsulanTenderController::class, 'submit_delegate'])->name('delegate-usulan-tender');
 });
 Route::group(['middleware'=>'role:5'],function () {
     Route::post('/usulan-tender/ba/{tender_detail_id}', [UsulanTenderController::class, 'submit_ba'])->name('submit-ba-usulan-tender');
+    Route::post('/usulan-tender/ba-choose/{tender_detail_id}', [UsulanTenderController::class, 'submit_ba_pemilihan'])->name('submit-ba-pemilihan-usulan-tender');
 });
-
