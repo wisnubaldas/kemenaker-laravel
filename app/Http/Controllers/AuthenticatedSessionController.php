@@ -22,13 +22,18 @@ class AuthenticatedSessionController extends Controller
         $credentials = $request->only('username', 'password');
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            if(Auth::user() && Auth::user()->role != '6'){
+            
+            if (Auth::user() && Auth::user()->role != '6') {
                 return Redirect::route('dashboard');
-            } else { 
+            } else {
                 Auth::guard('web')->logout();
                 return redirect()->route('login');
             }
-        } 
+        } else {
+            // Login gagal, simpan pesan error ke dalam sesi
+           // $request->session()->flash('error', 'Kombinasi username dan password salah.');
+            return redirect()->route('login')->with('error', 'Kombinasi username dan password salah.');;
+        }
         
     }
    

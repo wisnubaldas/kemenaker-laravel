@@ -5,9 +5,15 @@
                 <img src="/images/kemnaker-logo.png" alt="kemnaker" width="200px">
                 <img src="/images/ukpbj-logo.png" alt="ukpbj" width="80px">
             </div>
+
            
+
             <form id="w0" class="login-form" method="POST" action="{{ route('submitlogin') }}">
                 @csrf
+                @if (session('error'))
+              <div class="text-danger text-center">{{ session('error') }}</div>
+              
+            @endif
                 <h4 class="text-center f-bold">SIPNAKER</h4>
                 <div class="form-group field-loginform-username required has-success">
                     <input type="text" id="loginform-username" class="form-control" name="username"
@@ -23,8 +29,8 @@
 
                     <p :messages="$errors - > get('password')" class="mt-2">
                 </div>
-        <button type="submit" class="f-med">Login</button>
-        </form>
+                <button type="submit" class="f-med">Login</button>
+            </form>
         </div>
         <div class="login-hero">
             <img src="/images/login-img.svg" alt="illustration">

@@ -26,6 +26,7 @@ createApp({
             rowdraftactive: null,
             file_surat_usulan_name: null,
             surat_st_name:null,
+            ba_kaji_ulang_name:null,
             members: [{}],
             catatan:"",
             logs:[],

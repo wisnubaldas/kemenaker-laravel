@@ -56,3 +56,7 @@ Route::group(['middleware'=>'role:3'],function () {
     Route::post('/usulan-tender/reject/{tender_detail_id}', [UsulanTenderController::class, 'rejecttender'])->name('reject-usulan-tender');
     Route::post('/usulan-tender/st/{tender_detail_id}', [UsulanTenderController::class, 'submit_st'])->name('submit-st-usulan-tender');
 });
+Route::group(['middleware'=>'role:5'],function () {
+    Route::post('/usulan-tender/ba/{tender_detail_id}', [UsulanTenderController::class, 'submit_ba'])->name('submit-ba-usulan-tender');
+});
+

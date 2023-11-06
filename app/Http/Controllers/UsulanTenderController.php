@@ -37,15 +37,23 @@ class UsulanTenderController extends Controller
         switch ($role) {
             case 1:
                 $detailusulanlist
-                    ->join('th_usulan_tender_pokja', function ($join) {
+                    ->join('th_usulan_tender_pokja', function ($join)use($user) {
                         $join->on('th_usulan_tender_pokja.thusulantenderdetail_id', '=', 'th_usulan_tender_detail.id')
-                            ->where('th_usulan_tender_pokja.thusulananggotapokja_id', '=', 55);
+                            ->where('th_usulan_tender_pokja.thusulananggotapokja_id', '=', $user->thanggotapokja_id);
                     });
                 break;
             case 2:
                 $detailusulanlist
                     ->where('th_usulan_tender.tmunitkerja_id', $user->tmunitkerja_id)
                     ->where('th_usulan_tender.created_by', $user->id);
+                    break;
+            case 5:
+                $detailusulanlist
+                ->join('th_usulan_tender_pokja', function ($join)use($user) {
+                    $join->on('th_usulan_tender_pokja.thusulantenderdetail_id', '=', 'th_usulan_tender_detail.id')
+                        ->where('th_usulan_tender_pokja.thusulananggotapokja_id', '=', $user->thanggotapokja_id);
+                });
+                break;
         }
         $data = [
             "title" => "Usulan Tender",
@@ -393,7 +401,6 @@ class UsulanTenderController extends Controller
             //dd($members);
             foreach ($members as $member) {
                 if (!isset($member['id'])) {
-
                     $membervalidator = Validator::make($member, [
                         'nip' => 'required:max:20',
                         'nama_lengkap' => 'nullable|max:100',
@@ -478,15 +485,29 @@ class UsulanTenderController extends Controller
         $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
         $model = ThUsulanTender::find($model_detail->thusulantender_id);
         if ($is_approve) {
-            $alur = '3';
-            $posisi = '4';
+            if($model_detail->alur==7){
+                $alur = '9';
+                $posisi = null;
+                $tender_posisi='2';
+            }else{
+                $alur = '3';
+                $posisi = '4';
+                $tender_posisi='4';
+            }
         } else {
-            $alur = '2';
-            $posisi = '2';
+            if($model_detail->alur==7){
+                $alur = '8';
+                $posisi = null;
+                $tender_posisi='5';
+            }else{
+                $alur = '2';
+                $posisi = '2';
+                $tender_posisi='2';
+            }
         }
 
         $model_detail->alur = $alur;
-        $model_detail->posisi = $posisi;
+        $model_detail->posisi = $tender_posisi;
         $model_detail->catatan = request('catatan');
         $model_detail->save();
 
@@ -511,6 +532,44 @@ class UsulanTenderController extends Controller
         $model_alur->posisi = $posisi;
         $model_alur->save();
         return $model_alur;
+    }
+    public function submit_ba(Request $request, $usulan_tender_detail_id): RedirectResponse
+    {
+        DB::beginTransaction();
+        //dd(request()->all());
+        $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
+        $validated = $request->validate([
+            'ba_kaji_ulang' =>'required|file|mimes:pdf|max:25000',
+        ],[
+            'ba_kaji_ulang.required'=>"Ba kaji ulang tidak boleh kosong",
+            'ba_kaji_ulanng.file'=>"Data harus berupa file",
+            'ba_kaji_ulang.mimes'=>'File harus berpa pdf',
+            'ba_kaji_ulang.max'=>'File tidak boleh leboh dari 25Mb'
+        ]);
+        try {
+            $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
+            if ($request->hasFile('ba_kaji_ulang')) {
+                $file = $request->file('ba_kaji_ulang');
+                //   dd($file);
+                $uniqueFileName = Str::uuid(30)->toString() . '.pdf';
+                $file->storeAs('ba_kaji', $uniqueFileName, 'public');
+                $model_detail->ba_kaji_ulang = $uniqueFileName;
+            }else{
+                throw new Exception("File Not Found");
+            }
+           
+            $this->savealur(7, 3, $usulan_tender_detail_id);
+            $model_detail->alur = 7;
+            $model_detail->posisi = 3;
+            $model_detail->save();
+            DB::commit();
+            return redirect()->route('usulan-tender')->with(
+                'success',
+                'Berhasil unggah surat BA.'
+            );;
+        }catch (Exception $e) {
+            DB::rollBack();
+        }
     }
     public function submit_st(STRequest $request, $usulan_tender_detail_id): RedirectResponse
     {

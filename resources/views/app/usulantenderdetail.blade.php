@@ -5,9 +5,17 @@
             var tenderData = @json($data);
         </script>
         @include('components.modalpdf')
-       
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error!</strong>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <div class="card mb-6 mb-xl-9">
-           
+            {{ $data->alur }}
             <div class="card-body pt-9 pb-0">
                 <div class="row">
                     <div class="col-7">
@@ -121,6 +129,64 @@
                         @endif
                     </div>
                     <div class="col-5">
+
+                        <div class="border border-gray-300 border-dashed rounded w-100 py-5 px-4 mb-3">
+                            <label class="fs-4 fw-bolder mb-3">Kaji Ulang</label>
+                            <div class="separator mb-3"></div>
+                            @if ($data->alur == 6 && auth()->user()->tagroup_id == 5)
+                                <form action="/usulan-tender/ba/{{ Route::current()->parameter('tender_detail_id') }}"
+                                    method="POST" enctype="multipart/form-data" class="form-control">
+                                    @csrf
+                                    <input hidden ref="ba_kaji_ulang"
+                                        @change="updateFileName($event,'ba_kaji_ulang_name')" type="file"
+                                        name="ba_kaji_ulang" />
+                                    <div v-if="ba_kaji_ulang_name"
+                                        class="image-input d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-150px me-7 mb-4">
+                                        <label @click="openFilePicker('ba_kaji_ulang')"
+                                            class="btn btn-icon btn-circle  w-25px h-25px bg-body shadow"
+                                            data-kt-image-input-action="change" data-bs-toggle="tooltip" title=""
+                                            data-bs-original-title="Change avatar">
+                                            <i class="bi bi-pencil-fill fs-7"></i>
+                                            <!--end::Inputs-->
+                                        </label>
+
+                                        <img class="scale-hover mw-50px mw-lg-75px" data-bs-target="#kt_modal_new_card"
+                                            @click="openFilePicker('ba_kaji_ulang')" data-bs-toggle="modal"
+                                            data-bs-target="#kt_modal_new_card" style="cursor: pointer"
+                                            src="/assets/media/svg/files/pdf.svg" alt="image">
+                                        <span class="w-75 mt-3 text-center text-2-row text-wrap"
+                                            v-html="ba_kaji_ulang_name"></span>
+                                    </div>
+                                    <div v-else @click="openFilePicker('ba_kaji_ulang')" style="cursor: pointer"
+                                        class="card h-75 flex-center {{ $errors->has('ba_kaji_ulang') ? 'bg-light-danger border-danger' : 'bg-light-primary border-primary' }} border border-dashed p-8 mb-4">
+
+                                        <img src="/assets/media/svg/files/upload.svg" class="h-20px" alt="">
+                                        <a href="#" class=" fs-6 fw-bolder mb-2">Unggah BA Kaji Ulang</a>
+                                        @error('ba_kaji_ulang')
+                                            <div class="text-center invalid-feedback d-block mb-3">{{ $message }}
+                                            </div>
+                                        @enderror
+
+
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-sm btn-light-primary">Unggah</button>
+                                    </div>
+                                </form>
+                            @else
+                                @if (!$data->ba_kaji_ulang)
+                                    <img src="/images/notFound.png" class="img h-80px" />
+                                @else
+                                    <img class="scale-hover mw-50px mw-lg-75px" data-bs-target="#kt_modal_new_card"
+                                        @click="pathmodalactive='storage/ba_kaji/'+'{{ $data->ba_kaji_ulang }}'"
+                                        data-bs-toggle="modal" data-bs-target="#kt_modal_new_card"
+                                        style="cursor: pointer" src="/assets/media/svg/files/pdf.svg" alt="image">
+                                @endif
+                            @endif
+                        </div>
+
+
+
                         <div class="border border-gray-300 border-dashed rounded w-100 py-5 px-4 mb-3">
                             <div class="fw-bolder fs-4 mb-3">Surat Tugas</div>
                             <div class="separator mb-4"></div>
@@ -128,30 +194,32 @@
                                 <img src="/images/notFound.png" class="img h-80px" />
                             @else
                                 <div class="d-flex align-items-center">
-                                    <img class="scale-hover mw-50px mw-lg-75px me-5" data-bs-target="#kt_modal_new_card"
-                                        @click="pathmodalactive='storage/surat_st/'+{{$data->nomor_st}}"
+                                    <img class="scale-hover mw-50px mw-lg-75px me-5"
+                                        data-bs-target="#kt_modal_new_card"
+                                        @click="pathmodalactive='storage/surat_st/'+{{ $data->nomor_st }}"
                                         data-bs-toggle="modal" data-bs-target="#kt_modal_new_card"
                                         style="cursor: pointer" src="/assets/media/svg/files/pdf.svg" alt="image">
                                     <div>
                                         <div class="border border-gray-300 border-dashed rounded w-100 py-3 px-4 mb-3">
-                                        <div>Nomor Surat Tugas : </div>
-                                        <div class="text-gray-800 text-hover-primary fs-4  fw-bolder me-3">
-                                            {{ $data->nomor_st ?? 'Surat tugas belum di tentukan' }}</div>
+                                            <div>Nomor Surat Tugas : </div>
+                                            <div class="text-gray-800 text-hover-primary fs-4  fw-bolder me-3">
+                                                {{ $data->nomor_st ?? 'Surat tugas belum di tentukan' }}</div>
                                         </div>
                                         <div class="border border-gray-300 border-dashed rounded w-100 py-3 px-4">
-                                        <div>Tanggal Surat Tugas : </div>
-                                        <div class="fw-bolder fs-5">
-                                            {{ $data->tgl_st ?? 'Tanggal surat tugas belum di tentukan' }}</div>
+                                            <div>Tanggal Surat Tugas : </div>
+                                            <div class="fw-bolder fs-5">
+                                                {{ $data->tgl_st ?? 'Tanggal surat tugas belum di tentukan' }}</div>
                                         </div>
                                     </div>
                                 </div>
                             @endif
 
                         </div>
-                        @if ($data->alur == 0)
+                        @if ($data->alur == 0 || $data->alur == 7)
                             @if (auth()->user()->tagroup_id == 3)
                                 <form class="form-control">
-                                    <label class="fs-3 mb-3">Verifikasi Usulan Tender</label>
+                                    <label
+                                        class="fs-3 mb-3">{{ $data->alur == 0 ? 'Verifikasi Usulan Tender' : 'Verifikasi BA Kaji Ulang' }}</label>
                                     <div class="separator mb-3"></div>
 
                                     <label class="mb-3">Keterangan</label>
@@ -312,5 +380,5 @@
             </div>
         </div>
     </section>
-   
+
 </x-app-layout>

@@ -5,13 +5,15 @@
         <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
             data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
             class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-            <a class="fw-bolder d-flex align-items-center" href="/usulan-tender/draft">
+            
+            <a class="fw-bolder d-flex align-items-center" href="{{ url()->previous() }}">
                 <span class="svg-icon svg-icon-3 me-3"><svg xmlns="http://www.w3.org/2000/svg" width="24"
                         height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M17.6 4L9.6 12L17.6 20H13.6L6.3 12.7C5.9 12.3 5.9 11.7 6.3 11.3L13.6 4H17.6Z"
                             fill="black" />
                     </svg>
                 </span> Kembali</a>
+                
             <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
             <!--begin::Title-->
             <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">{{ $title ?? '' }}
