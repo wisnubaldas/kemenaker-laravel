@@ -488,7 +488,13 @@ class UsulanTenderController extends Controller
                 $alur = '9';
                 $posisi = null;
                 $tender_posisi = '2';
-            } else {
+            } 
+            elseif($model_detail->alur == 13){
+                $alur = '16';
+                $posisi = null;
+                $tender_posisi = '3';
+            }
+            else {
                 $alur = '3';
                 $posisi = '4';
                 $tender_posisi = '4';
@@ -497,6 +503,11 @@ class UsulanTenderController extends Controller
             if ($model_detail->alur == 7) {
                 $alur = '8';
                 $posisi = null;
+                $tender_posisi = '5';
+            }
+            elseif($model_detail->alur == 13){
+                $alur = '14';
+                $posisi = '5';
                 $tender_posisi = '5';
             } else {
                 $alur = '2';
@@ -739,6 +750,55 @@ class UsulanTenderController extends Controller
             return redirect()->route('usulan-tender')->with(
                 'success',
                 'Berhasil mem-verifikasi penayangan LPSE.'
+            );
+        } catch (Exception $e) {
+            dd($e);
+            DB::rollBack();
+        }
+    }
+    public function submit_sph(Request $request, $usulan_tender_detail_id): RedirectResponse
+    {
+        DB::beginTransaction();
+        if(request('approve')){
+            $validated = $request->validate([
+                'file_lap_hpk' => 'required',
+                'file_spk' => 'required',
+            ], [
+                'file_lap_hpk.required' => "Hasil Penandatanganan Kontrak tidak boleh kosong",
+                'file_lap_hpk.file' => "Data harus berupa file",
+                'file_lap_hpk.mimes' => 'File harus berpa pdf',
+                'file_lap_hpk.max' => 'File tidak boleh leboh dari 25Mb',
+                'file_spk.required' => "Surat Perjanjian Kontrak tidak boleh kosong",
+                'file_spk.file' => "Data harus berupa file",
+                'file_spk.mimes' => 'File harus berpa pdf',
+                'file_spk.max' => 'File tidak boleh leboh dari 25Mb'
+            ]);
+        }
+        try {
+            if(!request('approve')){
+                $this->isApprove($request,$usulan_tender_detail_id,false);
+            }else{
+                $data = request()->all();
+                $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
+                if ($request->hasFile('file_lap_hpk')) {
+                    $file = $request->file('file_lap_hpk');
+                    $uniqueFileName = Str::uuid(30)->toString() . '.pdf';
+                    $file->storeAs('_upload', $uniqueFileName, 'public');
+                    $model_detail->file_lap_hpk = $uniqueFileName;
+                }
+                if ($request->hasFile('file_spk')) {
+                    $file = $request->file('file_spk');
+                    $uniqueFileName = Str::uuid(30)->toString() . '.pdf';
+                    $file->storeAs('_upload', $uniqueFileName, 'public');
+                    $model_detail->file_spk = $uniqueFileName;
+                }
+                $model_detail->save();
+                $this->isApprove($request,$usulan_tender_detail_id,true);
+            }
+            DB::commit();
+            return redirect()->route('usulan-tender')->with(
+                'success',
+                'Berhasil mengirimkan Laporan hasil penandatanganan kontrak beserta SPK ke Sekretariat'
             );
         } catch (Exception $e) {
             dd($e);

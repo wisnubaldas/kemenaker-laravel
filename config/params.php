@@ -10,6 +10,11 @@ return [
     'setmaxButtonCount' => 5,
     'btnupdate' => 'Ubah Data',
     'btndelete' => 'Hapus Data',
+    'form-title'=>[
+        0=>'Verifikasi Usulan Tender',
+        7=>'Verifikasi Berita Acara Kaji Ulang',
+        13=>'Verifikasi Berita Acara Hasil Pemilihan'
+    ],
     'status' => [
         1 => 'Aktif',
         0 => 'Inaktif',

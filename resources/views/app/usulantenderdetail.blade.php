@@ -130,6 +130,95 @@
                     </div>
                     <div class="col-5">
 
+                        @if ($data->alur == 13 && auth()->user()->tagroup_id == 2)
+                            <div class="border border-gray-300 border-dashed rounded w-100 py-5 px-4 mb-3">
+                                <div class="fs-4 fw-bolder mb-5">Verifikasi Berita Acara Hasil Pemilihan</div>
+                                <div class="separator"></div>
+                                <form
+                                    action="/usulan-tender/sph/{{ Route::current()->parameter('tender_detail_id') }}"
+                                    method="POST" enctype="multipart/form-data" class="p-3">
+                                    @csrf
+                                    <div class="form-check form-switch form-check-custom form-check-solid mb-3">
+                                        <input class="form-check-input" @change="changeOpt($event)" @if(old('approve')) checked @endif  name="approve"  type="checkbox"
+                                            ref="flexSwitchChecked2" id="flexSwitchChecked2" />
+                                        <label class="form-check-label fw-bolder" :class="checked?'text-success':'text-danger'" for="flexSwitchChecked2">
+                                            @{{checked?'Terima':'Tolak'}}
+                                        </label>
+                                    </div>
+                                    <div v-if="checked">
+                                        <input hidden ref="file_lap_hpk"
+                                            @change="updateFileName($event,'file_lap_hpk_name')" type="file"
+                                            name="file_lap_hpk" />
+                                        <div v-if="file_lap_hpk_name"
+                                            class="image-input d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-150px me-7 mb-4">
+                                            <label @click="openFilePicker('file_lap_hpk')"
+                                                class="btn btn-icon btn-circle  w-25px h-25px bg-body shadow"
+                                                data-kt-image-input-action="change" data-bs-toggle="tooltip"
+                                                title="" data-bs-original-title="Change avatar">
+                                                <i class="bi bi-pencil-fill fs-7"></i>
+                                                <!--end::Inputs-->
+                                            </label>
+
+                                            <img class=" mw-50px mw-lg-75px"
+                                                style="cursor: pointer"
+                                                src="/assets/media/svg/files/pdf.svg" alt="image">
+                                            <span class="w-75 mt-3 text-center text-2-row text-wrap"
+                                                v-html="file_lap_hpk_name"></span>
+                                        </div>
+                                        <div v-else @click="openFilePicker('file_lap_hpk')" style="cursor: pointer"
+                                            class="card h-75 flex-center {{ $errors->has('file_lap_hpk') ? 'bg-light-danger border-danger' : 'bg-light-primary border-primary' }} border border-dashed p-8 mb-4">
+
+                                            <img src="/assets/media/svg/files/upload.svg" class="h-20px"
+                                                alt="">
+                                            <a href="#" class=" fs-6 fw-bolder mb-2">Laporan Hasil
+                                                Penandatanganan Kontrak</a>
+                                            @error('file_lap_hpk')
+                                                <div class="text-center invalid-feedback d-block mb-3">{{ $message }}
+                                                </div>
+                                            @enderror
+
+
+                                        </div>
+                                        <input hidden ref="file_spk"
+                                            @change="updateFileName($event,'file_spk_name')" type="file"
+                                            name="file_spk" />
+                                        <div v-if="file_spk_name"
+                                            class="image-input d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-150px me-7 mb-4">
+                                            <label @click="openFilePicker('file_spk')"
+                                                class="btn btn-icon btn-circle  w-25px h-25px bg-body shadow"
+                                                data-kt-image-input-action="change" data-bs-toggle="tooltip"
+                                                title="" data-bs-original-title="Change avatar">
+                                                <i class="bi bi-pencil-fill fs-7"></i>
+                                                <!--end::Inputs-->
+                                            </label>
+
+                                            <img class="mw-50px mw-lg-75px"
+                                                style="cursor: pointer"
+                                                src="/assets/media/svg/files/pdf.svg" alt="image">
+                                            <span class="w-75 mt-3 text-center text-2-row text-wrap"
+                                                v-html="file_spk_name"></span>
+                                        </div>
+                                        <div v-else @click="openFilePicker('file_spk')" style="cursor: pointer"
+                                            class="card h-75 flex-center {{ $errors->has('file_spk') ? 'bg-light-danger border-danger' : 'bg-light-primary border-primary' }} border border-dashed p-8 mb-4">
+
+                                            <img src="/assets/media/svg/files/upload.svg" class="h-20px"
+                                                alt="">
+                                            <a href="#" class=" fs-6 fw-bolder mb-2">Surat Perjanjian
+                                                Kontrak</a>
+                                            @error('file_spk')
+                                                <div class="text-center invalid-feedback d-block mb-3">{{ $message }}
+                                                </div>
+                                            @enderror
+
+
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-sm btn-light-primary">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        @endif
                         <div class="border border-gray-300 border-dashed rounded w-100 py-5 px-4 mb-3">
                             <div class="fs-4 fw-bolder mb-5">Informasi LPSE</div>
                             <div class="separator"></div>
@@ -146,7 +235,8 @@
                                         <div class="invalid-feedback d-block mb-3">{{ $message }}</div>
                                     @enderror
                                     <label class="mb-2 fw-bold">Kode Rup</label>
-                                    <input class="form-control {{ $errors->has('kode_rup') ? 'is-invalid' : 'mb-3' }} "
+                                    <input
+                                        class="form-control {{ $errors->has('kode_rup') ? 'is-invalid' : 'mb-3' }} "
                                         name="kode_rup" />
                                     @error('kode_rup')
                                         <div class="invalid-feedback d-block mb-3">{{ $message }}</div>
@@ -229,25 +319,22 @@
                             @endif
                         </div>
 
-                        @if ($data->alur == 0 || $data->alur == 7)
-                            @if (auth()->user()->tagroup_id == 3)
-                                <form class="form-control">
-                                    <label
-                                        class="fs-3 mb-3">{{ $data->alur == 0 ? 'Verifikasi Usulan Tender' : 'Verifikasi Berita Aacara Kaji Ulang' }}</label>
-                                    <div class="separator mb-3"></div>
+                        @if (($data->alur == 0 && auth()->user()->tagroup_id == 3) || ($data->alur == 7 && auth()->user()->tagroup_id == 3))
+                            <form class="form-control mb-3">
+                                <label class="fs-3 mb-3">{{ config('params.form-title.' . $data->alur) }}</label>
+                                <div class="separator mb-3"></div>
 
-                                    <label class="mb-3">Keterangan</label>
-                                    <textarea v-model="catatan" class="form-control mb-3"></textarea>
-                                    <div class="d-flex justify-content-end">
-                                        <button
-                                            @click="rejectUsulan({{ Route::current()->parameter('tender_detail_id') }})"
-                                            type="button" class="btn btn-sm btn-light-danger me-3">Tolak</button>
-                                        <button
-                                            @click="approveUsulan({{ Route::current()->parameter('tender_detail_id') }})"
-                                            type="button" class="btn btn-sm btn-light-primary">Terima</button>
-                                    </div>
-                                </form>
-                            @endif
+                                <label class="mb-3">Keterangan</label>
+                                <textarea v-model="catatan" class="form-control mb-3"></textarea>
+                                <div class="d-flex justify-content-end">
+                                    <button
+                                        @click="rejectUsulan({{ Route::current()->parameter('tender_detail_id') }})"
+                                        type="button" class="btn btn-sm btn-light-danger me-3">Tolak</button>
+                                    <button
+                                        @click="approveUsulan({{ Route::current()->parameter('tender_detail_id') }})"
+                                        type="button" class="btn btn-sm btn-light-primary">Terima</button>
+                                </div>
+                            </form>
                         @endif
                         @if ($data->alur == 3)
                             @if (auth()->user()->tagroup_id == 3)
@@ -331,6 +418,38 @@
                         <div class="border border-gray-300 border-dashed rounded w-100 py-5 px-4 mb-3">
                             <label class="fs-4 fw-bolder mb-3">Unggahan Berkas</label>
                             <div class="separator mb-3"></div>
+                            <div
+                                    class="d-flex align-items-center border border-gray-300 border-dashed rounded w-100 py-5 px-4 mb-3">
+                                    @if (!$data->file_lap_hpk)
+                                    <img src="/images/notFound.png" class="img h-70px" />
+                                @else
+                                    <img class="scale-hover mw-50px mw-lg-75px"
+                                        data-bs-target="#kt_modal_new_card"
+                                        @click="pathmodalactive='storage/_upload/'+'{{ $data->file_lap_hpk }}'"
+                                        data-bs-toggle="modal" data-bs-target="#kt_modal_new_card"
+                                        style="cursor: pointer" src="/assets/media/svg/files/pdf.svg"
+                                        alt="image">
+                                @endif
+                                <div class="fs-5 fw-bolder ms-3">
+                                    Laporan Hasil Penandatanganan Kontrak
+                                </div>
+                            </div>
+                            <div
+                                    class="d-flex align-items-center border border-gray-300 border-dashed rounded w-100 py-5 px-4 mb-3">
+                                    @if (!$data->file_spk)
+                                    <img src="/images/notFound.png" class="img h-70px" />
+                                @else
+                                    <img class="scale-hover mw-50px mw-lg-75px"
+                                        data-bs-target="#kt_modal_new_card"
+                                        @click="pathmodalactive='storage/_upload/'+'{{ $data->file_spk }}'"
+                                        data-bs-toggle="modal" data-bs-target="#kt_modal_new_card"
+                                        style="cursor: pointer" src="/assets/media/svg/files/pdf.svg"
+                                        alt="image">
+                                @endif
+                                <div class="fs-5 fw-bolder ms-3">
+                                    Surat Perjanjian Kontrak
+                                </div>
+                            </div>
                             @if ($data->alur == 6 && auth()->user()->tagroup_id == 5)
                                 <form action="/usulan-tender/ba/{{ Route::current()->parameter('tender_detail_id') }}"
                                     method="POST" enctype="multipart/form-data" class="form-control">
@@ -456,6 +575,8 @@
                                         </div>
 
                                     </div>
+                                @endif
+                                @if ($data->alur == 12 && auth()->user()->tagroup_id == 5)
                                 @endif
                             @endif
                         </div>

@@ -28,10 +28,13 @@ createApp({
             surat_st_name:null,
             ba_kaji_ulang_name:null,
             ba_hasil_pemilihan_name:null,
+            file_lap_hpk_name:null,
+            file_spk_name:null,
             members: [{}],
             catatan:"",
             logs:[],
             logname:"",
+            checked:null,
             alurTender : {
                     '': 'Draft Usulan Tender',
                     0: 'Usulan Tender Dikirimkan',
@@ -56,7 +59,17 @@ createApp({
                 }            
             };
     },
+    mounted() {
+        this.$nextTick(() => {
+            if (this.$refs.flexSwitchChecked2) {
+              this.checked = this.$refs.flexSwitchChecked2.checked;
+            }
+          });
+    },
     methods: {
+            changeOpt(e){
+                this.checked=e.target.checked
+            },
         objectDate(tglStr){
             const tanggalObj= new Date(tglStr);
             var tgl = tanggalObj.getDate();
