@@ -494,6 +494,11 @@ class UsulanTenderController extends Controller
                 $posisi = null;
                 $tender_posisi = '3';
             }
+            elseif($model_detail->alur == 16){
+                $alur = '18';
+                $posisi = null;
+                $tender_posisi = '3';
+            }
             else {
                 $alur = '3';
                 $posisi = '4';
@@ -509,6 +514,10 @@ class UsulanTenderController extends Controller
                 $alur = '14';
                 $posisi = '5';
                 $tender_posisi = '5';
+            }   elseif($model_detail->alur == 16){
+                $alur = '17';
+                $posisi = null;
+                $tender_posisi = '2';
             } else {
                 $alur = '2';
                 $posisi = '2';

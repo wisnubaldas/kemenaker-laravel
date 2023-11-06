@@ -219,6 +219,25 @@
                                 </form>
                             </div>
                         @endif
+                        @if (($data->alur == 0 && auth()->user()->tagroup_id == 3) 
+                        || ($data->alur == 7 && auth()->user()->tagroup_id == 3)
+                        || ($data->alur == 16 && auth()->user()->tagroup_id == 3))
+                            <form class="form-control mb-3">
+                                <label class="fs-3 mb-3">{{ config('params.form-title.' . $data->alur) }}</label>
+                                <div class="separator mb-3"></div>
+
+                                <label class="mb-3">Keterangan</label>
+                                <textarea v-model="catatan" class="form-control mb-3"></textarea>
+                                <div class="d-flex justify-content-end">
+                                    <button
+                                        @click="rejectUsulan({{ Route::current()->parameter('tender_detail_id') }})"
+                                        type="button" class="btn btn-sm btn-light-danger me-3">Tolak</button>
+                                    <button
+                                        @click="approveUsulan({{ Route::current()->parameter('tender_detail_id') }})"
+                                        type="button" class="btn btn-sm btn-light-primary">Terima</button>
+                                </div>
+                            </form>
+                        @endif
                         <div class="border border-gray-300 border-dashed rounded w-100 py-5 px-4 mb-3">
                             <div class="fs-4 fw-bolder mb-5">Informasi LPSE</div>
                             <div class="separator"></div>
@@ -319,23 +338,7 @@
                             @endif
                         </div>
 
-                        @if (($data->alur == 0 && auth()->user()->tagroup_id == 3) || ($data->alur == 7 && auth()->user()->tagroup_id == 3))
-                            <form class="form-control mb-3">
-                                <label class="fs-3 mb-3">{{ config('params.form-title.' . $data->alur) }}</label>
-                                <div class="separator mb-3"></div>
-
-                                <label class="mb-3">Keterangan</label>
-                                <textarea v-model="catatan" class="form-control mb-3"></textarea>
-                                <div class="d-flex justify-content-end">
-                                    <button
-                                        @click="rejectUsulan({{ Route::current()->parameter('tender_detail_id') }})"
-                                        type="button" class="btn btn-sm btn-light-danger me-3">Tolak</button>
-                                    <button
-                                        @click="approveUsulan({{ Route::current()->parameter('tender_detail_id') }})"
-                                        type="button" class="btn btn-sm btn-light-primary">Terima</button>
-                                </div>
-                            </form>
-                        @endif
+                       
                         @if ($data->alur == 3)
                             @if (auth()->user()->tagroup_id == 3)
                                 <form action="/usulan-tender/st/{{ Route::current()->parameter('tender_detail_id') }}"

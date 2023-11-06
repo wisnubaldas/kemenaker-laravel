@@ -13,7 +13,7 @@ return [
     'form-title'=>[
         0=>'Verifikasi Usulan Tender',
         7=>'Verifikasi Berita Acara Kaji Ulang',
-        13=>'Verifikasi Berita Acara Hasil Pemilihan'
+        16=>'Verifikasi laporan hasil penandatanganan kontrak beserta SPK'
     ],
     'status' => [
         1 => 'Aktif',
