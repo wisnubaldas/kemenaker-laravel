@@ -62,11 +62,39 @@ class ThUsulanTenderDetail extends Model
     {
         return $this->hasMany(ThUsulanTenderAlur::class, 'thusulantenderdetail_id', 'id');
     }
+    public function basequery(){
+        $detailusulanlist = $this->getCompleteData();
+        $user = Auth::user();
+        $role = $user->tagroup_id;
+        switch ($role) {
+            case 1:
+                $detailusulanlist
+                    ->join('th_usulan_tender_pokja', function ($join) use ($user) {
+                        $join->on('th_usulan_tender_pokja.thusulantenderdetail_id', '=', 'th_usulan_tender_detail.id')
+                            ->where('th_usulan_tender_pokja.thusulananggotapokja_id', '=', $user->thanggotapokja_id);
+                    });
+                break;
+            case 2:
+                $detailusulanlist
+                    ->where('th_usulan_tender.tmunitkerja_id', $user->tmunitkerja_id)
+                    ->where('th_usulan_tender.created_by', $user->id);
+                break;
+            case 5:
+                $detailusulanlist
+                    ->join('th_usulan_tender_pokja', function ($join) use ($user) {
+                        $join->on('th_usulan_tender_pokja.thusulantenderdetail_id', '=', 'th_usulan_tender_detail.id')
+                            ->where('th_usulan_tender_pokja.thusulananggotapokja_id', '=', $user->thanggotapokja_id);
+                    });
+                break;
+        }
+        return $detailusulanlist;
+    }
     public function getCompleteData()
     {
         return $this->select(
             'th_usulan_tender_detail.*',
             'th_usulan_tender.no_surat_usulan',
+            'th_usulan_tender.tipe_tender',
             'th_usulan_tender.keterangan',
             'ta_group.nama_group',
             'tm_unitkerja.unitkerja',

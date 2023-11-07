@@ -13,7 +13,7 @@
                     
                     <div class="">
                         @if(auth()->user()->tagroup_id==2)
-                        @include('components.tabusulan')
+                        @include('components.newtabusulan')
                         @endif
                     </div>
                   

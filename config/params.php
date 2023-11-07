@@ -39,6 +39,12 @@ return [
         4 => 'Kepala ukpbj',
         5 => 'Pokja',
     ],
+    'tipe_tender' => [
+        0 => 'Tender Lama',
+        1 => 'Permohonan Proses Tender/Seleksi',
+        2 => 'Permohonan Proses Pengadaan Dikecualikan ',
+        
+    ],
     'alur' => [
         '' => 'Draft Usulan Tender',
         0 => 'Usulan Tender Dikirimkan',

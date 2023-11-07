@@ -45,7 +45,22 @@ class ThUsulanTender extends Model
     {
         return $this->hasMany(ThUsulanTenderUsulpokja::class, 'thusulantender_id', 'id');
     }
-
+    public function draft($tipe){
+        $user = Auth::user();
+        $role = $user->tagroup_id;
+        $detailusulanlist = $this->getdraft($user->tmunitkerja_id, $user->id);
+        //dd($detailusulanlist);
+        $data = [
+            "title" => "Usulan Tender",
+            "tipe_tender"=>$tipe,
+            "data" => $detailusulanlist
+                ->where('th_usulan_tender.tipe_tender', $tipe)
+                ->orderByDesc('th_usulan_tender.created_date')
+                ->paginate(20),
+            "tm_unitkerja" => (new TmUnitkerja())->getSortedUnitKerja()
+        ];
+        return $data;
+    }
     public function getdraft($unit_kerja_id,$owner_id){
         return $this
             ->with('usulanTenderDetails')

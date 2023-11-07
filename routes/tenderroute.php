@@ -13,7 +13,8 @@ Route::middleware('guest')->group(function () {
 Route::group(['middleware'=>'role:1,2,3,4,5'],function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/usulan-tender', [UsulanTenderController::class, 'index'])->name('usulan-tender');
-    Route::get('/usulan-tender-new', [NewUsulanTenderController::class, 'index'])->name('usulan-tender-new');
+    Route::get('/usulan-tender-seleksi', [NewUsulanTenderController::class, 'seleksi'])->name('usulan-tender-seleksi');
+    Route::get('/usulan-tender-pengecualian', [NewUsulanTenderController::class, 'pengecualian'])->name('usulan-tender-pengecualian');
     Route::get('/usulan-tender-detail/{tender_detail_id}', [UsulanTenderController::class, 'detail'])->name('usulan-tender-detail');
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
     Route::get('profile', [ProfileController::class, 'create'])->name('profile');
@@ -29,7 +30,10 @@ Route::group(['middleware'=>'role:1'],function () {
 });
 
 Route::group(['middleware'=>'role:2'],function () {
-    Route::get('/usulan-tender/draft', [UsulanTenderController::class, 'draftlist'])->name('draft-usulan-tender');
+    Route::get('/usulan-tender/draft', [NewUsulanTenderController::class, 'draftlist'])->name('draft-usulan-tender');
+    Route::get('/usulan-tender-seleksi/draft', [NewUsulanTenderController::class, 'draftlistseleksi'])->name('draft-usulan-tender-seleksi');
+    Route::get('/usulan-tender-pengecualian/draft', [NewUsulanTenderController::class, 'draftlistdikecualikan'])->name('draft-usulan-tender-pengecualian');
+
     Route::get('/usulan-tender/new', [UsulanTenderController::class, 'newdraft'])->name('new-usulan-tender');
     Route::post('/usulan-tender/new', [UsulanTenderController::class, 'submit_newdraft'])->name('submit-new-usulan-tender');
     Route::get('/usulan-tender/edit/{tender_id}', [UsulanTenderController::class, 'editdraft'])->name('edit-usulan-tender');
