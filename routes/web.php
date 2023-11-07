@@ -48,6 +48,7 @@ Route::group(['middleware'=>'role:2'],function () {
     Route::post('/usulan-tender/send/{tender_id}', [UsulanTenderController::class, 'send'])->name('send-usulan-tender');
     Route::post('/usulan-tender/lpse/{tender_detail_id}', [UsulanTenderController::class, 'updatelpse'])->name('submit-lpse-usulan-tender');
     Route::post('/usulan-tender/sph/{tender_detail_id}', [UsulanTenderController::class, 'submit_sph'])->name('submit-sph-usulan-tender');
+    Route::post('/usulan-tender/resend/{tender_detail_id}', [UsulanTenderController::class, 'sendAfterReject'])->name('resend-usulan-tender');
     
 });
 

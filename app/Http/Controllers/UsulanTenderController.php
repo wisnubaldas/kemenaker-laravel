@@ -231,6 +231,33 @@ class UsulanTenderController extends Controller
         $modelPokja->save();
         return $modelPokja;
     }
+    private function saveKirim($detail)
+    {
+        $user = Auth::user();
+        $detail->alur = '0';
+        $detail->posisi = 3;
+        $detail->save();
+        $alur = new ThUsulanTenderAlur();
+        $alur->thusulantenderdetail_id = $detail->id;
+        $alur->tagroup_id = $user->tagroup_id;
+        $alur->alur = '0';
+        $alur->posisi = 3;
+        $alur->save();
+    }
+    public function sendAfterReject($usulan_tender_detail_id)
+    {
+        DB::beginTransaction();
+        try {
+            $detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
+            $this->saveKirim($detail);
+            DB::commit();
+            return $detail;
+        } catch (Exception $e) {
+            //dd($e);
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
+    }
     public function send($id)
     {
         DB::beginTransaction();
@@ -245,17 +272,8 @@ class UsulanTenderController extends Controller
                 if ($model->save()) {
                     $model_detail = ThUsulanTenderDetail::where('thusulantender_id', $model->id)->get();
                     foreach ($model_detail as $detail) {
-                        $detail->alur = '0';
-                        $detail->posisi = 3;
-                        $detail->save();
-                        $alur = new ThUsulanTenderAlur();
-                        $alur->thusulantenderdetail_id = $detail->id;
-                        $alur->tagroup_id = $user->tagroup_id;
-                        $alur->alur = '0';
-                        $alur->posisi = 3;
-                        $alur->save();
+                        $this->saveKirim($detail);
                     }
-
                     $model_usulpokja = ThUsulanTenderUsulpokja::where('thusulantender_id', $model->id)->get();
                     foreach ($model_usulpokja as $pokja) {
                         $anggota = ThAnggotaPokja::firstOrCreate(
@@ -488,20 +506,17 @@ class UsulanTenderController extends Controller
                 $alur = '9';
                 $posisi = null;
                 $tender_posisi = '2';
-            } 
-            elseif($model_detail->alur == 13){
+            } elseif ($model_detail->alur == 13) {
                 $alur = '16';
                 $posisi = null;
                 $tender_posisi = '3';
-            }
-            elseif($model_detail->alur == 16){
+            } elseif ($model_detail->alur == 16) {
                 $alur = '18';
                 $posisi = null;
                 $tender_posisi = '3';
-            }
-            else {
+            } else {
                 $alur = '3';
-                $posisi = '4';
+                $posisi = '3';
                 $tender_posisi = '4';
             }
         } else {
@@ -509,12 +524,11 @@ class UsulanTenderController extends Controller
                 $alur = '8';
                 $posisi = null;
                 $tender_posisi = '5';
-            }
-            elseif($model_detail->alur == 13){
+            } elseif ($model_detail->alur == 13) {
                 $alur = '14';
                 $posisi = '5';
                 $tender_posisi = '5';
-            }   elseif($model_detail->alur == 16){
+            } elseif ($model_detail->alur == 16) {
                 $alur = '17';
                 $posisi = null;
                 $tender_posisi = '2';
@@ -580,7 +594,7 @@ class UsulanTenderController extends Controller
             $model_detail->alur = 13;
             $model_detail->posisi = 2;
             $model_detail->save();
-            DB::commit();   
+            DB::commit();
             return redirect()->route('usulan-tender')->with(
                 'success',
                 'Unggah BA Hasil Pemilihan Berhasil.'
@@ -609,6 +623,7 @@ class UsulanTenderController extends Controller
                 //   dd($file);
                 $uniqueFileName = Str::uuid(30)->toString() . '.pdf';
                 $file->storeAs('ba_kaji', $uniqueFileName, 'public');
+                Storage::disk('public')->delete('ba_kaji/' . $model_detail->ba_kaji_ulang);
                 $model_detail->ba_kaji_ulang = $uniqueFileName;
             } else {
                 throw new Exception("File Not Found");
@@ -716,9 +731,9 @@ class UsulanTenderController extends Controller
     public function submit_delegate(Request $request, $usulan_tender_detail_id): RedirectResponse
     {
 
-      //  dd(request()->all());
+        //  dd(request()->all());
         DB::beginTransaction();
-       
+
         try {
             if (request('delegasi') == 'YES') {
                 $data = request()->all();
@@ -742,9 +757,9 @@ class UsulanTenderController extends Controller
     public function deploy_lpse(Request $request, $usulan_tender_detail_id): RedirectResponse
     {
 
-      //  dd(request()->all());
+        //  dd(request()->all());
         DB::beginTransaction();
-       
+
         try {
             if (request('delegasi') == 'YES') {
                 $data = request()->all();
@@ -768,7 +783,7 @@ class UsulanTenderController extends Controller
     public function submit_sph(Request $request, $usulan_tender_detail_id): RedirectResponse
     {
         DB::beginTransaction();
-        if(request('approve')){
+        if (request('approve')) {
             $validated = $request->validate([
                 'file_lap_hpk' => 'required',
                 'file_spk' => 'required',
@@ -784,9 +799,9 @@ class UsulanTenderController extends Controller
             ]);
         }
         try {
-            if(!request('approve')){
-                $this->isApprove($request,$usulan_tender_detail_id,false);
-            }else{
+            if (!request('approve')) {
+                $this->isApprove($request, $usulan_tender_detail_id, false);
+            } else {
                 $data = request()->all();
                 $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
                 if ($request->hasFile('file_lap_hpk')) {
@@ -802,7 +817,7 @@ class UsulanTenderController extends Controller
                     $model_detail->file_spk = $uniqueFileName;
                 }
                 $model_detail->save();
-                $this->isApprove($request,$usulan_tender_detail_id,true);
+                $this->isApprove($request, $usulan_tender_detail_id, true);
             }
             DB::commit();
             return redirect()->route('usulan-tender')->with(

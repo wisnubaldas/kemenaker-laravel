@@ -149,6 +149,44 @@ createApp({
                 this.tenderData.usulan_tender_usul_pokja.splice(index, 1);
             }
         },
+        reSendUsulan(tenderdetailId) {
+            Swal.fire({
+                title: "Apakah data ini akan dikirim?",
+                text: "Pastikan data telah di input dengan benar!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya! Kirim",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios
+                        .post(`/usulan-tender/resend/${tenderdetailId}`)
+                        .then((response) => {
+                            Swal.fire({
+                                title: "Terkirim!",
+                                text: "Usulan Tender Telah Terkirim.",
+                                icon: "success",
+                                didClose: () => {
+                                    // Redirect ke halaman '/usulan-tender' setelah SweetAlert ditutup
+                                    window.location.href = '/usulan-tender';
+                                }
+                            });
+                            
+                         //   window.location.href = '/usulan-tender';
+                        })
+                        .catch((error) => {
+                            // Handle error jika request gagal
+                            console.error(error); // Outputkan pesan error jika diperlukan
+                            Swal.fire(
+                                "Error!",
+                              error.response.data.message,
+                                "error"
+                            );
+                        });
+                }
+            });
+        },
         sendUsulan(tenderId) {
             Swal.fire({
                 title: "Apakah data ini akan dikirim?",

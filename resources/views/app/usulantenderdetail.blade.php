@@ -453,7 +453,7 @@
                                     Surat Perjanjian Kontrak
                                 </div>
                             </div>
-                            @if ($data->alur == 6 && auth()->user()->tagroup_id == 5)
+                            @if (($data->alur == 6||$data->alur ==8) && auth()->user()->tagroup_id == 5)
                                 <form action="/usulan-tender/ba/{{ Route::current()->parameter('tender_detail_id') }}"
                                     method="POST" enctype="multipart/form-data" class="form-control">
                                     @csrf
@@ -513,7 +513,7 @@
                                     </div>
 
                                 </div>
-                                @if ($data->alur == 12 && auth()->user()->tagroup_id == 5)
+                                @if (($data->alur == 12) && auth()->user()->tagroup_id == 5)
                                     <form
                                         action="/usulan-tender/ba-choose/{{ Route::current()->parameter('tender_detail_id') }}"
                                         method="POST" enctype="multipart/form-data">
@@ -579,8 +579,7 @@
 
                                     </div>
                                 @endif
-                                @if ($data->alur == 12 && auth()->user()->tagroup_id == 5)
-                                @endif
+                               
                             @endif
                         </div>
 
