@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NewUsulanTenderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsulanTenderController;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +13,7 @@ Route::middleware('guest')->group(function () {
 Route::group(['middleware'=>'role:1,2,3,4,5'],function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/usulan-tender', [UsulanTenderController::class, 'index'])->name('usulan-tender');
+    Route::get('/usulan-tender-new', [NewUsulanTenderController::class, 'index'])->name('usulan-tender-new');
     Route::get('/usulan-tender-detail/{tender_detail_id}', [UsulanTenderController::class, 'detail'])->name('usulan-tender-detail');
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
     Route::get('profile', [ProfileController::class, 'create'])->name('profile');
