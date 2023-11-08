@@ -2,8 +2,10 @@ import "./bootstrap";
 import Swal from "sweetalert2";
 import axios from "axios";
 
-const csrfToken = document.head.querySelector('meta[name="csrf-token"]').content;
-axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+const csrfToken = document.head.querySelector(
+    'meta[name="csrf-token"]'
+).content;
+axios.defaults.headers.common["X-CSRF-TOKEN"] = csrfToken;
 const { createApp, ref } = Vue;
 var i = 0;
 
@@ -25,63 +27,85 @@ createApp({
             tabusulan_active: 1,
             rowdraftactive: null,
             file_surat_usulan_name: null,
-            surat_st_name:null,
-            ba_kaji_ulang_name:null,
-            ba_hasil_pemilihan_name:null,
-            file_lap_hpk_name:null,
-            file_spk_name:null,
+            surat_st_name: null,
+            ba_kaji_ulang_name: null,
+            ba_hasil_pemilihan_name: null,
+            file_lap_hpk_name: null,
+            file_spk_name: null,
             members: [{}],
-            catatan:"",
-            logs:[],
-            logname:"",
-            checked:null,
-            alurTender : {
-                    '': 'Draft Usulan Tender',
-                    0: 'Usulan Tender Dikirimkan',
-                    1: 'Verifikasi Berkas Usulan Tender dan Input Surat Tugas',
-                    2: 'Sekretariat menolak Usulan Tender',
-                    3: 'Sekretariat menerima Usulan Tender dan memilih anggota pokja',
-                    4: 'Kepala UKPBJ mem-verikasi ST dan anggota pokja',
-                    5: 'Kepala UKPBJ menolak ST dan anggota pokja',
-                    6: 'Unggah Berita Acara Kaji Ulang',
-                    7: 'Verifikasi Berita Acara Kaji Ulang',
-                    8: 'Sekretariat menolak BA Kaji Ulang Dari Pokja',
-                    9: 'Input Kode Tender',
-                    10: 'Delegasi Paket ke Kelompok Kerja Pemilihan',
-                    11: 'Verifikasi Paket Tayang pada LPSE',
-                    12: 'Paket Tayang pada LPSE dan Unggah Berita Acara Hasil Pemilihan',
-                    13: 'Verifikasi Berita Acara Hasil Pemilihan',
-                    14: 'PPK Menolak BAHP dari Pokja',
-                    15: 'Unggah Hasil Penandatanganan Kontrak',
-                    16: 'Verifikasi Hasil Penandatanganan Kontrak',
-                    17: 'Sekretariat menolak Laporan hasil penandatanganan Kontrak dari PPK',
-                    18: 'Tender Telah Selesai'
-                }            
-            };
+            catatan: "",
+            logs: [],
+            logname: "",
+            checked: null,
+            alurTender: {
+                "": "Draft Usulan Tender",
+                0: "Usulan Tender Dikirimkan",
+                1: "Verifikasi Berkas Usulan Tender dan Input Surat Tugas",
+                2: "Sekretariat menolak Usulan Tender",
+                3: "Sekretariat menerima Usulan Tender dan memilih anggota pokja",
+                4: "Kepala UKPBJ mem-verikasi ST dan anggota pokja",
+                5: "Kepala UKPBJ menolak ST dan anggota pokja",
+                6: "Unggah Berita Acara Kaji Ulang",
+                7: "Verifikasi Berita Acara Kaji Ulang",
+                8: "Sekretariat menolak BA Kaji Ulang Dari Pokja",
+                9: "Input Kode Tender",
+                10: "Delegasi Paket ke Kelompok Kerja Pemilihan",
+                11: "Verifikasi Paket Tayang pada LPSE",
+                12: "Paket Tayang pada LPSE dan Unggah Berita Acara Hasil Pemilihan",
+                13: "Verifikasi Berita Acara Hasil Pemilihan",
+                14: "PPK Menolak BAHP dari Pokja",
+                15: "Unggah Hasil Penandatanganan Kontrak",
+                16: "Verifikasi Hasil Penandatanganan Kontrak",
+                17: "Sekretariat menolak Laporan hasil penandatanganan Kontrak dari PPK",
+                18: "Tender Telah Selesai",
+            },
+        };
     },
     mounted() {
         this.$nextTick(() => {
             if (this.$refs.flexSwitchChecked2) {
-              this.checked = this.$refs.flexSwitchChecked2.checked;
+                this.checked = this.$refs.flexSwitchChecked2.checked;
             }
-          });
+        });
     },
     methods: {
-            changeOpt(e){
-                this.checked=e.target.checked
-            },
-        objectDate(tglStr){
-            const tanggalObj= new Date(tglStr);
+        selectedjenis(e, item) {
+            const value = e.target.value;
+            if (value) {
+                axios
+                    .get(`/api/common/jenis-tender/docs/${e.target.value}`)
+                    .then((res) => {
+                        // alert(JSON.stringify(res));
+                        item.usulan_tender_detail_doc = [];
+                        res.data.forEach((i) => {
+                            item.usulan_tender_detail_doc.push({
+                                nama_berkas: i.nama_doc,
+                                tmjenistenderdoc_id:i.id
+                            });
+                        });
+                    });
+            } else {
+                item.usulan_tender_detail_doc = [];
+            }
+        },
+        changeOpt(e) {
+            this.checked = e.target.checked;
+        },
+        objectDate(tglStr) {
+            const tanggalObj = new Date(tglStr);
             var tgl = tanggalObj.getDate();
-            var bln = tanggalObj.toLocaleString('default', { month: 'short' });
+            var bln = tanggalObj.toLocaleString("default", { month: "short" });
             var thn = tanggalObj.getFullYear();
-            var jam = tanggalObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });      
+            var jam = tanggalObj.toLocaleTimeString("en-US", {
+                hour: "2-digit",
+                minute: "2-digit",
+            });
             // Mengembalikan objek dengan properti tgl, bln, thn, dan jam
             return { tgl, bln, thn, jam };
         },
-        showlog(item){
-            this.logs=item.usulan_tender_alur
-            this.logname=item.nama_tender
+        showlog(item) {
+            this.logs = item.usulan_tender_alur;
+            this.logname = item.nama_tender;
         },
         checkExist(name) {
             var ret = false;
@@ -110,14 +134,29 @@ createApp({
         openFilePicker(namainput) {
             this.$refs[namainput].click();
         },
+        updateDoc(e,id){
+            var file = e.target.files[0]
+            var data=new FormData();
+            data.append('berkas',file);
+            axios.post('/berkas/update/'+id,data).then(ret=>{
+                document.location.reload();
+            }).catch(err=>{
+                Swal.fire(
+                    "Error!",
+                    err.response.data.message,
+                    "error"
+                );
+            })
+        },
         updateDocName(event, name) {
+          //  alert()
             var fileName = event.target.files[0]
                 ? event.target.files[0].name
                 : "";
 
             this.docname[name] = fileName;
         },
-        updateFileName(event,name) {
+        updateFileName(event, name) {
             var fileName = event.target.files[0]
                 ? event.target.files[0].name
                 : "";
@@ -169,18 +208,18 @@ createApp({
                                 icon: "success",
                                 didClose: () => {
                                     // Redirect ke halaman '/usulan-tender' setelah SweetAlert ditutup
-                                    window.location.href = '/usulan-tender';
-                                }
+                                    window.location.href = "/usulan-tender";
+                                },
                             });
-                            
-                         //   window.location.href = '/usulan-tender';
+
+                            //   window.location.href = '/usulan-tender';
                         })
                         .catch((error) => {
                             // Handle error jika request gagal
                             console.error(error); // Outputkan pesan error jika diperlukan
                             Swal.fire(
                                 "Error!",
-                              error.response.data.message,
+                                error.response.data.message,
                                 "error"
                             );
                         });
@@ -207,18 +246,18 @@ createApp({
                                 icon: "success",
                                 didClose: () => {
                                     // Redirect ke halaman '/usulan-tender' setelah SweetAlert ditutup
-                                    window.location.href = '/usulan-tender';
-                                }
+                                    window.location.href = "/usulan-tender";
+                                },
                             });
-                            
-                         //   window.location.href = '/usulan-tender';
+
+                            //   window.location.href = '/usulan-tender';
                         })
                         .catch((error) => {
                             // Handle error jika request gagal
                             console.error(error); // Outputkan pesan error jika diperlukan
                             Swal.fire(
                                 "Error!",
-                              error.response.data.message,
+                                error.response.data.message,
                                 "error"
                             );
                         });
@@ -236,9 +275,10 @@ createApp({
                 confirmButtonText: "Ya! Terima",
             }).then((result) => {
                 if (result.isConfirmed) {
-                 
                     axios
-                        .post(`/usulan-tender/approve/${tenderId}`,{catatan:this.catatan})
+                        .post(`/usulan-tender/approve/${tenderId}`, {
+                            catatan: this.catatan,
+                        })
                         .then((response) => {
                             Swal.fire({
                                 title: "Diterima!",
@@ -246,18 +286,18 @@ createApp({
                                 icon: "success",
                                 didClose: () => {
                                     // Redirect ke halaman '/usulan-tender' setelah SweetAlert ditutup
-                                    window.location.reload()
-                                }
+                                    window.location.reload();
+                                },
                             });
-                            
-                         //   window.location.href = '/usulan-tender';
+
+                            //   window.location.href = '/usulan-tender';
                         })
                         .catch((error) => {
                             // Handle error jika request gagal
                             console.error(error); // Outputkan pesan error jika diperlukan
                             Swal.fire(
                                 "Error!",
-                              error.response.data.message,
+                                error.response.data.message,
                                 "error"
                             );
                         });
@@ -275,27 +315,28 @@ createApp({
                 confirmButtonText: "Ya! Tolak",
             }).then((result) => {
                 if (result.isConfirmed) {
-                 
                     axios
-                        .post(`/usulan-tender/reject/${tenderId}`,{catatan:this.catatan})
+                        .post(`/usulan-tender/reject/${tenderId}`, {
+                            catatan: this.catatan,
+                        })
                         .then((response) => {
                             Swal.fire({
                                 title: "Diterima!",
                                 text: "Usulan Tender Telah Ditolak",
                                 icon: "success",
                                 didClose: () => {
-                                    window.location.reload()
-                                }
+                                    window.location.reload();
+                                },
                             });
-                            
-                         //   window.location.href = '/usulan-tender';
+
+                            //   window.location.href = '/usulan-tender';
                         })
                         .catch((error) => {
                             // Handle error jika request gagal
                             console.error(error); // Outputkan pesan error jika diperlukan
                             Swal.fire(
                                 "Error!",
-                              error.response.data.message,
+                                error.response.data.message,
                                 "error"
                             );
                         });
@@ -304,7 +345,7 @@ createApp({
         },
     },
 }).mount("#app");
-"use strict";
+("use strict");
 var KTProjectOverview = (function () {
     var t = KTUtil.getCssVariableValue("--bs-primary"),
         e = KTUtil.getCssVariableValue("--bs-light-primary"),
@@ -317,47 +358,50 @@ var KTProjectOverview = (function () {
             var s, i;
             !(function () {
                 var t = document.getElementById("project_overview_chart");
-              
+
                 if (t) {
-                    var chartData = document.getElementById("project_overview_chart").getAttribute("data-chart-data");
+                    var chartData = document
+                        .getElementById("project_overview_chart")
+                        .getAttribute("data-chart-data");
                     var parsedData = JSON.parse(chartData);
-                    
-                   
-                if (chartData) {
-                   
-                    var e = t.getContext("2d");
-                    new Chart(e, {
-                        type: "doughnut",
-                        data:parsedData,
-                        options: {
-                            chart: { fontFamily: "inherit" },
-                            cutoutPercentage: 75,
-                            responsive: !0,
-                            maintainAspectRatio: !1,
-                            cutout: "75%",
-                            title: { display: !1 },
-                            animation: { animateScale: !0, animateRotate: !0 },
-                            tooltips: {
-                                enabled: !0,
-                                intersect: !1,
-                                mode: "nearest",
-                                bodySpacing: 5,
-                                yPadding: 10,
-                                xPadding: 10,
-                                caretPadding: 0,
-                                displayColors: !1,
-                                backgroundColor: "#20D489",
-                                titleFontColor: "#ffffff",
-                                cornerRadius: 4,
-                                footerSpacing: 0,
-                                titleSpacing: 0,
+
+                    if (chartData) {
+                        var e = t.getContext("2d");
+                        new Chart(e, {
+                            type: "doughnut",
+                            data: parsedData,
+                            options: {
+                                chart: { fontFamily: "inherit" },
+                                cutoutPercentage: 75,
+                                responsive: !0,
+                                maintainAspectRatio: !1,
+                                cutout: "75%",
+                                title: { display: !1 },
+                                animation: {
+                                    animateScale: !0,
+                                    animateRotate: !0,
+                                },
+                                tooltips: {
+                                    enabled: !0,
+                                    intersect: !1,
+                                    mode: "nearest",
+                                    bodySpacing: 5,
+                                    yPadding: 10,
+                                    xPadding: 10,
+                                    caretPadding: 0,
+                                    displayColors: !1,
+                                    backgroundColor: "#20D489",
+                                    titleFontColor: "#ffffff",
+                                    cornerRadius: 4,
+                                    footerSpacing: 0,
+                                    titleSpacing: 0,
+                                },
+                                plugins: { legend: { display: !1 } },
                             },
-                            plugins: { legend: { display: !1 } },
-                        },
-                    });
+                        });
+                    }
                 }
-            }
-            })()
+            })();
         },
     };
 })();
@@ -365,4 +409,3 @@ KTUtil.onDOMContentLoaded(function () {
     KTProjectOverview.init();
 });
 $("#kt_datepicker_1").flatpickr();
-

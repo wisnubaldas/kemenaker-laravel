@@ -40,7 +40,7 @@ class ThUsulanTenderDetail extends Model
 
     public function usulanTenderDetailDoc()
     {
-        return $this->hasMany(ThUsulanTenderDetailDoc::class, 'thusulantenderdetail_id', 'id');
+        return $this->hasMany(ThUsulanTenderDetailDoc::class, 'thusulantenderdetail_id', 'id')->orderby('tmjenistenderdoc_id');
     }
 
     public function tmJenisTender()
@@ -62,7 +62,7 @@ class ThUsulanTenderDetail extends Model
     {
         return $this->hasMany(ThUsulanTenderAlur::class, 'thusulantenderdetail_id', 'id');
     }
-    public function basequery(){
+    public function basequery($request,$tipe_tender){
         $detailusulanlist = $this->getCompleteData();
         $user = Auth::user();
         $role = $user->tagroup_id;
@@ -87,7 +87,28 @@ class ThUsulanTenderDetail extends Model
                     });
                 break;
         }
-        return $detailusulanlist;
+        $title=["Usulan Tender","Usulan Tender Seleksi","Usulan Tender Dikecualikan"];
+        $data = [
+            "title" => $title[$tipe_tender],
+            "tipe_tender"=>$tipe_tender,
+            "data" =>
+            $detailusulanlist
+                ->where('th_usulan_tender.tipe_tender', $tipe_tender)
+                ->when($request->input('tm_unitkerja_id'), function ($query, $tm_unitkerja_id) {
+                    return $query->where('th_usulan_tender.tmunitkerja_id', $tm_unitkerja_id);
+                })
+                ->when($request->input('no_surat_usulan'), function ($query, $no_surat_usulan) {
+                    return $query->where('th_usulan_tender.no_surat_usulan', 'like', '%' . $no_surat_usulan . '%');
+                })
+                ->when($request->input('nama_tender'), function ($query, $nama_tender) {
+                    return $query->where('th_usulan_tender_detail.nama_tender', 'like', '%' . $nama_tender . '%');
+                })
+                ->orderBy('th_usulan_tender_detail.updated_date', 'DESC')
+                ->paginate(20),
+            "tm_unitkerja" => (new TmUnitkerja())->getSortedUnitKerja()
+
+        ];
+        return $data;
     }
     public function getCompleteData()
     {

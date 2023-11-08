@@ -18,7 +18,7 @@
                     </div>
                     <div class="d-flex align-items-center py-1">
                        
-                            <a href="/usulan-tender/new" class="btn btn-sm btn-light-info me-3 fw-bolder" >
+                            <a href="{{$link_new}}" class="btn btn-sm btn-light-info me-3 fw-bolder" >
                                 <span class="svg-icon svg-icon-muted svg-icon-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="black"/>
                                     <rect x="10.8891" y="17.8033" width="12" height="2" rx="1" transform="rotate(-90 10.8891 17.8033)" fill="black"/>
@@ -157,7 +157,7 @@
                                                 </span>
                                                 <!--end::Svg Icon-->
                                             </div>
-                                            <a href="/usulan-tender/edit/{{$item->id}}" class="btn btn-icon btn-light-warning btn-sm me-1">
+                                            <a href="{{ $link_edit.'/'.$item->id}}" class="btn btn-icon btn-light-warning btn-sm me-1">
                                                 <!--begin::Svg Icon | path: icons/duotune/art/art005.svg-->
                                                 <span class="svg-icon svg-icon-3">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

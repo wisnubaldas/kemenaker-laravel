@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('guest')->group(function () {
     Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('/', [AuthenticatedSessionController::class, 'login'])->name('submitlogin');
+   
 });
 Route::group(['middleware'=>'role:1,2,3,4,5'],function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
@@ -34,9 +35,22 @@ Route::group(['middleware'=>'role:2'],function () {
     Route::get('/usulan-tender-seleksi/draft', [NewUsulanTenderController::class, 'draftlistseleksi'])->name('draft-usulan-tender-seleksi');
     Route::get('/usulan-tender-pengecualian/draft', [NewUsulanTenderController::class, 'draftlistdikecualikan'])->name('draft-usulan-tender-pengecualian');
 
-    Route::get('/usulan-tender/new', [UsulanTenderController::class, 'newdraft'])->name('new-usulan-tender');
-    Route::post('/usulan-tender/new', [UsulanTenderController::class, 'submit_newdraft'])->name('submit-new-usulan-tender');
+    Route::get('/usulan-tender/new', [NewUsulanTenderController::class, 'newdraft'])->name('new-usulan-tender');
+    Route::get('/usulan-tender-seleksi/new', [NewUsulanTenderController::class, 'newdraftseleksi'])->name('new-usulan-tender-seleksi');
+    Route::get('/usulan-tender-dikecualikan/new', [NewUsulanTenderController::class, 'newdraftdikecualikan'])->name('new-usulan-tender-dikecualikan');
+   
+    Route::post('/usulan-tender/new', [NewUsulanTenderController::class, 'submit_newdraft'])->name('submit-new-usulan-tender');
+    Route::post('/usulan-tender-seleksi/new', [NewUsulanTenderController::class, 'submit_newdraft'])->name('submit-new-usulan-tender-seleksi');
+    Route::post('/usulan-tender-dikecualikan/new', [NewUsulanTenderController::class, 'submit_newdraft'])->name('submit-new-usulan-tender-dikecualikan');
+
+    Route::post('/berkas/update/{doc_id}', [NewUsulanTenderController::class, 'updateberkas'])->name('update-berkas');
+
+
     Route::get('/usulan-tender/edit/{tender_id}', [UsulanTenderController::class, 'editdraft'])->name('edit-usulan-tender');
+    Route::get('/usulan-tender-seleksi/edit/{tender_id}', [NewUsulanTenderController::class, 'editdraft_seleksi'])->name('edit-usulan-tender-seleksi');
+    Route::get('/usulan-tender-dikecualikan/edit/{tender_id}', [NewUsulanTenderController::class, 'editdraft_dikecualikan'])->name('edit-usulan-tender-dikecualikan');
+
+
     Route::post('/usulan-tender/edit/{tender_id}', [UsulanTenderController::class, 'updatedraft'])->name('update-usulan-tender');
     Route::post('/usulan-tender/send/{tender_id}', [UsulanTenderController::class, 'send'])->name('send-usulan-tender');
     Route::post('/usulan-tender/lpse/{tender_detail_id}', [UsulanTenderController::class, 'updatelpse'])->name('submit-lpse-usulan-tender');

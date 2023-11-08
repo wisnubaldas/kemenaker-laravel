@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ThUsulanTender;
 use App\Models\TmJenisTender;
+use App\Models\TmJenisTenderDoc;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -64,5 +65,9 @@ class DashboardController extends Controller
             "chartData"=>$chartData
         ];
         return view('app.dashboard', $data);
+    }
+    public function getDocs($jenis_tender_id){
+        $documents = TmJenisTenderDoc::where('tmjenistender_id', $jenis_tender_id)->get();
+        return response()->json($documents);
     }
 }

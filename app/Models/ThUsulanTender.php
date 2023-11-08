@@ -45,13 +45,20 @@ class ThUsulanTender extends Model
     {
         return $this->hasMany(ThUsulanTenderUsulpokja::class, 'thusulantender_id', 'id');
     }
+    
+
     public function draft($tipe){
+        $title=["Draft Usulan Tender","Draft Usulan Tender Seleksi","Draft Usulan Tender Dikecualikan"];
         $user = Auth::user();
         $role = $user->tagroup_id;
         $detailusulanlist = $this->getdraft($user->tmunitkerja_id, $user->id);
+        $to=['/usulan-tender/new','/usulan-tender-seleksi/new','/usulan-tender-dikecualikan/new'];
+        $editto=['/usulan-tender/edit','/usulan-tender-seleksi/edit','/usulan-tender-dikecualikan/edit'];
         //dd($detailusulanlist);
         $data = [
-            "title" => "Usulan Tender",
+            "title" => $title[$tipe],
+            'link_new'=>$to[$tipe],
+            'link_edit'=>$editto[$tipe],
             "tipe_tender"=>$tipe,
             "data" => $detailusulanlist
                 ->where('th_usulan_tender.tipe_tender', $tipe)
@@ -61,6 +68,7 @@ class ThUsulanTender extends Model
         ];
         return $data;
     }
+
     public function getdraft($unit_kerja_id,$owner_id){
         return $this
             ->with('usulanTenderDetails')
@@ -69,8 +77,32 @@ class ThUsulanTender extends Model
             ->whereNull('th_usulan_tender.alur')
             ->whereNull('th_usulan_tender.posisi')
             ->where('th_usulan_tender.tmunitkerja_id', $unit_kerja_id)
-            ->where('th_usulan_tender.created_by', $owner_id);
-            
+            ->where('th_usulan_tender.created_by', $owner_id);   
     }
+   public function newdraftdata($tipe_tender){
+    $title=["Form Usulan Tender","Form Usulan Tender Seleksi","Form Usulan Tender Dikecualikan"];
+   
+    $data = [
+        "title" => $title[$tipe_tender],
+        "jenis_tender" => TmJenisTender::with('jenisTenderDocs')->orderby('jenis_tender')->get(),
+       
+        "tipe_tender"=>$tipe_tender,
+        "is_edit" => false,
+        "data" => [
+            "usulan_tender_details" => [
+                [
+                    "usulan_tender_detail_doc" => [
+                    ]
+                ]
+            ],
+            "usulan_tender_usul_pokja" => [
+                [
+                    "nip" => ""
+                ]
+            ]
+        ]
+    ];
+    return $data;
+   }
    
 }
