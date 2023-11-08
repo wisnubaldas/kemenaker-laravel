@@ -22,4 +22,13 @@ class ThUsulanTenderDetailService{
         $model_detail->save();
         return $model_detail;
     }
+    public function movealur($detail_id,$newalur,$position,$detail_position){
+        $detail=$this->model->find($detail_id);
+        $detail->alur = $newalur;
+        $detail->posisi = $detail_position;
+        $detail->save();
+        $alur=new ThUsulanTenderAlurService();
+        
+        $alur->createalur($detail_id,$newalur,$position);
+    }
 }

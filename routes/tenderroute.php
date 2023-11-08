@@ -33,7 +33,7 @@ Route::group(['middleware'=>'role:1'],function () {
 Route::group(['middleware'=>'role:2'],function () {
     Route::get('/usulan-tender/draft', [NewUsulanTenderController::class, 'draftlist'])->name('draft-usulan-tender');
     Route::get('/usulan-tender-seleksi/draft', [NewUsulanTenderController::class, 'draftlistseleksi'])->name('draft-usulan-tender-seleksi');
-    Route::get('/usulan-tender-pengecualian/draft', [NewUsulanTenderController::class, 'draftlistdikecualikan'])->name('draft-usulan-tender-pengecualian');
+    Route::get('/usulan-tender-pengecualian/draft', [NewUsulanTenderController::class, 'draftlistdikecualikan'])->name('draft-usulan-tender-dikecualikan');
 
     Route::get('/usulan-tender/new', [NewUsulanTenderController::class, 'newdraft'])->name('new-usulan-tender');
     Route::get('/usulan-tender-seleksi/new', [NewUsulanTenderController::class, 'newdraftseleksi'])->name('new-usulan-tender-seleksi');
@@ -52,7 +52,11 @@ Route::group(['middleware'=>'role:2'],function () {
 
 
     Route::post('/usulan-tender/edit/{tender_id}', [UsulanTenderController::class, 'updatedraft'])->name('update-usulan-tender');
-    Route::post('/usulan-tender/send/{tender_id}', [UsulanTenderController::class, 'send'])->name('send-usulan-tender');
+    Route::post('/usulan-tender-seleksi/edit/{tender_id}', [NewUsulanTenderController::class, 'updatedraft'])->name('update-usulan-tender-seleksi');
+    Route::post('/usulan-tender-dikecualikan/edit/{tender_id}', [NewUsulanTenderController::class, 'updatedraft'])->name('update-usulan-tender-dikecualikan');
+    
+    Route::post('/usulan-tender/send/{tender_id}', [NewUsulanTenderController::class, 'send'])->name('send-usulan-tender');
+    
     Route::post('/usulan-tender/lpse/{tender_detail_id}', [UsulanTenderController::class, 'updatelpse'])->name('submit-lpse-usulan-tender');
     Route::post('/usulan-tender/sph/{tender_detail_id}', [UsulanTenderController::class, 'submit_sph'])->name('submit-sph-usulan-tender');
     Route::post('/usulan-tender/resend/{tender_detail_id}', [UsulanTenderController::class, 'sendAfterReject'])->name('resend-usulan-tender');

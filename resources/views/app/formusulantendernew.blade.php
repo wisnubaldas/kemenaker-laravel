@@ -126,7 +126,7 @@
                     <div class="card-body">
                         <div class="row mb-5">
                             <div class="col-6">
-                                <label class="mb-3 fw-bolder">Jenis Tender</label>
+                                <label class="mb-3 fw-bolder">Jenis Tender @{{item.tmjenistender_id}}</label>
                                 <select 
                                 :disabled="item.id"
                                 @change="selectedjenis($event,item)"

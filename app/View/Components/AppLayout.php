@@ -23,6 +23,8 @@ class AppLayout extends Component
                 "new-usulan-tender-seleksi",
                 "new-usulan-tender-dikecualikan",
                 "edit-usulan-tender",
+                "edit-usulan-tender-seleksi",
+                "edit-usulan-tender-dikecualikan",
             ]
         )) {
             $data['btn_save_usulan']=true;

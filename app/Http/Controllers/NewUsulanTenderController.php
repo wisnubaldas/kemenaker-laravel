@@ -6,6 +6,7 @@ use App\Http\Requests\NewDraftUsulanRequest;
 use App\Models\ThAnggotaPokja;
 use App\Models\ThUsulanTender;
 use App\Models\ThUsulanTenderDetail;
+use App\Models\ThUsulanTenderDetailDoc;
 use App\Models\ThUsulanTenderUsulpokja;
 use App\Models\TmJenisTender;
 use App\Models\TmUnitkerja;
@@ -19,6 +20,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class NewUsulanTenderController extends Controller
@@ -72,95 +74,28 @@ class NewUsulanTenderController extends Controller
         $data = (new ThUsulanTender())->newdraftdata(2);
         return view('app.formusulantendernew', $data);
     }
+
     public function submit_newdraft(NewDraftUsulanRequest $request): RedirectResponse
     {
         DB::beginTransaction();
         try {
-            $errTenderDetCount = 0;
-            $errDocCount = 0;
-            $errMemberCount = 0;
-            $registeredpokja = 0;
-            $result = $this->submit_service($request);
+            $result = (new ThUsulanTenderService)->submit_service($request);
             DB::commit();
-            return redirect()->route('draft-usulan-tender-seleksi')
+            $to = ['draft-usulan-tender', 'draft-usulan-tender-seleksi', 'draft-usulan-tender-dikecualikan'];
+            return redirect()->route($to[request('tipe_tender')])
                 ->with(
                     'success',
                     $result
                 );
         } catch (Exception $e) {
-        
+
             DB::rollBack();
-            dd($e);
-            return redirect()->route('new-usulan-tender-seleksi')->with('error',$e->getMessage())->withInput();
+            return redirect()->route('new-usulan-tender-seleksi')->with('error', $e->getMessage())->withInput();
         }
     }
-    private function submit_service(NewDraftUsulanRequest $request)
+
+    public function updateberkas(Request $request, $id_doc)
     {
-        $errTenderDetCount = 0;
-        $errDocCount = 0;
-        $errMemberCount = 0;
-        $registeredpokja = 0;
-        $modelService = new ThUsulanTenderService();
-        $model = $modelService->savenewtender($request);
-        $usulanTenderDetails = $request->input('usulanTenderDetails');
-        foreach ($usulanTenderDetails as $index => $detail) {
-          //  dd($detail);
-            $validator = Validator::make($detail, [
-                'nama_tender' => 'required',
-                'tmjenistender_id' => 'required'
-            ]);
-            if ($validator->fails()) {
-                $errTenderDetCount++;
-            } else {
-                $detailService = new ThUsulanTenderDetailService();
-                $model_detail = $detailService->savenewdetail($detail, $model->id);
-                $docs = request('usulanTenderDetails')[$index]['usulanTenderDetailDoc'];
-                foreach ($docs as $i => $doc) {
-                   
-                    $docsValidator = Validator::make($doc, [
-                    //     'nama_berkas' => 'required',
-                        'berkas' => 'nullable|file|mimes:pdf|max:25000',
-                        'tmjenistenderdoc_id'=>'required'
-                    ]);
-                   // dd($docsValidator->fails());
-                    if (!$docsValidator->fails()) {
-                       
-                        $detailDocService = new ThUsulanTenderDetailDocService();
-                        $detailDocService->savedoc($model_detail->id, $doc);
-                    } else {
-                        $errDocCount++;
-                    }
-                }
-            }
-        }
-        $members = $request->input('pokja');
-        foreach ($members as $member) {
-            $membervalidator = Validator::make($member, [
-                'nip' => 'required:max:20',
-                'nama_lengkap' => 'nullable|max:100',
-                'jabatan' => 'nullable|max:50',
-                'keterangan' => 'nullable|max:250',
-            ]);
-            if ($membervalidator->fails()) {
-                $errMemberCount++;
-            } else {
-                $nip = $member['nip'];
-                $ceknip = ThAnggotaPokja::where('nip', $nip)->first();
-                if ($ceknip) {
-                    $registeredpokja++;
-                } else {
-                    $servicePokja = new ThUsulanTenderUsulpokjaService();
-                    $servicePokja->newMember($nip, $member['nama_lengkap'], $member['jabatan'], $member['keterangan'], $model->id);
-                }
-            }
-        }
-        return  'Usulan berhasil disimpan. '
-            . $errTenderDetCount . ' Tender Gagal Tersimpan dan '
-            . $errDocCount . ' Dokumen Gagal Tersimpan dan '
-            . $errMemberCount . ' Anggota Gagal Tersimpan dan '
-            . $registeredpokja . ' Usulan Anggota Pokja Sudah ada dalam database';
-    }
-    public function updateberkas(Request $request,$id_doc){
         $validated = $request->validate([
             'berkas' => 'required|file|mimes:pdf|max:25000',
         ]);
@@ -169,16 +104,44 @@ class NewUsulanTenderController extends Controller
     }
     public function editdraft_seleksi(Request $request, $tender_id): View
     {
-        $data = ThUsulanTender::with('usulanTenderDetails.usulanTenderDetailDoc', 'usulanTenderUsulPokja')
-            ->where('id', $tender_id)
-            ->first();
-        $data = [
-            "title" => "Usulan Tender",
-            "tipe_tender"=>1,
-            "jenis_tender" => TmJenisTender::orderby('jenis_tender')->get(),
-            "is_edit" => true,
-            "data" => $data
-        ];
+
+        $data = (new ThUsulanTender())->edit(1, $tender_id);
         return view('app.formusulantendernew', $data);
+    }
+    public function editdraft_dikecualikan(Request $request, $tender_id): View
+    {
+
+        $data = (new ThUsulanTender())->edit(2, $tender_id);
+        return view('app.formusulantendernew', $data);
+    }
+
+    public function updatedraft(Request $request, $tender_id): RedirectResponse
+    {
+        try {
+            $result = (new ThUsulanTenderService)->update_service($request,$tender_id);
+            DB::commit();
+            $to = ['draft-usulan-tender', 'draft-usulan-tender-seleksi', 'draft-usulan-tender-dikecualikan'];
+            return redirect()->route($to[request('tipe_tender')])
+                ->with(
+                    'success',
+                    $result 
+                );
+        } catch (Exception $e) {
+            dd($e);
+            DB::rollBack();
+        }
+    }
+    public function send($id)
+    {
+        DB::beginTransaction();
+        try {
+            $model=(new ThUsulanTenderService())->send($id);
+            DB::commit();
+            return $model;
+        } catch (Exception $e) {
+            //dd($e);
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
     }
 }
