@@ -91,6 +91,8 @@ class ThUsulanTenderDetail extends Model
         $data = [
             "title" => $title[$tipe_tender],
             "tipe_tender"=>$tipe_tender,
+            "draft_count"=>(new ThUsulanTender())->getdraft($user->tmunitkerja_id, $user->id)->where('th_usulan_tender.tipe_tender', $tipe_tender)
+            ->orderByDesc('th_usulan_tender.created_date')->count(),
             "data" =>
             $detailusulanlist
                 ->where('th_usulan_tender.tipe_tender', $tipe_tender)

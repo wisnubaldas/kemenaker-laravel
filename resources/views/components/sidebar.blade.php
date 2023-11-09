@@ -103,7 +103,7 @@
                         </span>
                         <span class="menu-title">Permohonan Proses Tender/Seleksi</span>
                     </a>
-                    <a class="menu-link {{ request()->is('usulan-tender-pengecualian') ? 'active' : '' }}" href="/usulan-tender-pengecualian">
+                    <a class="menu-link {{ request()->is('usulan-tender-dikecualikan') ? 'active' : '' }}" href="/usulan-tender-dikecualikan">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/art/art002.svg-->
                             <span class="svg-icon svg-icon-2">

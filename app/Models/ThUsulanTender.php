@@ -77,6 +77,7 @@ class ThUsulanTender extends Model
                 ->where('th_usulan_tender.tipe_tender', $tipe)
                 ->orderByDesc('th_usulan_tender.created_date')
                 ->paginate(20),
+            "draft_count"=>$detailusulanlist->where('th_usulan_tender.tipe_tender', $tipe)->count(),
             "tm_unitkerja" => (new TmUnitkerja())->getSortedUnitKerja()
         ];
         return $data;

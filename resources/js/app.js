@@ -123,6 +123,7 @@ createApp({
         onAddBerkas(tender) {
             tender.usulan_tender_detail_doc.push({
                 nama_berkas: "",
+                tmjenistenderdoc_id:0
             });
         },
         saveDraft() {
@@ -246,7 +247,7 @@ createApp({
                                 icon: "success",
                                 didClose: () => {
                                     // Redirect ke halaman '/usulan-tender' setelah SweetAlert ditutup
-                                    window.location.href = "/usulan-tender";
+                                    window.location.reload()
                                 },
                             });
 

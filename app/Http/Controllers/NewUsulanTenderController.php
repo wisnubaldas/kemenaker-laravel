@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\NewDraftUsulanRequest;
+use App\Http\Requests\STRequest;
 use App\Models\ThAnggotaPokja;
 use App\Models\ThUsulanTender;
 use App\Models\ThUsulanTenderDetail;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class NewUsulanTenderController extends Controller
 {
@@ -118,13 +120,13 @@ class NewUsulanTenderController extends Controller
     public function updatedraft(Request $request, $tender_id): RedirectResponse
     {
         try {
-            $result = (new ThUsulanTenderService)->update_service($request,$tender_id);
+            $result = (new ThUsulanTenderService)->update_service($request, $tender_id);
             DB::commit();
             $to = ['draft-usulan-tender', 'draft-usulan-tender-seleksi', 'draft-usulan-tender-dikecualikan'];
             return redirect()->route($to[request('tipe_tender')])
                 ->with(
                     'success',
-                    $result 
+                    $result
                 );
         } catch (Exception $e) {
             dd($e);
@@ -135,13 +137,72 @@ class NewUsulanTenderController extends Controller
     {
         DB::beginTransaction();
         try {
-            $model=(new ThUsulanTenderService())->send($id);
+            $model = (new ThUsulanTenderService())->send($id);
             DB::commit();
             return $model;
         } catch (Exception $e) {
             //dd($e);
             DB::rollBack();
             throw new Exception($e->getMessage());
+        }
+    }
+    private function isApprove(Request $request, $usulan_tender_detail_id, $is_approve)
+    {
+        $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
+        $alur = new ThUsulanTenderDetailService();
+        if ($is_approve) {
+            if ($model_detail->alur == 7) {
+                $alur->movealur($usulan_tender_detail_id, 9, null, 2);
+            } elseif ($model_detail->alur == 13) {
+                $alur->movealur($usulan_tender_detail_id, 16, null, 3);
+            } elseif ($model_detail->alur == 16) {
+                $alur->movealur($usulan_tender_detail_id, 18, null, 3);
+            } elseif ($model_detail->alur == 0) {
+                $alur->movealur($usulan_tender_detail_id, 3, 3, 4);
+            }else{}
+        } else {
+            if ($model_detail->alur == 7) {
+                $alur->movealur($usulan_tender_detail_id, 8, null, 5);
+            } elseif ($model_detail->alur == 13) {
+                $alur->movealur($usulan_tender_detail_id, 14, 5, 5);
+            } elseif ($model_detail->alur == 16) {
+                $alur->movealur($usulan_tender_detail_id, 17, null, 2);
+            } elseif ($model_detail->alur == 0) {
+                $alur->movealur($usulan_tender_detail_id, 2, 2, 2);
+            }else{}
+        }
+    }
+    public function approvetender(Request $request, $usulan_tender_detail_id)
+    {
+        $this->isApprove($request, $usulan_tender_detail_id, true);
+    }
+    public function rejecttender(Request $request, $usulan_tender_detail_id)
+    {
+        $this->isApprove($request, $usulan_tender_detail_id, false);
+    }
+    private function getdirection($detail_id){
+        $detail=ThUsulanTenderDetail::find($detail_id);
+        $model=ThUsulanTender::find($detail->thusulantender_id);
+        $to = ['usulan-tender', 'usulan-tender-seleksi', 'usulan-tender-dikecualikan'];
+        return $to[$model->tipe_tender];
+    }
+    public function submit_st(STRequest $request, $usulan_tender_detail_id): RedirectResponse
+    {
+         $to=$this->getdirection($usulan_tender_detail_id);
+        // dd($to);
+        DB::beginTransaction();
+
+      
+        try {
+            $save=(new ThUsulanTenderDetailService())->submit_st($request,$usulan_tender_detail_id);
+            DB::commit();
+          
+            return redirect()->route($to)->with(
+                'success',
+                'Berhasil Update Nomor Surat Tugas.'
+            );
+        } catch (Exception $e) {
+            DB::rollBack();
         }
     }
 }

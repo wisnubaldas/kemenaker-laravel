@@ -15,6 +15,7 @@ class ThUsulanTenderAlurService{
         $alur = $this->model;
         $alur->thusulantenderdetail_id = $detail_id;
         $alur->tagroup_id = $user->tagroup_id;
+        $alur->keterangan = request('catatan')??"";
         $alur->alur = $newalur;
         $alur->posisi = $posisi;
         $alur->save();
