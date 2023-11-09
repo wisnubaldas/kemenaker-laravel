@@ -92,7 +92,8 @@ class NewUsulanTenderController extends Controller
         } catch (Exception $e) {
 
             DB::rollBack();
-            return redirect()->route('new-usulan-tender-seleksi')->with('error', $e->getMessage())->withInput();
+            return redirect()->back()->withErrors($e->getMessage())->withInput();
+           // return redirect()->route('new-usulan-tender-seleksi')->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -204,5 +205,20 @@ class NewUsulanTenderController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
         }
+    }
+    public function downloadtemplate($id)
+    {
+        if($id==1){
+            $filename="Format_ND_Usulan_Tender.docx";
+            $downloadname="Format ND Usulan Tender.docx";
+        }else if($id==2){
+            $filename="Berita_Acara_Reviu_Spesifikasi_Teknis_KAK.docx";
+            $downloadname="Berita Acara Reviu Spesifikasi Teknis KAK.docx";
+        }
+        $headers = [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        ];
+        $file_path = public_path('template/'.$filename);
+        return response()->download($file_path, $downloadname,$headers);
     }
 }

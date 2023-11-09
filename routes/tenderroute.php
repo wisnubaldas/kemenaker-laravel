@@ -19,6 +19,8 @@ Route::group(['middleware'=>'role:1,2,3,4,5'],function () {
     Route::get('/usulan-tender-detail/{tender_detail_id}', [UsulanTenderController::class, 'detail'])->name('usulan-tender-detail');
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
     Route::get('profile', [ProfileController::class, 'create'])->name('profile');
+
+    Route::get('download/template/{id}',[NewUsulanTenderController::class,'downloadtemplate'])->name('download-template');
 });
 Route::group(['middleware'=>'role:1'],function () {
     Route::get('/usulan-ppk', [AuthenticatedSessionController::class, 'dashboard'])->name('usulan-ppk');

@@ -20,12 +20,22 @@
                             </ul>
                         </div>
                     @endif
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <div class="d-flex flex-wrap flex-sm-nowrap mb-6">
                         <!--begin::Image-->
                         <div class="me-2">
                             <label class="fw-bolder mb-3">Berkas</label>
-                            <input hidden ref="file_surat_usulan" @change="updateFileName($event,'file_surat_usulan_name')"
-                                type="file" name="file_surat_usulan" />
+                            <input hidden ref="file_surat_usulan"
+                                @change="updateFileName($event,'file_surat_usulan_name')" type="file"
+                                name="file_surat_usulan" />
                             <div v-if="file_surat_usulan_name||tenderData.file_surat_usulan"
                                 class="image-input d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-150px me-7 mb-4">
                                 <label @click="openFilePicker('file_surat_usulan')"
@@ -65,17 +75,48 @@
                             <div class="d-flex flex-column">
                                 <!--begin::Status-->
                                 <div class="mb-5">
-                                    <label class="d-flex fw-bolder mb-3 required">
-                                        <div class="me-3">No Surat Usulan</div>
-                                        @error('no_surat_usulan')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </label>
+                                    <div class="d-flex align-items-end mb-3 justify-content-between">
+                                        <label class=" fw-bolder mb-3 required">
+                                            No Surat Usulan
+                                        </label>
+                                        <div>
+                                            <a href="{{ route('download-template',2) }}" class="btn btn-sm btn-light-info me-2">
+                                            <span class="svg-icon svg-icon-3"><svg xmlns="http://www.w3.org/2000/svg"
+                                                    width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path opacity="0.3"
+                                                        d="M19 15C20.7 15 22 13.7 22 12C22 10.3 20.7 9 19 9C18.9 9 18.9 9 18.8 9C18.9 8.7 19 8.3 19 8C19 6.3 17.7 5 16 5C15.4 5 14.8 5.2 14.3 5.5C13.4 4 11.8 3 10 3C7.2 3 5 5.2 5 8C5 8.3 5 8.7 5.1 9H5C3.3 9 2 10.3 2 12C2 13.7 3.3 15 5 15H19Z"
+                                                        fill="black" />
+                                                    <path
+                                                        d="M13 17.4V12C13 11.4 12.6 11 12 11C11.4 11 11 11.4 11 12V17.4H13Z"
+                                                        fill="black" />
+                                                    <path opacity="0.3"
+                                                        d="M8 17.4H16L12.7 20.7C12.3 21.1 11.7 21.1 11.3 20.7L8 17.4Z"
+                                                        fill="black" />
+                                                </svg></span>
+                                            Template Berita Acara Reviu Spesifikasi Teknis/KAK</a>
+                                            <a href="{{ route('download-template',1) }}" class="btn btn-sm btn-light-info">
+                                            <span class="svg-icon svg-icon-3"><svg xmlns="http://www.w3.org/2000/svg"
+                                                    width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path opacity="0.3"
+                                                        d="M19 15C20.7 15 22 13.7 22 12C22 10.3 20.7 9 19 9C18.9 9 18.9 9 18.8 9C18.9 8.7 19 8.3 19 8C19 6.3 17.7 5 16 5C15.4 5 14.8 5.2 14.3 5.5C13.4 4 11.8 3 10 3C7.2 3 5 5.2 5 8C5 8.3 5 8.7 5.1 9H5C3.3 9 2 10.3 2 12C2 13.7 3.3 15 5 15H19Z"
+                                                        fill="black" />
+                                                    <path
+                                                        d="M13 17.4V12C13 11.4 12.6 11 12 11C11.4 11 11 11.4 11 12V17.4H13Z"
+                                                        fill="black" />
+                                                    <path opacity="0.3"
+                                                        d="M8 17.4H16L12.7 20.7C12.3 21.1 11.7 21.1 11.3 20.7L8 17.4Z"
+                                                        fill="black" />
+                                                </svg></span>
+                                            Template Nota Dinas Usulan Tender</a>
+                                        </div>
+                                    </div>
                                     <input name="no_surat_usulan"
                                         class="form-control {{ $errors->has('no_surat_usulan') ? 'is-invalid' : '' }}"
                                         required
                                         value="{{ $is_edit ? $data->no_surat_usulan : @old('no_surat_usulan') }}" />
-
+                                    @error('no_surat_usulan')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <!--end::Status-->
                                 <!--begin::Description-->
@@ -111,8 +152,8 @@
             </div>
             <div v-for="(item,index) in tenderData.usulan_tender_details" :key="index">
                 <div class="image-input w-100 card mb-5" v-show="!item.is_del">
-                    <input v-if="isEdit&&item.is_del" :name="`usulanTenderDetails[${index}][is_del]`" :value="isEdit ? item.is_del : false"
-                        type="hidden" />
+                    <input v-if="isEdit&&item.is_del" :name="`usulanTenderDetails[${index}][is_del]`"
+                        :value="isEdit ? item.is_del : false" type="hidden" />
                     <input v-if="isEdit" :name="`usulanTenderDetails[${index}][id]`" :value="isEdit ? item.id : ''"
                         type="hidden" />
                     <label @click="delTender(item,index)"
@@ -126,11 +167,9 @@
                     <div class="card-body">
                         <div class="row mb-5">
                             <div class="col-6">
-                                <label class="mb-3 fw-bolder">Jenis Tender @{{item.tmjenistender_id}}</label>
-                                <select 
-                                :disabled="item.id"
-                                @change="selectedjenis($event,item)"
-                                v-model="item.tmjenistender_id"
+                                <label class="mb-3 fw-bolder">Jenis Tender @{{ item.tmjenistender_id }}</label>
+                                <select :disabled="item.id" @change="selectedjenis($event,item)"
+                                    v-model="item.tmjenistender_id"
                                     :name="`usulanTenderDetails[${index}][tmjenistender_id]`" class="form-control">
                                     <option value="">Pilih Jenis Tender</option>
                                     @foreach ($jenis_tender as $item)
@@ -144,12 +183,13 @@
                                     <div class="me-3">Nama Tender</div>
                                 </label>
                                 <input required :name="`usulanTenderDetails[${index}][nama_tender]`"
-                                v-model="item.nama_tender" class="form-control" />
+                                    v-model="item.nama_tender" class="form-control" />
                             </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
                             <h3>Berkas Tender</h3>
-                            <button @click="onAddBerkas(item)" type="button" class="btn btn-sm btn-light-primary">
+                            <button @click="onAddBerkas(item)" v-if="item.tmjenistender_id" type="button"
+                                class="btn btn-sm btn-light-primary">
                                 <span class="svg-icon  svg-icon-3"><svg xmlns="http://www.w3.org/2000/svg"
                                         width="24" height="24" viewBox="0 0 24 24" fill="none">
                                         <path opacity="0.3"
@@ -163,17 +203,18 @@
                         <hr />
                         <div v-for="(i,indexi) in item.usulan_tender_detail_doc">
                             <div class="row" v-show="!i.is_del">
-                                <input v-if="isEdit&&i.is_del"  :name="`usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][is_del]`" :value="isEdit ? i.is_del : false"
-                        type="hidden" />
-                        
+                                <input v-if="isEdit&&i.is_del"
+                                    :name="`usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][is_del]`"
+                                    :value="isEdit ? i.is_del : false" type="hidden" />
+
                                 <input v-if="isEdit"
                                     :name="`usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][id]`"
-                                    :value="isEdit ? i.berkas : ''" type="hidden" />
+                                    :value="isEdit ? i.id : ''" type="hidden" />
                                 <div class="col-2 mb-3">
-                                        <input :ref="`berkas_${index}_${indexi}`" hidden
-                                        @change="updateDocName($event,`berkas_${index}_${indexi}`)"  type="file"
-                                            :name="`usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][berkas]`" />
-                                        <div>
+                                    <input :ref="`berkas_${index}_${indexi}`" hidden
+                                        @change="updateDocName($event,`berkas_${index}_${indexi}`)" type="file"
+                                        :name="`usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][berkas]`" />
+                                    <div>
                                         <div v-if="(checkExist(`berkas_${index}_${indexi}`)||i.berkas)"
                                             style="cursor: pointer"
                                             class="image-input d-flex flex-column p-3 flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-100px me-7 mb-4">
@@ -186,8 +227,9 @@
                                                 <!--end::Inputs-->
                                             </label>
                                             <img data-bs-target="#kt_modal_new_card"
-                                                @click="pathmodalactive='storage/_upload/'+i.berkas" data-bs-toggle="modal"
-                                                data-bs-target="#kt_modal_new_card" class="scale-hover mw-50px mw-lg-75px"
+                                                @click="pathmodalactive='storage/_upload/'+i.berkas"
+                                                data-bs-toggle="modal" data-bs-target="#kt_modal_new_card"
+                                                class="scale-hover mw-50px mw-lg-75px"
                                                 src="/assets/media/svg/files/pdf.svg" alt="image">
 
                                         </div>
@@ -195,24 +237,24 @@
                                             style="cursor: pointer"
                                             class="card  flex-center bg-light-primary border-primary border border-dashed p-8">
 
-                                            <img src="/assets/media/svg/files/upload.svg" class=" h-20px" alt="">
+                                            <img src="/assets/media/svg/files/upload.svg" class=" h-20px"
+                                                alt="">
                                             <a href="#" class=" fs-6 fw-bolder mb-2">File Upload</a>
 
                                         </div>
-                                        </div>
                                     </div>
+                                </div>
                                 <div class="col">
-                                    <div  class="d-flex justify-content-between">
+                                    <div class="d-flex justify-content-between">
                                         <label class="fw-bolder mb-3">Nama Berkas</label>
-                                      
+                                        <span @click="delDoc(item,i,indexi)" v-if="i.tmjenistenderdoc_id==0"
+                                            style="cursor: pointer" class="text-danger fw-bolder">Hapus</span>
                                     </div>
-                                    <input type="text"
-                                        :disabled="i.tmjenistenderdoc_id!=0"
+                                    <input type="text" :disabled="i.tmjenistenderdoc_id != 0"
                                         :name="`usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][nama_berkas]`"
                                         v-model="i.nama_berkas" class="form-control me-4"
                                         aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-                                    <input type="hidden"
-                                        v-model="i.tmjenistenderdoc_id"
+                                    <input type="hidden" v-model="i.tmjenistenderdoc_id"
                                         :name="`usulanTenderDetails[${index}][usulanTenderDetailDoc][${indexi}][tmjenistenderdoc_id]`" />
                                     <span class="w-75 mt-3  text-2-row text-wrap"
                                         v-html="docname['berkas_'+index+'_'+indexi]"></span>
@@ -248,42 +290,35 @@
                     </div>
                     <hr />
                     <div v-for="(member,imember) in tenderData.usulan_tender_usul_pokja">
-                    <div class="row mb-3" v-show="!member.is_del">
-                        <input v-if="isEdit&&member.is_del"  :name="`pokja[${imember}][is_del]`" :value="isEdit ? member.is_del : false"
-                        type="hidden" />
-                        <input v-if="isEdit" :name="`pokja[${imember}][id]`" :value="isEdit ? member.id : ''"
-                            type="hidden" />
-                        <div class="col-3">
-                            <label class="fw-bolder mb-3">NIP</label>
-                            <input 
-                            v-model="member.nip" :name="`pokja[${imember}][nip]`"
-                                class="form-control" />
-                        </div>
-                        <div class="col-3">
-                            <label class="fw-bolder mb-3">Nama Lengkap</label>
-                            <input 
-                            v-model="member.nama_lengkap"
-                            :name="`pokja[${imember}][nama_lengkap]`"
-                                class="form-control" />
-                        </div>
-                        <div class="col-3">
-                            <label class="fw-bolder mb-3">Jabatan</label>
-                            <input 
-                            v-model="member.jabatan"
-                           :name="`pokja[${imember}][jabatan]`"
-                                class="form-control" />
-                        </div>
-                        <div class="col-3">
-                            <div class="d-flex justify-content-between">
-                                <label class="fw-bolder mb-3">No Sertifikat PBJ</label>
-                                <span @click="delMember(member,imember)" style="cursor: pointer" class="text-danger fw-bolder">Hapus</span>
+                        <div class="row mb-3" v-show="!member.is_del">
+                            <input v-if="isEdit&&member.is_del" :name="`pokja[${imember}][is_del]`"
+                                :value="isEdit ? member.is_del : false" type="hidden" />
+                            <input v-if="isEdit" :name="`pokja[${imember}][id]`" :value="isEdit ? member.id : ''"
+                                type="hidden" />
+                            <div class="col-3">
+                                <label class="fw-bolder mb-3">NIP</label>
+                                <input v-model="member.nip" :name="`pokja[${imember}][nip]`" class="form-control" />
                             </div>
-                            <input 
-                            v-model="member.keterangan"
-                           :name="`pokja[${imember}][keterangan]`"
-                                class="form-control" />
+                            <div class="col-3">
+                                <label class="fw-bolder mb-3">Nama Lengkap</label>
+                                <input v-model="member.nama_lengkap" :name="`pokja[${imember}][nama_lengkap]`"
+                                    class="form-control" />
+                            </div>
+                            <div class="col-3">
+                                <label class="fw-bolder mb-3">Jabatan</label>
+                                <input v-model="member.jabatan" :name="`pokja[${imember}][jabatan]`"
+                                    class="form-control" />
+                            </div>
+                            <div class="col-3">
+                                <div class="d-flex justify-content-between">
+                                    <label class="fw-bolder mb-3">No Sertifikat PBJ</label>
+                                    <span @click="delMember(member,imember)" style="cursor: pointer"
+                                        class="text-danger fw-bolder">Hapus</span>
+                                </div>
+                                <input v-model="member.keterangan" :name="`pokja[${imember}][keterangan]`"
+                                    class="form-control" />
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>

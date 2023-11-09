@@ -40,7 +40,7 @@ class ThUsulanTenderDetail extends Model
 
     public function usulanTenderDetailDoc()
     {
-        return $this->hasMany(ThUsulanTenderDetailDoc::class, 'thusulantenderdetail_id', 'id')->orderby('tmjenistenderdoc_id');
+        return $this->hasMany(ThUsulanTenderDetailDoc::class, 'thusulantenderdetail_id', 'id')->orderby('created_date');
     }
 
     public function tmJenisTender()

@@ -17,13 +17,17 @@ class ThUsulanTenderDetailDocService{
         $model_doc = $this->model;
         $model_doc->thusulantenderdetail_id = $detail_id;
         $model_doc->tmjenistenderdoc_id = $doc["tmjenistenderdoc_id"];
-        $tipe_doc=TmJenisTenderDoc::find($doc["tmjenistenderdoc_id"]);
-        $model_doc->nama_berkas = $tipe_doc->nama_doc;
-   
-        //$file = $doc['berkas'];
-        //$uniqueFileName = Str::uuid(40)->toString() . '.pdf';
-        //$file->storeAs('berkas', $uniqueFileName, 'public');
-        //$model_doc->berkas = $uniqueFileName;
+       
+        $uniqueFileName = Str::uuid(40)->toString() . '.pdf';
+        $file = $doc['berkas'];
+        $file->storeAs('_upload', $uniqueFileName, 'public');
+        if($doc["tmjenistenderdoc_id"]!=0){
+            $tipe_doc=TmJenisTenderDoc::find($doc["tmjenistenderdoc_id"]);
+            $model_doc->nama_berkas = $tipe_doc->nama_doc;
+        }else{
+            $model_doc->nama_berkas = $doc['nama_berkas'];
+        }
+        $model_doc->berkas = $uniqueFileName;
         $model_doc->save();
         return $model_doc;
     }
