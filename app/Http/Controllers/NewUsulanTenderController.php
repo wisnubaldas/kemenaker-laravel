@@ -130,8 +130,8 @@ class NewUsulanTenderController extends Controller
                     $result
                 );
         } catch (Exception $e) {
-            dd($e);
             DB::rollBack();
+            return redirect()->back()->withErrors($e->getMessage())->withInput();
         }
     }
     public function send($id)
@@ -153,7 +153,7 @@ class NewUsulanTenderController extends Controller
         $alur = new ThUsulanTenderDetailService();
         if ($is_approve) {
             if ($model_detail->alur == 7) {
-                $alur->movealur($usulan_tender_detail_id, 9, null, 2);
+                $alur->movealur($usulan_tender_detail_id, 11, 3, 3);
             } elseif ($model_detail->alur == 13) {
                 $alur->movealur($usulan_tender_detail_id, 16, null, 3);
             } elseif ($model_detail->alur == 16) {
@@ -204,6 +204,32 @@ class NewUsulanTenderController extends Controller
             );
         } catch (Exception $e) {
             DB::rollBack();
+            return redirect()->back()->withErrors($e->getMessage())->withInput();
+        }
+    }
+    public function submit_ba(Request $request, $usulan_tender_detail_id): RedirectResponse
+    {
+        DB::beginTransaction();
+        $to=$this->getdirection($usulan_tender_detail_id);
+        $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
+        $validated = $request->validate([
+            'ba_kaji_ulang' => 'required|file|mimes:pdf|max:225000',
+        ], [
+            'ba_kaji_ulang.required' => "Berita Acara Reviu Dokumen Persiapan Pemilihan Tidak Boleh Kosong",
+            'ba_kaji_ulanng.file' => "Data harus berupa file",
+            'ba_kaji_ulang.mimes' => 'File harus berpa pdf',
+            'ba_kaji_ulang.max' => 'File tidak boleh leboh dari 225Mb'
+        ]);
+        try {
+            $save=(new ThUsulanTenderDetailService())->submit_ba($request,$usulan_tender_detail_id);
+            DB::commit();
+            return redirect()->route($to)->with(
+                'success',
+                'Berhasil Unggah Berita Acara Reviu Dokumen Persiapan Pemilihan .'
+            );;
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($e->getMessage())->withInput();
         }
     }
     public function downloadtemplate($id)
@@ -220,5 +246,15 @@ class NewUsulanTenderController extends Controller
         ];
         $file_path = public_path('template/'.$filename);
         return response()->download($file_path, $downloadname,$headers);
+    }
+    public function ppkbatalkan(Request $request,$detail_id){
+        DB::beginTransaction();
+        try{
+            (new ThUsulanTenderDetailService())->movealur($detail_id,99,99,99);
+            DB::commit();
+        }catch(Exception $e){
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
     }
 }

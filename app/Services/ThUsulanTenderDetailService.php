@@ -5,8 +5,10 @@ use App\Http\Requests\STRequest;
 use App\Models\ThUsulanTender;
 use App\Models\ThUsulanTenderDetail;
 use App\Models\ThUsulanTenderPokja;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ThUsulanTenderDetailService{
@@ -54,5 +56,19 @@ class ThUsulanTenderDetailService{
             (new ThUsulanTenderPokjaService())->submit($anggota,$usulan_tender_detail_id);
         }
         $this->movealur($usulan_tender_detail_id,6,5,5);
+    }
+    public function submit_ba(Request $request, $usulan_tender_detail_id){
+        $model_detail = ThUsulanTenderDetail::find($usulan_tender_detail_id);
+        if ($request->hasFile('ba_kaji_ulang')) {
+            $file = $request->file('ba_kaji_ulang');
+            $uniqueFileName = Str::uuid(30)->toString() . '.pdf';
+            $file->storeAs('_upload', $uniqueFileName, 'public');
+            Storage::disk('public')->delete('_upload/' . $model_detail->ba_kaji_ulang);
+            $model_detail->ba_kaji_ulang = $uniqueFileName;
+        } else {
+            throw new Exception("File Not Found");
+        }
+        $model_detail->save();
+        (new ThUsulanTenderDetailService())->movealur($usulan_tender_detail_id,7,3,3);
     }
 }

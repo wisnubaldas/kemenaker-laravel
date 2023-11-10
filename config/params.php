@@ -12,7 +12,7 @@ return [
     'btndelete' => 'Hapus Data',
     'form-title'=>[
         0=>'Verifikasi Usulan Tender',
-        7=>'Verifikasi Berita Acara Kaji Ulang',
+        7=>'Verifikasi Berita Acara Reviu Dokumen Persiapan Pemilihan',
         16=>'Verifikasi laporan hasil penandatanganan kontrak beserta SPK'
     ],
     'status' => [
@@ -53,19 +53,20 @@ return [
         3 => 'Sekretariat menerima Usulan Tender dan memilih anggota pokja',
         4 => 'Kepala UKPBJ mem-verikasi ST dan anggota pokja',
         5 => 'Kepala UKPBJ menolak ST dan anggota pokja',
-        6 => 'Unggah Berita Acara Kaji Ulang',
-        7 => 'Verifikasi Berita Acara Kaji Ulang',
-        8 => 'Sekretariat menolak BA Kaji Ulang Dari Pokja',
+        6 => 'Unggah Berita Acara Reviu Dokumen Persiapan Pemilihan',
+        7 => 'Verifikasi Berita Acara Reviu Dokumen Persiapan Pemilihan',
+        8 => 'Sekretariat menolak Berita Acara Reviu Dokumen Persiapan Pemilihan Pokja',
         9 => 'Input Kode Tender',
         10 => 'Delegasi Paket ke Kelompok Kerja Pemilihan',
         11 => 'Verifikasi Paket Tayang pada LPSE',
-        12 => 'Paket Tayang pada LPSE dan Unggah Berita Acara Hasil Pemilihan',
-        13 => 'Verifikasi Berita Acara Hasil Pemilihan',
+        12 => 'Paket Tayang pada LPSE dan Unggah Berita Acara Hasil Pemilihan dan SK Penetapan Pemenang',
+        13 => 'Verifikasi Berita Acara Hasil Pemilihan dan SK Penetapan Pemenang',
         14 => 'PPK Menolak BAHP dari Pokja',
         15 => 'Unggah Hasil Penandatanganan Kontrak',
         16 => 'Verifikasi Hasil Penandatanganan Kontrak',
         17 => 'Sekretariat menolak Laporan hasil penandatanganan Kontrak dari PPK',
-        18 => 'Tender Telah Selesai'
+        18 => 'Tender Telah Selesai',
+        99 => 'Tender Telah Dibatalkan Oleh PPK'
     ],
     'alur' => [
         '' => 'Draft Usulan Tender',
@@ -87,7 +88,8 @@ return [
         15 => 'Unggah Hasil Penandatanganan Kontrak',
         16 => 'Verifikasi Hasil Penandatanganan Kontrak',
         17 => 'Sekretariat menolak Laporan hasil penandatanganan Kontrak dari PPK',
-        18 => 'Tender Telah Selesai'
+        18 => 'Tender Telah Selesai',
+        99 => 'Tender Telah Dibatalkan Oleh PPK'
     ],
     'base-bg-color'=>[
         0=>'bg-primary',
@@ -117,7 +119,8 @@ return [
         15 => 'badge-light-primary', // Untuk Unggah Hasil Penandatanganan Kontrak
         16 => 'badge-light-primary', // Untuk Verifikasi Hasil Penandatanganan Kontrak
         17 => 'badge-light-danger', // Untuk Sekretariat menolak Laporan hasil penandatanganan Kontrak dari PPK
-        18 => 'badge-light-success' // Untuk Tender Telah Selesai
+        18 => 'badge-light-success', // Untuk Tender Telah Selesai
+        99 => 'badge-danger'
     ],
     'dashboardPallete'=>[
         0 => [
@@ -189,7 +192,7 @@ return [
         4 => 'Mohon untuk mem-verikasi ST dan anggota pokja',
         5 => 'Kepala UKPBJ menolak ST dan anggota pokja',
         6 => 'Unggah Berita Acara Kaji Ulang',
-        7 => 'Verifikasi Berita Acara Kaji Ulang',
+        7 => 'Verifikasi Berita Acara Reviu Dokumen Persiapan Pemilihan',
         8 => 'Sekretariat menolak BA Kaji Ulang Dari Pokja',
         9 => 'Input Kode Tender',
         10 => 'Delegasi Paket ke Kelompok Kerja Pemilihan',

@@ -31,6 +31,7 @@ createApp({
             ba_kaji_ulang_name: null,
             ba_hasil_pemilihan_name: null,
             file_lap_hpk_name: null,
+            sk_penetapan_pemenang_name:null,
             file_spk_name: null,
             members: [{}],
             catatan: "",
@@ -45,8 +46,8 @@ createApp({
                 3: "Sekretariat menerima Usulan Tender dan memilih anggota pokja",
                 4: "Kepala UKPBJ mem-verikasi ST dan anggota pokja",
                 5: "Kepala UKPBJ menolak ST dan anggota pokja",
-                6: "Unggah Berita Acara Kaji Ulang",
-                7: "Verifikasi Berita Acara Kaji Ulang",
+                6: "Unggah Berita Acara Reviu Dokumen Persiapan Pemilihan",
+                7: "Verifikasi Berita Acara Reviu Dokumen Persiapan Pemilihan",
                 8: "Sekretariat menolak BA Kaji Ulang Dari Pokja",
                 9: "Input Kode Tender",
                 10: "Delegasi Paket ke Kelompok Kerja Pemilihan",
@@ -58,6 +59,7 @@ createApp({
                 16: "Verifikasi Hasil Penandatanganan Kontrak",
                 17: "Sekretariat menolak Laporan hasil penandatanganan Kontrak dari PPK",
                 18: "Tender Telah Selesai",
+                99: 'Tender Telah Dibatalkan Oleh PPK',
             },
         };
     },
@@ -103,6 +105,7 @@ createApp({
             // Mengembalikan objek dengan properti tgl, bln, thn, dan jam
             return { tgl, bln, thn, jam };
         },
+        
         showlog(item) {
             this.logs = item.usulan_tender_alur;
             this.logname = item.nama_tender;
@@ -189,6 +192,50 @@ createApp({
                 this.tenderData.usulan_tender_usul_pokja.splice(index, 1);
             }
         },
+        cancelTender(tenderdetailId) {
+            Swal.fire({
+                title: "Apakah data yakin untuk membatalkan data ini?",
+                text: "Jika ya,input alasan pembatalan",
+                inputAttributes: {
+                    autocapitalize: "off"
+                },
+                input: "textarea",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya! Batalkan",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(result.value)
+                    let data=new FormData();
+                    data.append('catatan',result.value);
+                    axios
+                        .post(`/usulan-tender/cancel/${tenderdetailId}`,data)
+                        .then((response) => {
+                            Swal.fire({
+                                title: "Tender Dibatalkan!",
+                                text: "Usulan Tender Telah Dibatalkan.",
+                                icon: "success",
+                                didClose: () => {
+                                    // Redirect ke halaman '/usulan-tender' setelah SweetAlert ditutup
+                                   // window.location.href = "/usulan-tender";
+                                   window.location.reload();
+                                },
+                            });
+                        })
+                        .catch((error) => {
+                            // Handle error jika request gagal
+                            console.error(error); // Outputkan pesan error jika diperlukan
+                            Swal.fire(
+                                "Error!",
+                                error.response.data.message,
+                                "error"
+                            );
+                        });
+                }
+            });
+        },
         reSendUsulan(tenderdetailId) {
             Swal.fire({
                 title: "Apakah data ini akan dikirim?",
@@ -238,6 +285,7 @@ createApp({
                 confirmButtonText: "Ya! Kirim",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    Swal.fire(result.value)
                     axios
                         .post(`/usulan-tender/send/${tenderId}`)
                         .then((response) => {

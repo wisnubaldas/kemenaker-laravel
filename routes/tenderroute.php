@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NewUsulanTenderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsulanTenderController;
+use App\Http\Controllers\UsulanTenderDetailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -62,6 +63,9 @@ Route::group(['middleware'=>'role:2'],function () {
     Route::post('/usulan-tender/lpse/{tender_detail_id}', [UsulanTenderController::class, 'updatelpse'])->name('submit-lpse-usulan-tender');
     Route::post('/usulan-tender/sph/{tender_detail_id}', [UsulanTenderController::class, 'submit_sph'])->name('submit-sph-usulan-tender');
     Route::post('/usulan-tender/resend/{tender_detail_id}', [UsulanTenderController::class, 'sendAfterReject'])->name('resend-usulan-tender');
+
+    Route::post('/usulan-tender/cancel/{tender_detail_id}', [NewUsulanTenderController::class, 'ppkbatalkan'])->name('batal-usulan-tender');
+    
     
 });
 
@@ -74,13 +78,13 @@ Route::group(['middleware'=>'role:3'],function () {
     Route::post('/usulan-tender/st/{tender_detail_id}', [NewUsulanTenderController::class, 'submit_st'])->name('submit-st-usulan-tender');
 
 
-    Route::post('/usulan-tender/deploy/{tender_detail_id}', [UsulanTenderController::class, 'deploy_lpse'])->name('deploy-usulan-tender');
+    Route::post('/usulan-tender/deploy/{tender_detail_id}', [UsulanTenderDetailController::class, 'deploy_lpse'])->name('deploy-usulan-tender');
    
 });
 Route::group(['middleware'=>'role:4'],function () {
     Route::post('/usulan-tender/delegate/{tender_detail_id}', [UsulanTenderController::class, 'submit_delegate'])->name('delegate-usulan-tender');
 });
 Route::group(['middleware'=>'role:5'],function () {
-    Route::post('/usulan-tender/ba/{tender_detail_id}', [UsulanTenderController::class, 'submit_ba'])->name('submit-ba-usulan-tender');
-    Route::post('/usulan-tender/ba-choose/{tender_detail_id}', [UsulanTenderController::class, 'submit_ba_pemilihan'])->name('submit-ba-pemilihan-usulan-tender');
+    Route::post('/usulan-tender/ba/{tender_detail_id}', [NewUsulanTenderController::class, 'submit_ba'])->name('submit-ba-usulan-tender');
+    Route::post('/usulan-tender/ba-choose/{tender_detail_id}', [UsulanTenderDetailController::class, 'submit_ba_pemilihan'])->name('submit-ba-pemilihan-usulan-tender');
 });
