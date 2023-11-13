@@ -14,6 +14,9 @@ class TmJenisTender extends Model
     {
         return $this->hasMany(ThUsulanTenderDetail::class, 'tmjenistender_id');
     }
+    public function jenisTenderDocs(){
+        return $this->hasMany(TmJenisTenderDoc::class,'tmjenistender_id');
+    }
     public function summary(){
         return $this->select('tm_jenis_tender.id', 'tm_jenis_tender.jenis_tender', DB::raw('COUNT(tm_jenis_tender.id) as jmlltender'))
         ->leftJoin('th_usulan_tender_detail as tutd', 'tm_jenis_tender.id', '=', 'tutd.tmjenistender_id')

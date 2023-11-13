@@ -17,7 +17,16 @@ class AppLayout extends Component
     {
         $routename=Route::current()->getName();
         $data=[];
-        if($routename=="new-usulan-tender"||$routename=="edit-usulan-tender"){
+        if (in_array($routename, 
+            [
+                "new-usulan-tender", 
+                "new-usulan-tender-seleksi",
+                "new-usulan-tender-dikecualikan",
+                "edit-usulan-tender",
+                "edit-usulan-tender-seleksi",
+                "edit-usulan-tender-dikecualikan",
+            ]
+        )) {
             $data['btn_save_usulan']=true;
         }
         return view('layouts.app',$data);

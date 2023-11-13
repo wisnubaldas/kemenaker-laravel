@@ -7,24 +7,17 @@
         </div>
     @endif
         <div class="card-header border-0 pt-5">
+            @include('components.logdrawer')
             <div class="card-header">
-                <div class="d-flex justify-content-between">
+                <div class="d-flex flex-stack">
+                    
                     <div class="">
-                        <div class="">
-                            @if(auth()->user()->tagroup_id==2)
-                            @include('components.newtabusulan')
-                            @endif
-                        </div>
+                        @if(auth()->user()->tagroup_id==2)
+                        @include('components.newtabusulan')
+                        @endif
                     </div>
+                  
                     <div class="d-flex align-items-center py-1">
-                            
-                            <a href="{{$link_new}}" class="btn btn-sm btn-light-info me-3 fw-bolder" >
-                                <span class="svg-icon svg-icon-muted svg-icon-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="black"/>
-                                    <rect x="10.8891" y="17.8033" width="12" height="2" rx="1" transform="rotate(-90 10.8891 17.8033)" fill="black"/>
-                                    <rect x="6.01041" y="10.9247" width="12" height="2" rx="1" fill="black"/>
-                                    </svg></span>
-                                Tambah Usulan Tender</a>
                         <div class="me-4">
                             <!--begin::Menu-->
                             <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder"
@@ -52,11 +45,42 @@
                                 <!--end::Menu separator-->
                                 <!--begin::Form-->
                                 <div class="px-7 py-5">
-                                   
+                                    <script>
+                                        // Dapatkan elemen select menggunakan ID
+                                        var selectElement = document.getElementById('tm_unitkerja_select');
+                                        if(selectElement){
+                                        // Set nilai awal pada elemen Select2
+                                            selectElement.value = '{{ request('tm_unitkerja_id') }}';
+
+                                        // Trigger event change agar Select2 memperbarui tampilan
+                                            var event = new Event('change');
+                                            selectElement.dispatchEvent(event);
+                                        }
+                                    </script>
                                     <form method="GET" action="">
                                         @csrf
                                         <!--begin::Input group-->
-                                      
+                                        <div class="mb-10">
+                                            <!--begin::Label-->
+                                            <label class="form-label fw-bold">Unit Kerja:</label>
+                                            <div>
+                                                <select id="tm_unitkerja_select" name="tm_unitkerja_id"
+                                                    value="{{ request('tm_unitkerja_id') }}"
+                                                    class="form-select form-select-solid" data-kt-select2="true"
+                                                    data-placeholder="Select option"
+                                                    data-dropdown-parent="#kt_menu_61484bf44d957"
+                                                    data-allow-clear="true">
+                                                    <option></option>
+                                                    @foreach ($tm_unitkerja as $item)
+                                                        <option value="{{ $item->id }}"
+                                                            {{ request('tm_unitkerja_id') == $item->id ? 'selected' : '' }}>
+                                                            {{ $item->unitkerja }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
                                         <!--end::Input group-->
                                         <!--begin::Input group-->
                                         <div class="mb-10">
@@ -96,7 +120,6 @@
                             <!--end::Menu 1-->
                             <!--end::Menu-->
                         </div>
-                        <div>
                         <select class="form-select form-select-sm form-select-solid w-70px select2-hidden-accessible"
                             data-control="select2" data-placeholder="Select Hours" data-hide-search="true"
                             data-select2-id="select2-data-10-wdu2" tabindex="-1" aria-hidden="true">
@@ -105,25 +128,21 @@
                             <option value="4">100 </option>
                             <option value="all">All</option>
                         </select>
-                        </div>
                     </div>
                 </div>
             </div>
             <div class="card-body py-3">
                 <div class="table-responsive">
                     <table id="example"
-                        class="table  table-row-bordered table-row-gray-100 align-middle gs-0 gy-4"
+                        class="table table-hover table-row-bordered table-row-gray-100 align-middle gs-0 gy-4"
                         style="width:100%">
                         <thead>
                             <tr class="fw-bolder text-muted bg-light">
-                                <th class="ps-4 rounded-start">
-                                    <span class="svg-icon svg-icon-muted svg-icon-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path opacity="0.3" d="M10 4H21C21.6 4 22 4.4 22 5V7H10V4Z" fill="black"/>
-                                    <path d="M9.2 3H3C2.4 3 2 3.4 2 4V19C2 19.6 2.4 20 3 20H21C21.6 20 22 19.6 22 19V7C22 6.4 21.6 6 21 6H12L10.4 3.60001C10.2 3.20001 9.7 3 9.2 3Z" fill="black"/>
-                                    </svg></span>
-                                </th>
-                                <th >Nomor Surat Usulan</th>
-                                <th>Keterangan</th>
+                                <th class="ps-4 rounded-start">Unit Kerja</th>
+                                <th>Nomor Surat Usulan</th>
+                                <th>Nama tender</th>
+                                <th>Jenis Tender</th>
+                                <th>Posisi</th>
                                 <th class="text-center">Alur</th>
                                 <th class="w-25px pe-4 text-end rounded-end">Aksi</th>
                             </tr>
@@ -131,23 +150,27 @@
                         <tbody>
                             @foreach ($data as $item)
                                 <tr>
-                                    <td>
-                                        <button type="button" @click="rowdraftactive=={{ $loop->iteration }}?rowdraftactive=null:rowdraftactive={{ $loop->iteration }}" class="btn btn-icon btn-light-primary btn-sm me-1">
-                                        <span class="svg-icon  svg-icon-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                            <path opacity="0.3" d="M10 4H21C21.6 4 22 4.4 22 5V7H10V4Z" fill="black"/>
-                                            <path d="M10.4 3.60001L12 6H21C21.6 6 22 6.4 22 7V19C22 19.6 21.6 20 21 20H3C2.4 20 2 19.6 2 19V4C2 3.4 2.4 3 3 3H9.2C9.7 3 10.2 3.20001 10.4 3.60001ZM16 12H13V9C13 8.4 12.6 8 12 8C11.4 8 11 8.4 11 9V12H8C7.4 12 7 12.4 7 13C7 13.6 7.4 14 8 14H11V17C11 17.6 11.4 18 12 18C12.6 18 13 17.6 13 17V14H16C16.6 14 17 13.6 17 13C17 12.4 16.6 12 16 12Z" fill="black"/>
-                                            <path opacity="0.3" d="M11 14H8C7.4 14 7 13.6 7 13C7 12.4 7.4 12 8 12H11V14ZM16 12H13V14H16C16.6 14 17 13.6 17 13C17 12.4 16.6 12 16 12Z" fill="black"/>
-                                            </svg></span>
-                                        </button>
-                                    </td>
-                                    <td class="ps-4">{{ $item->no_surat_usulan }}</td>
-                                    <td>{{ $item->keterangan }}</td>
-                                    <td><span
-                                            class="w-100 badge {{ config('params.badgecolor.' . $item->alur) }} text-wrap">{{ config('params.alur.' . $item->alur) }}</span>
+                                    <td class="ps-4">{{ $item->unitkerja }}</td>
+                                    <td>{{ $item->no_surat_usulan }}</td>
+                                    <td>{{ $item->nama_tender }}</td>
+                                    <td>{{ $item->jenis_tender }}</td>
+                                    <td class=" {{ ($item->posisi== 4 && $item->alur == 3 && auth()->user()->tagroup_id==3) ?'text-danger fw-bolder':'' }}">  
+                                        @if($item->posisi== 4 && $item->alur == 3) 
+                                            {{config('params.posisi.3');}}
+                                        @else
+                                           {{ config('params.posisi.'.$item->posisi);}}
+                                        @endif
+                                         
+                                            
+                                            
+                                        </td>
+                                    <td><span @click="showlog({{$item}})" id="kt_drawer_example_basic_button" 
+                                            class="btn w-100 badge {{ config('params.badgecolor.' . $item->alur) }} text-wrap">{{ config('params.alur-seleksi.' . $item->alur) }}</span>
                                     </td>
                                     <td class="pe-4">
                                         <div class="d-flex justify-content-end flex-shrink-0">
-                                            <div @click="sendUsulan({{$item->id}})" class="btn btn-icon btn-light-primary btn-sm me-1">
+                                            @if($item->alur==2&& auth()->user()->tagroup_id==2)
+                                            <div @click="reSendUsulan({{ $item->id }})" class="btn btn-icon btn-light-primary btn-sm me-1">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen019.svg-->
                                                 <span class="svg-icon svg-icon-3">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -157,8 +180,26 @@
                                                 </span>
                                                 <!--end::Svg Icon-->
                                             </div>
-                                            <a href="{{ $link_edit.'/'.$item->id}}" class="btn btn-icon btn-light-warning btn-sm me-1">
-                                                <!--begin::Svg Icon | path: icons/duotune/art/art005.svg-->
+                                            @endif
+                                            <a href="/usulan-tender-detail/{{ $item->id }}"
+                                                class="btn btn-icon btn-light-info btn-sm me-1">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen019.svg-->
+                                                <span class="svg-icon svg-icon-3">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                        height="24" viewBox="0 0 24 24" fill="none">
+                                                        <path
+                                                            d="M17.5 11H6.5C4 11 2 9 2 6.5C2 4 4 2 6.5 2H17.5C20 2 22 4 22 6.5C22 9 20 11 17.5 11ZM15 6.5C15 7.9 16.1 9 17.5 9C18.9 9 20 7.9 20 6.5C20 5.1 18.9 4 17.5 4C16.1 4 15 5.1 15 6.5Z"
+                                                            fill="black"></path>
+                                                        <path opacity="0.3"
+                                                            d="M17.5 22H6.5C4 22 2 20 2 17.5C2 15 4 13 6.5 13H17.5C20 13 22 15 22 17.5C22 20 20 22 17.5 22ZM4 17.5C4 18.9 5.1 20 6.5 20C7.9 20 9 18.9 9 17.5C9 16.1 7.9 15 6.5 15C5.1 15 4 16.1 4 17.5Z"
+                                                            fill="black"></path>
+                                                    </svg>
+                                                </span>
+                                                <!--end::Svg Icon-->
+                                            </a>
+                                            @if($item->alur<4&& auth()->user()->tagroup_id==2)
+                                                <a href="/usulan-tender-detail/{{ $item->id }}" class="btn btn-icon btn-light-warning btn-sm me-1">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen019.svg-->
                                                 <span class="svg-icon svg-icon-3">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                                         <path opacity="0.3" d="M21.4 8.35303L19.241 10.511L13.485 4.755L15.643 2.59595C16.0248 2.21423 16.5426 1.99988 17.0825 1.99988C17.6224 1.99988 18.1402 2.21423 18.522 2.59595L21.4 5.474C21.7817 5.85581 21.9962 6.37355 21.9962 6.91345C21.9962 7.45335 21.7817 7.97122 21.4 8.35303ZM3.68699 21.932L9.88699 19.865L4.13099 14.109L2.06399 20.309C1.98815 20.5354 1.97703 20.7787 2.03189 21.0111C2.08674 21.2436 2.2054 21.4561 2.37449 21.6248C2.54359 21.7934 2.75641 21.9115 2.989 21.9658C3.22158 22.0201 3.4647 22.0084 3.69099 21.932H3.68699Z" fill="black"></path>
@@ -167,46 +208,14 @@
                                                 </span>
                                                 <!--end::Svg Icon-->
                                             </a>
-                                            <a href="#" class="btn btn-icon btn-light-danger  btn-sm">
-                                                <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
-                                                <span class="svg-icon svg-icon-3">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                        <path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="black"></path>
-                                                        <path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="black"></path>
-                                                        <path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="black"></path>
-                                                    </svg>
-                                                </span>
-                                                <!--end::Svg Icon-->
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <tr v-if="rowdraftactive === {{ $loop->iteration }}">
-                                    <td colspan="5">
-                                        <div class="container px-20">
-                                            <table class="table  table-row-bordered table-row-gray-100 align-middle gs-0 gy-4">
-                                                <thead>
-                                                    <tr class="fw-bolder text-muted bg-light">
-                                                        <th class="w-30px ps-4 rounded-start">No</th>
-                                                        <th class="pe-4  rounded-end">Nama Tender</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach($item->usulanTenderDetails as $itemd)
-                                                    <tr>
-                                                        <td class="text-center">{{$loop->iteration}}</td>
-                                                        <td>{{$itemd->nama_tender}}</td>
-                                                    </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    {{-- @include('components.paginationbar',['data'=>$data]) --}}
                     {!! $data->links('pagination::bootstrap-5') !!}
                 </div>
             </div>

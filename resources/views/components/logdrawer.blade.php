@@ -58,13 +58,13 @@
                 <!--end::Label-->
                 <!--begin::Badge-->
                 <div class="timeline-badge">
-                    <i class="fa fa-genderless text-primary fs-1"></i>
+                    <i class="fa fa-genderless fs-1" :class="log.alur==99?'text-danger':'text-primary'"></i>
                 </div>
                 <!--end::Badge-->
                 <!--begin::Text-->
                 <div class="timeline-content ps-3">
                     <div class=" text-muted">@{{log.user?.nama_lengkap}}</div>
-                    <div class="fw-bold ">@{{alurTender[log.alur]}}</div>
+                    <div class="fw-bold " :class="log.alur==99?'text-danger':''">@{{alurTender[log.alur]}}</div>
                     <div class=" text-muted mb-3">@{{objectDate(log.created_date).jam}}</div>
                     <div v-if="log.keterangan" class="fs-7 btn btn-outline btn-outline-dashed btn-outline-default active d-flex text-start p-2">@{{log.keterangan}}</div>
                 </div>

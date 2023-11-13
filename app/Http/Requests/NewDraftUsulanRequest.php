@@ -25,6 +25,7 @@ class NewDraftUsulanRequest extends FormRequest
         return [
             "no_surat_usulan"=>"required|max:100",
             'file_surat_usulan' => 'nullable|file|mimes:pdf|max:25000',
+            "tipe_tender"=>"required"
            // 'usulanTenderDetails.*.nama_tender' => 'required',
         ];
     }
@@ -32,6 +33,7 @@ class NewDraftUsulanRequest extends FormRequest
     public function messages():array
     {
         return[
+            "tipe_tender.required"=>"Jenis Tender Tidak Dikenali",
             "no_surat_usulan.required"=>"No surat usulan tidak boleh kosong",
             "no_surat_usulan.max"=>"No surat usulan tidak boleh lebih dari 100 karakter",
             "file_surat_usulan.file"=>"Surat harus berupa file",
